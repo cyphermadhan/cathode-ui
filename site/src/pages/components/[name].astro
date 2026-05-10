@@ -1,0 +1,113 @@
+---
+import Main from '../../layouts/Main.astro';
+import { ComponentDemo } from '../../components/ComponentDemo';
+import manifest from '../../../../cathode.manifest.json';
+
+/**
+ * Dynamic component detail route. Renders a page per entry in
+ * cathode.manifest.json. Two components (Chat, Dialog) also have
+ * dedicated .astro pages at the same path — Astro's router prefers
+ * the static file over this dynamic one, so those get richer layouts
+ * while this route handles the other fifteen.
+ */
+export async function getStaticPaths() {
+  return manifest.components.map((c: any) => ({
+    params: { name: c.name.toLowerCase() },
+    props: { component: c },
+  }));
+}
+
+const { component } = Astro.props as { component: any };
+const c = component;
+---
+
+<Main title={c.name}>
+  <h1>{c.name.toUpperCase()}</h1>
+  <div class="page-lead">{c.summary}</div>
+
+  <h2>Live demo</h2>
+  <div class="demo-frame" style="display: block;">
+    <ComponentDemo name={c.name} client:only="react" />
+  </div>
+
+  <h2>Import</h2>
+  <pre><code>{c.import}</code></pre>
+
+  <h2>Props</h2>
+  {c.props.length > 0 ? (
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {c.props.map((p: any) => (
+          <tr>
+            <td><code>{p.name}</code></td>
+            <td><code>{p.type}</code></td>
+            <td>{p.default !== undefined ? <code>{String(p.default)}</code> : '—'}</td>
+            <td>{p.required ? 'yes' : '—'}</td>
+            <td style="color: var(--cathode-color-text-dim); font-size: 11px;">
+              {p.description ?? ''}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ) : (
+    <p>No props.</p>
+  )}
+
+  {c.examples && c.examples.length > 0 ? (
+    <>
+      <h2>Examples</h2>
+      {c.examples.map((ex: any) => (
+        <>
+          <h3>{ex.name}</h3>
+          <pre><code>{ex.snippet}</code></pre>
+        </>
+      ))}
+    </>
+  ) : null}
+
+  <h2>Accessibility</h2>
+  <p>
+    <strong>Role:</strong> <code>{c.a11y.role}</code>
+  </p>
+  {c.a11y.requires && c.a11y.requires.length > 0 ? (
+    <ul style="color: var(--cathode-color-text-dim);">
+      {c.a11y.requires.map((r: string) => <li>{r}</li>)}
+    </ul>
+  ) : null}
+
+  <h2>Feedback</h2>
+  <table>
+    <tbody>
+      <tr><td><strong>Haptic</strong></td><td><code>{String(c.feedback.haptic ?? 'none')}</code></td></tr>
+      <tr><td><strong>Sound</strong></td><td><code>{String(c.feedback.sound ?? 'none')}</code></td></tr>
+    </tbody>
+  </table>
+
+  {c.motionStates && c.motionStates.length > 0 ? (
+    <>
+      <h2>Motion states</h2>
+      <p>
+        {c.motionStates.map((s: string, i: number) => (
+          <>
+            <code>{s}</code>{i < c.motionStates.length - 1 ? ' · ' : ''}
+          </>
+        ))}
+      </p>
+    </>
+  ) : null}
+
+  <hr />
+  <p>
+    <a href="/components">← All components</a>
+  </p>
+</Main>
