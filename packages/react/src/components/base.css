@@ -70,6 +70,11 @@
   gap: 6px;
   font-family: var(--cathode-type-font-stack);
   font-size: 11px;
+  /* Contain the dot-leader row so a very long middle span can't widen
+   * the parent. Paired with min-width:0 on the flex child below. */
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .cathode-dotleader-label {
@@ -81,7 +86,13 @@
 }
 
 .cathode-dotleader-dots {
-  flex: 1 1 auto;
+  /* `flex: 1 1 0` (zero basis) — the dots span takes only the space
+   * left between label and value. With flex-basis: auto the browser
+   * would honor the intrinsic ~1700px width of 200 periods and widen
+   * the whole row, defeating overflow:hidden. `min-width:0` allows
+   * the flex item to shrink below its content size. */
+  flex: 1 1 0;
+  min-width: 0;
   overflow: hidden;
   white-space: nowrap;
   color: var(--cathode-color-text-faint);
