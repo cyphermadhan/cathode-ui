@@ -1611,6 +1611,689 @@
       ]
     },
     {
+      "name": "Tabs",
+      "import": "import { Tabs } from '@cathode-ui/react';",
+      "summary": "Horizontal tabs where exactly one is active. Controlled via value + onChange.",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "onChange",
+          "type": "(v: string) => void",
+          "required": true
+        },
+        {
+          "name": "items",
+          "type": "Array<{value,label,disabled?}>",
+          "required": true
+        },
+        {
+          "name": "accent",
+          "type": "'info'|'success'|'warning'|'danger'|'accent'",
+          "required": false,
+          "default": "info"
+        }
+      ],
+      "motionStates": [
+        "idle",
+        "press"
+      ],
+      "a11y": {
+        "role": "tablist",
+        "requires": [
+          "aria-label for the group"
+        ]
+      },
+      "feedback": {
+        "haptic": "tap",
+        "sound": "click"
+      },
+      "examples": [
+        {
+          "name": "views",
+          "snippet": "<Tabs value={v} onChange={setV} items={[{value:\"a\",label:\"Overview\"},{value:\"b\",label:\"Logs\"}]} aria-label=\"Views\" />"
+        }
+      ]
+    },
+    {
+      "name": "Breadcrumbs",
+      "import": "import { Breadcrumbs } from '@cathode-ui/react';",
+      "summary": "Path-style navigation. The last item is marked `aria-current=\"page\"` and rendered as static text.",
+      "props": [
+        {
+          "name": "items",
+          "type": "Array<{label, href?}>",
+          "required": true
+        },
+        {
+          "name": "separator",
+          "type": "string",
+          "required": false,
+          "default": "›"
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "navigation",
+        "requires": [
+          "aria-label (defaults to \"Breadcrumb\")"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "path",
+          "snippet": "<Breadcrumbs items={[{label:\"Home\",href:\"/\"},{label:\"Docs\",href:\"/docs\"},{label:\"Tabs\"}]} />"
+        }
+      ]
+    },
+    {
+      "name": "Menu",
+      "import": "import { Menu } from '@cathode-ui/react';",
+      "summary": "Click-triggered dropdown of actions. Keyboard-navigable (ArrowUp/Down, Enter, Escape).",
+      "props": [
+        {
+          "name": "trigger",
+          "type": "ReactNode",
+          "required": true,
+          "description": "Usually a Button or icon."
+        },
+        {
+          "name": "items",
+          "type": "Array<{label, onSelect, disabled?, shortcut?, kind?, divider?}>",
+          "required": true
+        },
+        {
+          "name": "align",
+          "type": "'start'|'end'",
+          "required": false,
+          "default": "start"
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "menu",
+        "requires": [
+          "aria-haspopup + aria-expanded set automatically on trigger"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "actions",
+          "snippet": "<Menu trigger={<Button>MORE</Button>} items={[{label:\"Edit\",onSelect:doEdit,shortcut:\"E\"},{label:\"Delete\",kind:\"danger\",onSelect:doDelete}]} />"
+        }
+      ]
+    },
+    {
+      "name": "Pagination",
+      "import": "import { Pagination } from '@cathode-ui/react';",
+      "summary": "Prev/Next arrows + windowed page buttons with ellipses. Controlled: page + totalPages + onChange.",
+      "props": [
+        {
+          "name": "page",
+          "type": "number",
+          "required": true,
+          "description": "1-based current page."
+        },
+        {
+          "name": "totalPages",
+          "type": "number",
+          "required": true,
+          "description": "Renders nothing when ≤ 1."
+        },
+        {
+          "name": "onChange",
+          "type": "(page: number) => void",
+          "required": true
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "navigation",
+        "requires": [
+          "aria-label (defaults to \"Pagination\")",
+          "aria-current on active page"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "basic",
+          "snippet": "<Pagination page={p} totalPages={12} onChange={setP} />"
+        }
+      ]
+    },
+    {
+      "name": "Popover",
+      "import": "import { Popover } from '@cathode-ui/react';",
+      "summary": "Anchored floating panel, click to open. Closes on outside click / Escape.",
+      "props": [
+        {
+          "name": "trigger",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": false,
+          "description": "Controlled — pair with onOpenChange."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "required": false,
+          "default": false,
+          "description": "Uncontrolled fallback."
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "required": false
+        },
+        {
+          "name": "align",
+          "type": "'start'|'end'",
+          "required": false,
+          "default": "start"
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "dialog",
+        "requires": [
+          "aria-haspopup + aria-expanded set automatically on trigger"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "info",
+          "snippet": "<Popover trigger={<Button>DETAILS</Button>}><p>Some info</p></Popover>"
+        }
+      ]
+    },
+    {
+      "name": "Tooltip",
+      "import": "import { Tooltip } from '@cathode-ui/react';",
+      "summary": "Hover/focus-triggered hint. Text-only; wraps a focusable child and injects aria-describedby.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactElement",
+          "required": true,
+          "description": "The element the tooltip describes."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'top'|'bottom'|'left'|'right'",
+          "required": false,
+          "default": "top"
+        },
+        {
+          "name": "delay",
+          "type": "number",
+          "required": false,
+          "default": 200
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "tooltip",
+        "requires": [
+          "aria-describedby threaded into child automatically"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "shortcut",
+          "snippet": "<Tooltip label=\"Save — Cmd+S\"><Button>SAVE</Button></Tooltip>"
+        }
+      ]
+    },
+    {
+      "name": "Drawer",
+      "import": "import { Drawer } from '@cathode-ui/react';",
+      "summary": "Slide-in panel anchored to a viewport edge. Non-modal by default; pass `modal` to require explicit close.",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "onClose",
+          "type": "() => void",
+          "required": true
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "side",
+          "type": "'left'|'right'|'top'|'bottom'",
+          "required": false,
+          "default": "right"
+        },
+        {
+          "name": "size",
+          "type": "number",
+          "required": false,
+          "default": 360,
+          "description": "Width for left/right, height for top/bottom."
+        },
+        {
+          "name": "modal",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        }
+      ],
+      "motionStates": [
+        "enter",
+        "exit"
+      ],
+      "a11y": {
+        "role": "dialog",
+        "requires": [
+          "aria-modal set from `modal` prop",
+          "aria-label from title"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "filters",
+          "snippet": "<Drawer open={show} onClose={close} title=\"FILTERS\" side=\"right\">...</Drawer>"
+        }
+      ]
+    },
+    {
+      "name": "ProgressBar",
+      "import": "import { ProgressBar } from '@cathode-ui/react';",
+      "summary": "Continuous horizontal bar for determinate progress. Omit `value` for an indeterminate shimmer.",
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "required": false,
+          "description": "0–1. Omit for indeterminate."
+        },
+        {
+          "name": "accent",
+          "type": "'info'|'success'|'warning'|'danger'|'accent'",
+          "required": false,
+          "default": "success"
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "required": false,
+          "default": 6
+        },
+        {
+          "name": "showValue",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        }
+      ],
+      "motionStates": [
+        "shimmer"
+      ],
+      "a11y": {
+        "role": "progressbar",
+        "requires": [
+          "aria-label (default \"Progress\")",
+          "aria-valuenow set automatically"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "value",
+          "snippet": "<ProgressBar value={0.42} showValue />"
+        },
+        {
+          "name": "indeterminate",
+          "snippet": "<ProgressBar />"
+        }
+      ]
+    },
+    {
+      "name": "Spinner",
+      "import": "import { Spinner } from '@cathode-ui/react';",
+      "summary": "Indeterminate loading indicator — pixel-square segments cycling via CSS. Use when duration is unknown.",
+      "props": [
+        {
+          "name": "size",
+          "type": "'sm'|'md'|'lg'",
+          "required": false,
+          "default": "md"
+        },
+        {
+          "name": "accent",
+          "type": "'info'|'success'|'warning'|'danger'|'accent'",
+          "required": false,
+          "default": "info"
+        }
+      ],
+      "motionStates": [
+        "spin"
+      ],
+      "a11y": {
+        "role": "status",
+        "requires": [
+          "aria-label (default \"Loading\")"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "loading",
+          "snippet": "<Spinner /> <span>CONNECTING…</span>"
+        }
+      ]
+    },
+    {
+      "name": "Skeleton",
+      "import": "import { Skeleton } from '@cathode-ui/react';",
+      "summary": "Placeholder block with a shimmer, used while content loads. Compose multiples to mirror the final layout.",
+      "props": [
+        {
+          "name": "width",
+          "type": "number | string",
+          "required": false
+        },
+        {
+          "name": "height",
+          "type": "number | string",
+          "required": false
+        },
+        {
+          "name": "variant",
+          "type": "'text'|'block'",
+          "required": false,
+          "default": "block"
+        }
+      ],
+      "motionStates": [
+        "shimmer"
+      ],
+      "a11y": {
+        "role": "presentation",
+        "requires": [
+          "aria-hidden set automatically"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "text",
+          "snippet": "<Skeleton variant=\"text\" width={180} />"
+        },
+        {
+          "name": "block",
+          "snippet": "<Skeleton width=\"100%\" height={120} />"
+        }
+      ]
+    },
+    {
+      "name": "SignalBars",
+      "import": "import { SignalBars } from '@cathode-ui/react';",
+      "summary": "Cellular/wifi-style ascending bars. Use for strength, battery, or any 1-of-N reading.",
+      "props": [
+        {
+          "name": "level",
+          "type": "number",
+          "required": true,
+          "description": "0…bars; fractional values round."
+        },
+        {
+          "name": "bars",
+          "type": "number",
+          "required": false,
+          "default": 5
+        },
+        {
+          "name": "accent",
+          "type": "'info'|'success'|'warning'|'danger'|'accent'",
+          "required": false,
+          "default": "info"
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "required": false,
+          "default": 24
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "required": false,
+          "default": 16
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "img",
+        "requires": [
+          "aria-label auto-composed \"Signal: N of M\""
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "strength",
+          "snippet": "<SignalBars level={4} />"
+        }
+      ]
+    },
+    {
+      "name": "ScanLine",
+      "import": "import { ScanLine } from '@cathode-ui/react';",
+      "summary": "Decorative CRT scan-line overlay. Wraps children with a translucent grid + a sweeping beam.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "speed",
+          "type": "number",
+          "required": false,
+          "default": 4,
+          "description": "Sweep duration in seconds."
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": "CSS color for the sweeping beam."
+        },
+        {
+          "name": "patternOpacity",
+          "type": "number",
+          "required": false,
+          "default": 0.06
+        }
+      ],
+      "motionStates": [
+        "sweep"
+      ],
+      "a11y": {
+        "role": "presentation",
+        "requires": [
+          "decorative — aria-hidden on effect layers"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "overlay",
+          "snippet": "<ScanLine><TerminalFrame title=\"CAM\">…</TerminalFrame></ScanLine>"
+        }
+      ]
+    },
+    {
+      "name": "TypewriterText",
+      "import": "import { TypewriterText } from '@cathode-ui/react';",
+      "summary": "Character-by-character reveal animation. Respects `prefers-reduced-motion` by rendering the full text immediately.",
+      "props": [
+        {
+          "name": "text",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "speed",
+          "type": "number",
+          "required": false,
+          "default": 40,
+          "description": "ms per character."
+        },
+        {
+          "name": "cursorAfter",
+          "type": "boolean",
+          "required": false,
+          "default": true
+        },
+        {
+          "name": "delay",
+          "type": "number",
+          "required": false,
+          "default": 0
+        },
+        {
+          "name": "onDone",
+          "type": "() => void",
+          "required": false
+        }
+      ],
+      "motionStates": [
+        "typing",
+        "cursor-blink"
+      ],
+      "a11y": {
+        "role": "text",
+        "requires": [
+          "aria-label carries the full text so SR reads it once"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "boot",
+          "snippet": "<TypewriterText text=\"SYSTEM INITIALIZED.\" speed={30} />"
+        }
+      ]
+    },
+    {
+      "name": "Countdown",
+      "import": "import { Countdown } from '@cathode-ui/react';",
+      "summary": "T-minus timer. Renders HH:MM:SS (or DD:HH:MM:SS when > 24h); auto-flips to danger in the final minute.",
+      "props": [
+        {
+          "name": "target",
+          "type": "Date | number",
+          "required": true
+        },
+        {
+          "name": "prefix",
+          "type": "string",
+          "required": false,
+          "default": "T-"
+        },
+        {
+          "name": "accent",
+          "type": "'info'|'success'|'warning'|'danger'|'accent'",
+          "required": false,
+          "default": "info"
+        },
+        {
+          "name": "onComplete",
+          "type": "() => void",
+          "required": false
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "timer",
+        "requires": [
+          "aria-live=\"off\" to avoid spamming SR"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "launch",
+          "snippet": "<Countdown target={launchAt} prefix=\"T-\" onComplete={fire} />"
+        }
+      ]
+    },
+    {
       "name": "Toast",
       "import": "import { Toast } from '@cathode-ui/react';",
       "summary": "Inline status notification. Controlled via `visible`; apps handle queuing/timing.",

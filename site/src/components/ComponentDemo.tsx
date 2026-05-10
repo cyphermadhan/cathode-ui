@@ -30,6 +30,20 @@ import {
   Kbd,
   CodeBlock,
   Table,
+  Tabs,
+  Breadcrumbs,
+  Menu,
+  Pagination,
+  Popover,
+  Tooltip,
+  Drawer,
+  ProgressBar,
+  Spinner,
+  Skeleton,
+  SignalBars,
+  ScanLine,
+  TypewriterText,
+  Countdown,
   sound,
 } from '@cathode-ui/react';
 import {
@@ -101,6 +115,20 @@ function Demos({ name }: { name: string }) {
     case 'Kbd':             return <KbdDemo />;
     case 'CodeBlock':       return <CodeBlockDemo />;
     case 'Table':           return <TableDemo />;
+    case 'Tabs':            return <TabsDemo />;
+    case 'Breadcrumbs':     return <BreadcrumbsDemo />;
+    case 'Menu':            return <MenuDemo />;
+    case 'Pagination':      return <PaginationDemo />;
+    case 'Popover':         return <PopoverDemo />;
+    case 'Tooltip':         return <TooltipDemo />;
+    case 'Drawer':          return <DrawerDemo />;
+    case 'ProgressBar':     return <ProgressBarDemo />;
+    case 'Spinner':         return <SpinnerDemo />;
+    case 'Skeleton':        return <SkeletonDemo />;
+    case 'SignalBars':      return <SignalBarsDemo />;
+    case 'ScanLine':        return <ScanLineDemo />;
+    case 'TypewriterText':  return <TypewriterTextDemo />;
+    case 'Countdown':       return <CountdownDemo />;
     default:
       return <div style={{ color: 'var(--cathode-color-text-dim)' }}>
         No live demo for <code>{name}</code> yet.
@@ -634,6 +662,198 @@ function TableDemo() {
         onSortChange={(k, d) => { setSortBy(k); setSortDir(d); }}
         onRowClick={(row) => alert(`Clicked ${row.name}`)}
       />
+    </div>
+  );
+}
+
+function TabsDemo() {
+  const [tab, setTab] = useState<'overview' | 'logs' | 'settings'>('overview');
+  return (
+    <div style={{ display: 'grid', gap: 12, width: '100%' }}>
+      <Tabs
+        value={tab}
+        onChange={setTab}
+        aria-label="Demo views"
+        items={[
+          { value: 'overview', label: 'OVERVIEW' },
+          { value: 'logs',     label: 'LOGS' },
+          { value: 'settings', label: 'SETTINGS' },
+        ]}
+      />
+      <div style={{ fontSize: 12, color: 'var(--cathode-color-text-dim)' }}>
+        ACTIVE: <code>{tab}</code>
+      </div>
+    </div>
+  );
+}
+
+function BreadcrumbsDemo() {
+  return (
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Components', href: '/components' },
+        { label: 'Breadcrumbs' },
+      ]}
+    />
+  );
+}
+
+function MenuDemo() {
+  const [last, setLast] = useState<string>('');
+  return (
+    <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+      <Menu
+        trigger={<Button>MORE ACTIONS ▾</Button>}
+        items={[
+          { label: 'Edit',       onSelect: () => setLast('edit'),     shortcut: 'E' },
+          { label: 'Duplicate',  onSelect: () => setLast('dup'),      shortcut: 'D' },
+          { label: 'Share…',     onSelect: () => setLast('share') },
+          { label: 'Delete',     onSelect: () => setLast('delete'),   kind: 'danger', divider: true, shortcut: '⌫' },
+        ]}
+      />
+      {last ? <span style={{ fontSize: 11, color: 'var(--cathode-color-text-dim)' }}>LAST: <code>{last}</code></span> : null}
+    </div>
+  );
+}
+
+function PaginationDemo() {
+  const [page, setPage] = useState(3);
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <Pagination page={page} totalPages={12} onChange={setPage} />
+      <div style={{ fontSize: 11, color: 'var(--cathode-color-text-dim)' }}>PAGE {page} OF 12</div>
+    </div>
+  );
+}
+
+function PopoverDemo() {
+  return (
+    <Popover trigger={<Button>SHOW DETAILS</Button>}>
+      <div style={{ fontSize: 11, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4, marginBottom: 6 }}>NODE · 0x0042</div>
+      <div style={{ fontSize: 13, color: 'var(--cathode-color-text)', lineHeight: 1.5 }}>
+        Anchored floating panel — closes on outside click or Escape.
+      </div>
+    </Popover>
+  );
+}
+
+function TooltipDemo() {
+  return (
+    <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
+      <Tooltip label="Save — Cmd+S"><Button>SAVE</Button></Tooltip>
+      <Tooltip label="Danger: destructive" side="bottom"><Button variant="danger">DELETE</Button></Tooltip>
+      <Tooltip label="Right-side hint" side="right"><Button>HOVER ME</Button></Tooltip>
+    </div>
+  );
+}
+
+function DrawerDemo() {
+  const [right, setRight] = useState(false);
+  const [bottom, setBottom] = useState(false);
+  return (
+    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+      <Button onClick={() => setRight(true)}>OPEN RIGHT DRAWER</Button>
+      <Button onClick={() => setBottom(true)}>OPEN BOTTOM DRAWER</Button>
+      <Drawer open={right} onClose={() => setRight(false)} title="FILTERS" side="right">
+        <p style={{ margin: '0 0 12px 0', color: 'var(--cathode-color-text-dim)', fontSize: 12 }}>Right-anchored panel. ESC closes.</p>
+      </Drawer>
+      <Drawer open={bottom} onClose={() => setBottom(false)} title="DETAILS" side="bottom" size={220}>
+        <p style={{ margin: 0, color: 'var(--cathode-color-text-dim)', fontSize: 12 }}>Bottom-anchored panel.</p>
+      </Drawer>
+    </div>
+  );
+}
+
+function ProgressBarDemo() {
+  const [pct, setPct] = useState(0.35);
+  return (
+    <div style={{ display: 'grid', gap: 14, width: '100%', maxWidth: 420 }}>
+      <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+        <ProgressBar value={pct} showValue accent="success" />
+      </div>
+      <div style={{ display: 'flex', gap: 8 }}>
+        <Button onClick={() => setPct((p) => Math.max(0, p - 0.1))}>−10%</Button>
+        <Button onClick={() => setPct((p) => Math.min(1, p + 0.1))}>+10%</Button>
+      </div>
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>INDETERMINATE</div>
+      <ProgressBar accent="info" />
+    </div>
+  );
+}
+
+function SpinnerDemo() {
+  return (
+    <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
+      <Spinner size="sm" />
+      <Spinner size="md" accent="success" />
+      <Spinner size="lg" accent="warning" />
+      <span style={{ fontSize: 11, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>CONNECTING…</span>
+    </div>
+  );
+}
+
+function SkeletonDemo() {
+  return (
+    <div style={{ display: 'grid', gap: 10, width: '100%', maxWidth: 360 }}>
+      <Skeleton variant="text" width={220} />
+      <Skeleton variant="text" width={180} />
+      <Skeleton variant="block" height={80} />
+    </div>
+  );
+}
+
+function SignalBarsDemo() {
+  return (
+    <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+      <SignalBars level={5} accent="success" />
+      <SignalBars level={3} accent="info" />
+      <SignalBars level={2} accent="warning" />
+      <SignalBars level={1} accent="danger" />
+      <SignalBars level={0} />
+      <SignalBars level={7} bars={10} width={34} height={18} accent="teal" />
+    </div>
+  );
+}
+
+function ScanLineDemo() {
+  return (
+    <ScanLine>
+      <TerminalFrame title="CAM · 01">
+        <DotLeader label="FEED" value="LIVE" valueColor="var(--cathode-color-success)" />
+        <DotLeader label="FPS"  value="30" />
+        <DotLeader label="RES"  value="1080p" />
+      </TerminalFrame>
+    </ScanLine>
+  );
+}
+
+function TypewriterTextDemo() {
+  const [key, setKey] = useState(0);
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <div style={{ fontSize: 14, color: 'var(--cathode-color-success)' }}>
+        <TypewriterText
+          key={key}
+          text="SYSTEM INITIALIZED. AWAITING INPUT…"
+          speed={30}
+        />
+      </div>
+      <Button onClick={() => setKey((k) => k + 1)}>REPLAY</Button>
+    </div>
+  );
+}
+
+function CountdownDemo() {
+  const [target, setTarget] = useState<number>(() => Date.now() + 2 * 60_000);
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <Countdown target={target} prefix="T-" />
+      <div style={{ display: 'flex', gap: 8 }}>
+        <Button onClick={() => setTarget(Date.now() + 30_000)}>30 S</Button>
+        <Button onClick={() => setTarget(Date.now() + 2 * 60_000)}>2 MIN</Button>
+        <Button onClick={() => setTarget(Date.now() + 25 * 3600_000)}>25 H</Button>
+      </div>
     </div>
   );
 }

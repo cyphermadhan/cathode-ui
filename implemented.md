@@ -7,7 +7,7 @@ Run `git log --oneline` in the repo for the exact commit history.
 
 ## Summary
 
-- **29 React primitives** shipped under `@cathode-ui/react`. ~9.8 KB gzipped.
+- **43 React primitives** shipped under `@cathode-ui/react`. ~13 KB gzipped.
 - **Dark + light themes** driven by `prefers-color-scheme`, pinnable via `<CathodeProvider theme="…">` or `data-theme`.
 - **Motion, haptics, sound** baked in. Six-pattern sound palette, five-pattern haptic palette.
 - **AI-native**: `CathodeAIProvider` interface, three React hooks, first-class `Chat` component, opt-in AI in `TextField` / `SearchBar` / `Button`.
@@ -92,7 +92,7 @@ Context with `theme` (auto/dark/light), `motion` (none/subtle/strong), `haptic` 
 
 ### Components (src/components/)
 
-**29 primitives**, all with motion profiles, opt-in haptic/sound, accessibility attributes.
+**43 primitives**, all with motion profiles, opt-in haptic/sound, accessibility attributes.
 
 | # | Primitive | Summary |
 |---|---|---|
@@ -125,6 +125,20 @@ Context with `theme` (auto/dark/light), `motion` (none/subtle/strong), `haptic` 
 | 26 | `Kbd` | Keyboard shortcut indicator — each key in its own bordered `<kbd>` box. |
 | 27 | `CodeBlock` | Multi-line code sample with language label + copy button. Accepts plain text or pre-highlighted HTML. |
 | 28 | `Table` | Terminal-style tabular display with controlled sort + optional row-click (keyboard-activatable). |
+| 29 | `Tabs` | Horizontal tab row, one active. Controlled via value + onChange. |
+| 30 | `Breadcrumbs` | Path-style nav — last item marked `aria-current="page"`. |
+| 31 | `Menu` | Click-triggered dropdown. Keyboard arrow-nav + Enter/Escape. |
+| 32 | `Pagination` | Prev/next arrows + windowed page buttons with ellipses. |
+| 33 | `Popover` | Anchored floating panel, click-to-open; cloneElement-wires aria on the trigger. |
+| 34 | `Tooltip` | Hover/focus hint; injects `aria-describedby` into the wrapped child. |
+| 35 | `Drawer` | Portaled slide-in panel from any of four edges; non-modal by default. |
+| 36 | `ProgressBar` | Continuous determinate bar; omit `value` for indeterminate shimmer. |
+| 37 | `Spinner` | Indeterminate loader; four pixel-square cells cycling. |
+| 38 | `Skeleton` | Loading-state placeholder box with a shimmer sweep. |
+| 39 | `SignalBars` | Cellular-style ascending bars for strength/battery/reception readings. |
+| 40 | `ScanLine` | Decorative CRT overlay — translucent grid + sweeping beam. |
+| 41 | `TypewriterText` | Character-by-character reveal; SR gets the full text immediately via visually-hidden sibling. |
+| 42 | `Countdown` | T-minus timer (HH:MM:SS or DD:HH:MM:SS); auto-flips to danger in the last minute. |
 
 ### Icons (src/icons.ts)
 Curated Phosphor Icons re-exports under `@cathode-ui/react/icons`. Includes `IconBroadcast`, `IconChat`, `IconEar`, `IconSignal`, `IconCheck`, `IconCamera`, `IconSparkle`, `IconClose`, `IconSettings`, `IconSearch`, `IconBrain`, `IconRobot`, and more.
