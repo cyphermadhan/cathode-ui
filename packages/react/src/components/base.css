@@ -1,0 +1,305 @@
+/* Component styles — theme-driven via tokens.css.
+ * Components pull their own classes out of here rather than
+ * inline-styling so bundle size stays low and consumers can override
+ * via CSS specificity if they really need to.
+ */
+
+.cathode-root {
+  font-family: var(--cathode-type-font-stack);
+  color: var(--cathode-color-text);
+  background: var(--cathode-color-bg);
+}
+
+/* ── TerminalFrame ─────────────────────────────────────────────── */
+
+.cathode-frame {
+  position: relative;
+  padding: var(--cathode-space-frame-pad);
+  border: var(--cathode-size-border-width) solid var(--cathode-color-border);
+  border-radius: var(--cathode-size-tile-corner);
+}
+
+.cathode-frame[data-accent="tx"]       { border-color: var(--cathode-color-tx);   }
+.cathode-frame[data-accent="info"]     { border-color: var(--cathode-color-info); }
+.cathode-frame[data-accent="ok"]       { border-color: var(--cathode-color-ok);   }
+.cathode-frame[data-accent="warn"]     { border-color: var(--cathode-color-warn); }
+
+.cathode-frame-title {
+  position: absolute;
+  top: 0;
+  left: 14px;
+  transform: translateY(-50%);
+  padding: 0 6px;
+  background: var(--cathode-color-bg);
+  color: var(--cathode-color-text-dim);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: var(--cathode-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* ── PixelBar ──────────────────────────────────────────────────── */
+
+.cathode-pixelbar {
+  display: inline-flex;
+  gap: var(--cathode-size-pixel-spacing);
+}
+
+.cathode-pixelbar-cell {
+  width: var(--cathode-size-pixel-cell);
+  height: var(--cathode-size-pixel-cell);
+  background: var(--cathode-color-text-faint);
+  flex: 0 0 auto;
+}
+
+.cathode-pixelbar-cell[data-lit="true"] {
+  background: var(--cathode-pixelbar-fill, var(--cathode-color-tx));
+}
+
+/* ── DotLeader ─────────────────────────────────────────────────── */
+
+.cathode-dotleader {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--cathode-type-font-stack);
+  font-size: 11px;
+}
+
+.cathode-dotleader-label {
+  color: var(--cathode-color-text-dim);
+  font-weight: 400;
+  letter-spacing: var(--cathode-type-tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.cathode-dotleader-dots {
+  flex: 1 1 auto;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--cathode-color-text-faint);
+  letter-spacing: 2px;
+  user-select: none;
+}
+
+.cathode-dotleader-value {
+  color: var(--cathode-color-text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ── PulsingDot ────────────────────────────────────────────────── */
+
+.cathode-pulsingdot {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  background: currentColor;
+  animation: cathode-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes cathode-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 1;   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cathode-pulsingdot { animation: none; opacity: 0.7; }
+}
+
+/* ── Pill ──────────────────────────────────────────────────────── */
+
+.cathode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 10px;
+  height: 32px;
+  min-height: var(--cathode-size-touch-target-min);
+  min-width: var(--cathode-size-touch-target-min);
+  border: var(--cathode-size-border-width) solid
+    color-mix(in srgb, var(--cathode-pill-accent, var(--cathode-color-info)) 60%, transparent);
+  background: transparent;
+  color: var(--cathode-pill-accent, var(--cathode-color-info));
+  font-family: var(--cathode-type-font-stack);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: var(--cathode-type-tracking-label);
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
+}
+
+.cathode-pill[data-active="true"] {
+  background: color-mix(in srgb, var(--cathode-pill-accent) 20%, transparent);
+  border-color: var(--cathode-pill-accent);
+  border-width: var(--cathode-size-border-width-active);
+  cursor: default;
+}
+
+.cathode-pill:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Button ────────────────────────────────────────────────────── */
+
+.cathode-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 var(--cathode-space-md);
+  height: var(--cathode-size-touch-target-min);
+  min-width: var(--cathode-size-touch-target-min);
+  border: var(--cathode-size-border-width) solid var(--cathode-color-border);
+  background: var(--cathode-color-panel);
+  color: var(--cathode-color-text);
+  font-family: var(--cathode-type-font-stack);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: var(--cathode-type-tracking-label);
+  text-transform: uppercase;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.cathode-button[data-variant="primary"] {
+  background: var(--cathode-color-ok);
+  border-color: var(--cathode-color-ok);
+  color: var(--cathode-color-bg);
+}
+
+.cathode-button[data-variant="danger"] {
+  background: var(--cathode-color-tx);
+  border-color: var(--cathode-color-tx);
+  color: var(--cathode-color-bg);
+}
+
+.cathode-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── TextField ─────────────────────────────────────────────────── */
+
+.cathode-textfield {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  border: var(--cathode-size-border-width) solid var(--cathode-color-border);
+  background: var(--cathode-color-panel);
+  font-family: var(--cathode-type-font-stack);
+}
+
+.cathode-textfield-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 10px 12px;
+  color: var(--cathode-color-text);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  caret-color: var(--cathode-color-ok);
+}
+
+.cathode-textfield-suggest {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  padding: 10px 12px;
+  pointer-events: none;
+  color: var(--cathode-color-text-dim);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: pre;
+  opacity: 0.6;
+}
+
+/* ── StatusTile ────────────────────────────────────────────────── */
+
+.cathode-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  cursor: default;
+}
+
+.cathode-tile-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  background: var(--cathode-color-panel);
+  border: var(--cathode-size-border-width) solid var(--cathode-color-border);
+  color: var(--cathode-color-text);
+}
+
+.cathode-tile[data-active="true"] .cathode-tile-icon {
+  background: color-mix(in srgb, var(--cathode-tile-accent, var(--cathode-color-info)) 15%, transparent);
+  border-color: var(--cathode-tile-accent);
+  color: var(--cathode-tile-accent);
+}
+
+.cathode-tile-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: var(--cathode-type-tracking-label);
+  text-transform: uppercase;
+  color: var(--cathode-color-text);
+}
+
+.cathode-tile[data-active="true"] .cathode-tile-title {
+  color: var(--cathode-tile-accent);
+}
+
+.cathode-tile-subtitle {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: var(--cathode-type-tracking-label);
+  text-transform: uppercase;
+  color: var(--cathode-color-text-dim);
+  line-height: 1.3;
+}
+
+.cathode-tile-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+/* ── Toast ─────────────────────────────────────────────────────── */
+
+.cathode-toast {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--cathode-color-panel);
+  border: var(--cathode-size-border-width) solid var(--cathode-color-info);
+  color: var(--cathode-color-text);
+  font-family: var(--cathode-type-font-stack);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: var(--cathode-type-tracking-label);
+}
+
+.cathode-toast[data-kind="error"]   { border-color: var(--cathode-color-tx);   }
+.cathode-toast[data-kind="warn"]    { border-color: var(--cathode-color-warn); }
+.cathode-toast[data-kind="success"] { border-color: var(--cathode-color-ok);   }
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

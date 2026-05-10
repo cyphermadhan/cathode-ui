@@ -1,0 +1,23 @@
+{
+  "name": "@cathode-ui/mcp",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server for Cathode UI — lets AI agents discover and query components without reading source.",
+  "type": "module",
+  "bin": {
+    "cathode-mcp": "./dist/server.js"
+  },
+  "main": "./dist/server.js",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/node": "^22.0.0"
+  },
+  "license": "MIT"
+}

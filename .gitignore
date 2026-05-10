@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+.DS_Store
+*.log
+.env
+.env.local
+.vite/
+storybook-static/
+coverage/
+.turbo/
+*.tsbuildinfo
+
+# Generated outputs — committed separately by intent
+# (kept in repo for downstream consumers + AI agents):
+# packages/react/src/tokens.css
+# cathode.manifest.json

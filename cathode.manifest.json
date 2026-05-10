@@ -1,0 +1,494 @@
+{
+  "$schema": "https://cathode-ui.dev/manifest.schema.json",
+  "name": "Cathode UI",
+  "version": "0.1.0",
+  "description": "Retro-future design system — monospace, pixel shapes, motion + haptics + sound + AI-native surfaces. Read this manifest to understand how to compose Cathode primitives without scraping React source.",
+  "fontStack": "'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', monospace",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "themeSelection": "CSS `prefers-color-scheme`, overridable via <html data-theme='dark|light'> or <CathodeProvider theme='dark|light'>.",
+  "imports": {
+    "tokens": "import '@cathode-ui/react/tokens.css';",
+    "fonts": "import '@cathode-ui/react/fonts.css';",
+    "icons": "import { IconBroadcast, IconChat /* ... */ } from '@cathode-ui/react/icons';"
+  },
+  "tokens": {
+    "$ref": "tokens/tokens.json"
+  },
+  "components": [
+    {
+      "name": "TerminalFrame",
+      "import": "import { TerminalFrame } from '@cathode-ui/react';",
+      "summary": "Bordered box with a small inset title — the \"┌─ PEERS ─\" terminal look. Use to group related readouts.",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "accent",
+          "type": "'neutral'|'tx'|'info'|'ok'|'warn'",
+          "required": false,
+          "default": "neutral"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "region",
+        "requires": []
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "titled",
+          "snippet": "<TerminalFrame title=\"PEERS\">{/* children */}</TerminalFrame>"
+        },
+        {
+          "name": "accented",
+          "snippet": "<TerminalFrame title=\"ERROR\" accent=\"tx\">…</TerminalFrame>"
+        }
+      ]
+    },
+    {
+      "name": "PixelBar",
+      "import": "import { PixelBar } from '@cathode-ui/react';",
+      "summary": "Discrete-cell horizontal level meter. Fill proportional to `level` (0–1).",
+      "props": [
+        {
+          "name": "level",
+          "type": "number",
+          "required": true,
+          "description": "Clamped to [0, 1]."
+        },
+        {
+          "name": "cells",
+          "type": "number",
+          "required": false,
+          "default": 24
+        },
+        {
+          "name": "fill",
+          "type": "string",
+          "required": false,
+          "description": "CSS color; overrides --cathode-pixelbar-fill."
+        },
+        {
+          "name": "cellSize",
+          "type": "number",
+          "required": false,
+          "default": 6
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "progressbar",
+        "requires": [
+          "aria-valuenow set automatically"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "vu",
+          "snippet": "<PixelBar level={0.6} cells={24} />"
+        }
+      ]
+    },
+    {
+      "name": "PulsingDot",
+      "import": "import { PulsingDot } from '@cathode-ui/react';",
+      "summary": "Small square that pulses to signal \"active/listening\" without a full progress indicator.",
+      "props": [
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "default": "currentColor"
+        },
+        {
+          "name": "size",
+          "type": "number",
+          "required": false,
+          "default": 8
+        }
+      ],
+      "motionStates": [
+        "pulse"
+      ],
+      "a11y": {
+        "role": "presentation",
+        "requires": []
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "default",
+          "snippet": "<PulsingDot color=\"var(--cathode-color-ok)\" />"
+        }
+      ]
+    },
+    {
+      "name": "DotLeader",
+      "import": "import { DotLeader } from '@cathode-ui/react';",
+      "summary": "\"LABEL …………… VALUE\" row — classic terminal readout. Dots fill available width.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "valueColor",
+          "type": "string",
+          "required": false,
+          "description": "CSS color for the value half."
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "text",
+        "requires": []
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "plain",
+          "snippet": "<DotLeader label=\"LATENCY\" value=\"42 MS\" />"
+        },
+        {
+          "name": "error",
+          "snippet": "<DotLeader label=\"STATUS\" value=\"DOWN\" valueColor=\"var(--cathode-color-tx)\" />"
+        }
+      ]
+    },
+    {
+      "name": "Pill",
+      "import": "import { Pill } from '@cathode-ui/react';",
+      "summary": "Icon+text nav/action button. `active` marks the current tab; pass an icon node for the icon+text treatment.",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "accent",
+          "type": "PillAccent ('info'|'ok'|'warn'|'tx'|'sys'|'navTalk'|'navChat'|'navListen'|'navSettings')",
+          "required": false,
+          "default": "info"
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "required": false,
+          "default": false,
+          "description": "Marks the current tab/state; visually highlights and disables click."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        },
+        {
+          "name": "feedback",
+          "type": "boolean",
+          "required": false,
+          "default": true,
+          "description": "Local override for haptic+sound."
+        },
+        {
+          "name": "onClick",
+          "type": "() => void",
+          "required": false
+        }
+      ],
+      "motionStates": [
+        "idle",
+        "press"
+      ],
+      "a11y": {
+        "role": "button",
+        "requires": [
+          "aria-label if title is unclear"
+        ]
+      },
+      "feedback": {
+        "haptic": "tap",
+        "sound": "click"
+      },
+      "examples": [
+        {
+          "name": "nav-active",
+          "snippet": "<Pill title=\"TALK\" active accent=\"navTalk\" />"
+        },
+        {
+          "name": "with-icon",
+          "snippet": "<Pill title=\"CHAT\" icon={<IconChat weight=\"bold\" />} onClick={openChat} accent=\"navChat\" />"
+        }
+      ]
+    },
+    {
+      "name": "Button",
+      "import": "import { Button } from '@cathode-ui/react';",
+      "summary": "General-purpose button. Variants: default / primary / danger. Supports declarative AI actions.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "variant",
+          "type": "'default'|'primary'|'danger'",
+          "required": false,
+          "default": "default"
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        },
+        {
+          "name": "onClick",
+          "type": "() => void",
+          "required": false
+        },
+        {
+          "name": "ai",
+          "type": "ButtonAIConfig",
+          "required": false,
+          "description": "Declarative AI intent; provider is routed from CathodeProvider."
+        },
+        {
+          "name": "onActionResult",
+          "type": "(result: string) => void",
+          "required": false
+        }
+      ],
+      "motionStates": [
+        "idle",
+        "press"
+      ],
+      "a11y": {
+        "role": "button",
+        "requires": [
+          "aria-label for icon-only usage"
+        ]
+      },
+      "feedback": {
+        "haptic": "confirm (primary) | tap",
+        "sound": "confirm (primary) | click"
+      },
+      "examples": [
+        {
+          "name": "primary",
+          "snippet": "<Button variant=\"primary\" onClick={save}>SAVE</Button>"
+        },
+        {
+          "name": "ai",
+          "snippet": "<Button ai={{ action: \"explain\", context: data }} onActionResult={setExplanation}>EXPLAIN</Button>"
+        }
+      ]
+    },
+    {
+      "name": "TextField",
+      "import": "import { TextField } from '@cathode-ui/react';",
+      "summary": "Monospace text input. With `ai={{ suggest: true }}` shows ghost-text AI completions (Tab to accept).",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "onChange",
+          "type": "(v: string) => void",
+          "required": true
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "ai",
+          "type": "TextFieldAIConfig",
+          "required": false
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "textbox",
+        "requires": [
+          "aria-label if no visible label"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "basic",
+          "snippet": "<TextField value={v} onChange={setV} placeholder=\"TYPE HERE\" />"
+        },
+        {
+          "name": "ai-suggest",
+          "snippet": "<TextField value={v} onChange={setV} ai={{ suggest: true }} />"
+        }
+      ]
+    },
+    {
+      "name": "StatusTile",
+      "import": "import { StatusTile } from '@cathode-ui/react';",
+      "summary": "MPC-style tile: icon + uppercase title + tiny subtitle. Optional tappable.",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "accent",
+          "type": "PillAccent",
+          "required": false,
+          "default": "info"
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        },
+        {
+          "name": "onClick",
+          "type": "() => void",
+          "required": false,
+          "description": "Makes the whole tile a press target."
+        }
+      ],
+      "motionStates": [
+        "idle",
+        "press"
+      ],
+      "a11y": {
+        "role": "button (when onClick) / region",
+        "requires": []
+      },
+      "feedback": {
+        "haptic": "tap",
+        "sound": "click"
+      },
+      "examples": [
+        {
+          "name": "display",
+          "snippet": "<StatusTile title=\"LINK\" subtitle=\"LIVE\" icon={<IconBroadcast weight=\"bold\" />} active accent=\"ok\" />"
+        },
+        {
+          "name": "button",
+          "snippet": "<StatusTile title=\"PAIR\" subtitle=\"TAP TO PAIR\" icon={<IconCheck />} onClick={pair} />"
+        }
+      ]
+    },
+    {
+      "name": "Toast",
+      "import": "import { Toast } from '@cathode-ui/react';",
+      "summary": "Inline status notification. Controlled via `visible`; apps handle queuing/timing.",
+      "props": [
+        {
+          "name": "visible",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "kind",
+          "type": "'info'|'success'|'warn'|'error'",
+          "required": false,
+          "default": "info"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        }
+      ],
+      "motionStates": [
+        "enter",
+        "exit"
+      ],
+      "a11y": {
+        "role": "status",
+        "requires": [
+          "aria-live=assertive for error kind"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "error",
+          "snippet": "<Toast visible={hasError} kind=\"error\">CONNECTION LOST</Toast>"
+        }
+      ]
+    }
+  ]
+}

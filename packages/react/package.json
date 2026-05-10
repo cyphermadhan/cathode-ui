@@ -1,0 +1,63 @@
+{
+  "name": "@cathode-ui/react",
+  "version": "0.1.0",
+  "description": "Cathode UI — React primitives with motion, haptics, sound, and AI hooks.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./tokens.css": "./src/tokens.css",
+    "./fonts.css": "./src/fonts.css",
+    "./icons": {
+      "import": "./dist/icons.js",
+      "types": "./dist/icons.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src/tokens.css",
+    "src/fonts.css"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "framer-motion": "^11.0.0",
+    "@phosphor-icons/react": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "typescript": "^5.5.0",
+    "vite": "^5.4.0",
+    "vite-plugin-dts": "^4.0.0"
+  },
+  "keywords": [
+    "design-system",
+    "react",
+    "retro",
+    "terminal",
+    "monospace",
+    "ai",
+    "haptics",
+    "motion"
+  ],
+  "license": "MIT"
+}

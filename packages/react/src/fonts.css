@@ -1,0 +1,12 @@
+/* JetBrains Mono via jsDelivr — avoids bundling ~100 KB of font files
+ * into @cathode-ui/react. Apps that want self-hosted fonts can override
+ * by NOT importing this file and providing their own @font-face rules.
+ *
+ * Only the weights Cathode actually uses (400, 500, 600, 700, 800) are
+ * linked, not the full variable axis — keeps the cold-load lean.
+ *
+ * Fallback stack is already baked into --cathode-type-font-stack; if
+ * this file fails to load the UI still renders in SF Mono / Menlo /
+ * Consolas depending on platform.
+ */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
