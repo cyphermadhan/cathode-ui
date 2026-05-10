@@ -2,7 +2,13 @@
 import Main from '../../layouts/Main.astro';
 import manifest from '../../../../cathode.manifest.json';
 
-const components = manifest.components;
+/* Sort by name for predictable browsing. The manifest preserves
+ * the order it was authored in (roughly: Klick ports first, new
+ * primitives after), which is handy for release notes but not for
+ * finding a component. */
+const components = [...manifest.components].sort((a: any, b: any) =>
+  a.name.localeCompare(b.name),
+);
 ---
 
 <Main title="Components" description="All Cathode UI components, lifted straight from the manifest.">

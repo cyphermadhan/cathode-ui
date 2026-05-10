@@ -9,6 +9,7 @@ import '@cathode-ui/react/fonts.css';
 import '@cathode-ui/react/styles.css';
 import '../styles/site.css';
 import { SiteControls } from '../components/SiteControls';
+import manifest from '../../../cathode.manifest.json';
 
 interface Props {
   title: string;
@@ -17,6 +18,16 @@ interface Props {
 
 const { title, description } = Astro.props;
 const path = Astro.url.pathname;
+
+// Components listed in alphabetical order from the manifest — the
+// authoritative list. Adding a new primitive to the manifest
+// auto-populates the sidebar.
+const componentItems = [...manifest.components]
+  .sort((a: any, b: any) => a.name.localeCompare(b.name))
+  .map((c: any) => ({
+    href: `/components/${c.name.toLowerCase()}`,
+    label: c.name,
+  }));
 
 const nav = [
   {
@@ -30,9 +41,8 @@ const nav = [
   {
     label: 'Components',
     items: [
-      { href: '/components',            label: 'All components' },
-      { href: '/components/chat',       label: 'Chat (AI)' },
-      { href: '/components/dialog',     label: 'Dialog' },
+      { href: '/components', label: 'All components' },
+      ...componentItems,
     ],
   },
   {
