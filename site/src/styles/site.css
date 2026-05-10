@@ -82,6 +82,13 @@ p a, li a, td a { text-decoration: underline; }
 .site-main {
   padding: 40px 56px 80px;
   max-width: 960px;
+  /* Grid items default to `min-width: auto`, which resolves to the
+   * content's intrinsic width and can override our max-width. Force
+   * min-width: 0 so the 1fr column actually holds us to 960px. */
+  min-width: 0;
+  /* Box every descendant so one overflowing child doesn't blow the
+   * column open sideways on a narrow viewport. */
+  overflow-x: clip;
 }
 
 @media (max-width: 820px) {
@@ -160,6 +167,11 @@ hr {
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
+  /* Keep the demo surface inside its column no matter what a child tries. */
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 table {

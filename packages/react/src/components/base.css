@@ -8,6 +8,11 @@
   font-family: var(--cathode-type-font-stack);
   color: var(--cathode-color-text);
   background: var(--cathode-color-bg);
+  /* Provider wrapper — prevent a runaway child (e.g. a dot-leader row
+   * with a long literal string) from forcing a parent grid/flex item
+   * wider than its allotted track. */
+  min-width: 0;
+  max-width: 100%;
 }
 
 /* ── TerminalFrame ─────────────────────────────────────────────── */
@@ -17,11 +22,17 @@
   padding: var(--cathode-space-frame-pad);
   border: var(--cathode-size-border-width) solid var(--cathode-color-border);
   border-radius: var(--cathode-size-tile-corner);
-  /* The frame's height is its content plus padding. If an ancestor
-   * (CSS grid cell, flex item, auto-layout row) tries to stretch the
-   * frame to equal siblings, align-self:start prevents it. */
+  /* Height comes from content; if an ancestor grid/flex tries to
+   * stretch the frame to match siblings, align-self:start prevents it. */
   align-self: start;
-  height: max-content;
+  /* Width is capped to the parent so a wide internal row (long
+   * dot-leader strings, pre-formatted text) can't blow the frame out
+   * past its column. min-width:0 is needed on flex/grid children to
+   * let them shrink below intrinsic content size. */
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .cathode-frame[data-accent="danger"]   { border-color: var(--cathode-color-danger);  }
