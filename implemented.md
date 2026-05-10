@@ -7,14 +7,17 @@ Run `git log --oneline` in the repo for the exact commit history.
 
 ## Summary
 
-- **45 React primitives** shipped under `@cathode-ui/react`. ~12 KB gzipped.
-- **Dark + light themes** driven by `prefers-color-scheme`, pinnable via `<CathodeProvider theme="…">` or `data-theme`.
-- **Motion, haptics, sound** baked in. Six-pattern sound palette, five-pattern haptic palette.
+- **45 React primitives** shipped under `@cathode-ui/react`. **14.5 KB gzip** for the JS bundle, **6.1 KB gzip** for the compiled component CSS, **0.5 KB gzip** for the icon re-exports. Tokens v0.3.0.
+- **Dark + light themes** driven by `prefers-color-scheme`, pinnable via `<CathodeProvider theme="…">` or `<html data-theme>`.
+- **Motion, haptics, sound** baked in. Six-pattern sound palette, six-pattern haptic palette. Global controls + per-component opt-out.
 - **AI-native**: `CathodeAIProvider` interface, three React hooks, first-class `Chat` component, opt-in AI in `TextField` / `SearchBar` / `Button`.
 - **AI-friendly**: machine-readable `cathode.manifest.json` + Model Context Protocol server at `@cathode-ui/mcp`.
-- **Docs site**: Astro, 8 pages, live React islands for interactive components.
+- **Docs site**: Astro, 51 pages, live React islands for interactive demos, global theme/motion/haptic/sound controls.
+- **Figma library**: 8 pages, 45 component sets, 210 components/variants at `figma.com/design/yudyQFCPwX1FSLcXBXuVvY`. All tokens bound to Figma Variables with Dark + Light modes.
+- **a11y**: 51/51 docs pages pass `@axe-core/playwright` cleanly (WCAG 2.0/2.1 A+AA).
+- **GitHub**: pushed to `github.com/cyphermadhan/cathode-ui`, default branch `main`.
 
-Not yet shipped: Figma kit, Swift package, npm publish, GitHub remote.
+Not yet shipped: npm publish, Swift package.
 
 ---
 
@@ -22,10 +25,11 @@ Not yet shipped: Figma kit, Swift package, npm publish, GitHub remote.
 
 ```
 cathode-ui/
-├── tokens/tokens.json              ← single source of truth (v0.2.0)
+├── tokens/tokens.json              ← single source of truth (v0.3.0)
 ├── scripts/
 │   ├── gen-css.js                  ← → packages/react/src/tokens.css
-│   └── gen-manifest.js             ← → cathode.manifest.json
+│   ├── gen-manifest.js             ← → cathode.manifest.json
+│   └── a11y-test.js                ← axe-core runner over docs site
 ├── packages/
 │   ├── react/                      ← @cathode-ui/react
 │   └── mcp-server/                 ← @cathode-ui/mcp
@@ -42,20 +46,14 @@ Node version pinned via `engines.node >= 20`. Licensed MIT.
 
 ## Tokens
 
-`tokens/tokens.json` — version `0.2.0`. Generator scripts emit CSS
+`tokens/tokens.json` — version `0.3.0`. Generator scripts emit CSS
 custom properties and (eventually) Swift constants from it.
-
-**Color token renames in 0.2.0:**
-- `tx` → `danger`, `txDeep` → `dangerDeep`
-- `ok` → `success`
-- `warn` → `warning`
-- `sys` → `accent`
-- `navTalk / navChat / navListen / navSettings` → `amber / pink / purple / grey`
-- Added: `teal`
 
 **Two color families** in the API surface:
 - **Semantic**: `danger` / `success` / `warning` / `info` / `accent` — for state-carrying meaning.
 - **Palette**: `amber` / `pink` / `purple` / `teal` / `grey` — for differentiation without semantic claim.
+
+Light-theme accents were deepened in 0.3.0 so every accent clears WCAG AA 4.5:1 contrast on both panel and bg surfaces without sacrificing the retro palette feel.
 
 **Other token groups**: `spacing` (xs/sm/md/lg/xl/xxl + framePad/rowHeight), `size` (pixelCell, touchTargetMin, iconSm/Md/Lg, borderWidth, …), `type.scale` (caption/readout/label/number/display/hero), `motion.duration/ease/scale`, `breakpoint`.
 
@@ -69,7 +67,13 @@ custom properties and (eventually) Swift constants from it.
 
 Vite + TypeScript strict, framer-motion, Phosphor Icons. Dual ESM + CJS output, types generated via `vite-plugin-dts`.
 
-**Build targets**: ES2022, iOS 16+ / modern browsers. Size at last build: **index 7.03 KB gzip, icons 0.52 KB gzip, CSS 2.20 KB gzip.**
+**Build targets**: ES2022, iOS 16+ / modern browsers.
+**Last build sizes**: `index.js` 14.51 KB gzip · `style.css` 6.09 KB gzip · `icons.js` 0.52 KB gzip.
+
+**Three CSS subpath exports** — consumers must import all three (or at minimum `tokens.css` + `styles.css`):
+- `@cathode-ui/react/tokens.css` — `:root` CSS variables, Light/Dark switching via `prefers-color-scheme` + `[data-theme]`.
+- `@cathode-ui/react/fonts.css` — JetBrains Mono `@font-face` (optional; remote Google Fonts).
+- `@cathode-ui/react/styles.css` — compiled component class rules (`.cathode-pill`, `.cathode-frame`, etc.).
 
 ### `<CathodeProvider>` (src/CathodeProvider.tsx)
 Context with `theme` (auto/dark/light), `motion` (none/subtle/strong), `haptic` (bool), `sound` (bool, default off), `ai` (provider).
@@ -78,7 +82,7 @@ Context with `theme` (auto/dark/light), `motion` (none/subtle/strong), `haptic` 
 - **`haptic.ts`** — `navigator.vibrate` wrapper with iOS-Safari no-op. 6 patterns: `tap` / `confirm` / `warn` / `error` / `destructive` / `long`.
 - **`sound.ts`** — Web Audio oscillator synth, supports multi-note sequences with per-note `delay`. 6 patterns:
   - `click` — 1.2 kHz square, 30 ms
-  - `tick` — 1.6 kHz square, 15 ms, low gain
+  - `tick` — 1.6 kHz square, 15 ms, low gain (slider / counter step)
   - `confirm` — 880 → 1175 Hz sine rising two-note
   - `warn` — 600 Hz triangle, 140 ms
   - `error` — 440 → 330 Hz sawtooth descending two-note (classic system ding-dong)
@@ -96,51 +100,51 @@ Context with `theme` (auto/dark/light), `motion` (none/subtle/strong), `haptic` 
 
 | # | Primitive | Summary |
 |---|---|---|
-| 1 | `TerminalFrame` | Bordered box w/ inset title. Accent variants (neutral/info/success/warning/danger). |
-| 1b | `Card` | TerminalFrame minus the inset title. Generic panel; clickable variant via `onClick`. |
-| 2 | `PixelBar` | Discrete-cell level meter, 0–1 level, configurable cells + fill. |
-| 3 | `ActivityBar` | Pseudo-random VU meter (deterministic hash per cell/seed). |
-| 4 | `PulsingDot` | Small CSS-animated square for "active/scanning" indicators. |
-| 5 | `DotLeader` | `LABEL ……………… VALUE` terminal readout. |
-| 6 | `StatusTile` | MPC-style icon+title+subtitle tile, optional tappable. |
-| 7 | `Pill` | Icon+text nav/action button with `active` state + 10-color accent API. |
-| 8 | `Button` | `default/primary/danger` variants; AI action via `ai={{ action }}`. |
-| 9 | `TextField` | Monospace input; AI ghost-text suggest with `ai={{ suggest: true }}`. |
-| 10 | `SearchBar` | Monospace search + results dropdown; semantic AI mode via `ai={{ semantic: true }}`. |
-| 11 | `Chat` | First-class AI conversation — streaming, cancel, reset, auto-scroll. |
-| 12 | `Toast` | Inline status notification, 4 kinds (info/success/warning/error). |
-| 13 | `Dialog` | Portal-rendered modal with TerminalFrame chrome. ESC + backdrop close. |
-| 14 | `Chips` | Horizontal-scroll preset chips, supports grouped layouts with dividers. |
-| 15 | `Counter` | `[−]  LABEL VALUE  [+]` rocker; welded label reads as one control. (Renamed from `Stepper` in 0.3.0.) |
-| 16 | `Toggle` | Binary on/off switch with accent fill when on. |
-| 17 | `HazardStripes` | Decorative diagonal-stripe overlay for "armed/caution" states. |
-| 18 | `Checkbox` | Binary form input; supports `indeterminate` for tri-state parent rows. |
-| 19 | `RadioGroup` | Single-select from 2+ options; native radios under the hood (keyboard arrow-nav free). |
-| 20 | `Select` | Native-backed single-select for finite option sets; Cathode chrome + chevron. |
-| 21 | `TextArea` | Multi-line monospace input; optional char counter; resize disabled by default. |
-| 22 | `FormField` | Label + input + hint/error wrapper; auto-wires `aria-labelledby` + `aria-describedby`. |
-| 23 | `Badge` | Small inline status marker (solid or outline). "NEW", "BETA", "v0.3.0". |
-| 24 | `Tag` | Outlined accent marker for keywords/filters; optional `onRemove` × button. |
-| 25 | `Avatar` | Square identity — image, initials fallback, optional status dot. |
-| 26 | `Kbd` | Keyboard shortcut indicator — each key in its own bordered `<kbd>` box. |
-| 27 | `CodeBlock` | Multi-line code sample with language label + copy button. Accepts plain text or pre-highlighted HTML. |
-| 28 | `Table` | Terminal-style tabular display with controlled sort + optional row-click (keyboard-activatable). |
-| 29 | `Tabs` | Horizontal tab row, one active. Controlled via value + onChange. |
-| 30 | `Breadcrumbs` | Path-style nav — last item marked `aria-current="page"`. |
-| 31 | `Menu` | Click-triggered dropdown. Keyboard arrow-nav + Enter/Escape. |
-| 32 | `Pagination` | Prev/next arrows + windowed page buttons with ellipses. |
-| 33 | `Popover` | Anchored floating panel, click-to-open; cloneElement-wires aria on the trigger. |
-| 34 | `Tooltip` | Hover/focus hint; injects `aria-describedby` into the wrapped child. |
-| 35 | `Drawer` | Portaled slide-in panel from any of four edges; non-modal by default. |
-| 36 | `ProgressBar` | Continuous determinate bar; omit `value` for indeterminate shimmer. |
-| 37 | `Loader` | Indeterminate loader; four pixel-square cells cycling. (Renamed from `Spinner` in 0.3.1.) |
-| 38 | `Skeleton` | Loading-state placeholder box with a shimmer sweep. |
-| 39 | `SignalBars` | Cellular-style ascending bars for strength/battery/reception readings. |
-| 40 | `ScanLine` | Decorative CRT overlay — translucent grid + sweeping beam. |
-| 41 | `TypewriterText` | Character-by-character reveal; SR gets the full text immediately via visually-hidden sibling. |
-| 42 | `Countdown` | T-minus timer (HH:MM:SS or DD:HH:MM:SS); auto-flips to danger in the last minute. |
-| 43 | `Stack` | Utility flex wrapper — direction/gap/align/justify/wrap via props; optional `as` tag. |
-| 44 | `Accordion` | Expand/collapse sections; controlled or uncontrolled; `allowMultiple={false}` for exclusive mode. |
+| 1  | `TerminalFrame` | Bordered box w/ inset title. Accent variants (neutral/info/success/warning/danger). |
+| 2  | `Card` | TerminalFrame minus the inset title. Generic panel; clickable variant via `onClick`. |
+| 3  | `PixelBar` | Discrete-cell level meter, 0–1 level, configurable cells + fill. |
+| 4  | `ActivityBar` | Pseudo-random VU meter (deterministic hash per cell/seed). |
+| 5  | `PulsingDot` | Small CSS-animated square for "active/scanning" indicators. |
+| 6  | `DotLeader` | `LABEL ……………… VALUE` terminal readout. |
+| 7  | `StatusTile` | MPC-style icon+title+subtitle tile, optional tappable. |
+| 8  | `Pill` | Icon+text nav/action button with `active` state + 10-color accent API. |
+| 9  | `Button` | `default/primary/danger` variants; AI action via `ai={{ action }}`. |
+| 10 | `TextField` | Monospace input; AI ghost-text suggest with `ai={{ suggest: true }}`. Regular weight by default; `weight="bold"` switches to 600. |
+| 11 | `SearchBar` | Monospace search + results dropdown; Phosphor MagnifyingGlass icon by default; semantic AI mode via `ai={{ semantic: true }}`. |
+| 12 | `Chat` | First-class AI conversation — streaming, cancel, reset, auto-scroll. |
+| 13 | `Toast` | Inline status notification, 4 kinds (info/success/warning/error). |
+| 14 | `Dialog` | Portal-rendered modal with TerminalFrame chrome. ESC + backdrop close. |
+| 15 | `Chips` | Horizontal-scroll preset chips, supports grouped layouts with dividers. |
+| 16 | `Counter` | `[−]  LABEL VALUE  [+]` rocker; welded label reads as one control. (Renamed from `Stepper` in 0.3.0.) |
+| 17 | `Toggle` | Binary on/off switch with accent fill when on. |
+| 18 | `HazardStripes` | Decorative diagonal-stripe overlay for "armed/caution" states. |
+| 19 | `Checkbox` | Binary form input; supports `indeterminate` for tri-state parent rows. |
+| 20 | `RadioGroup` | Single-select from 2+ options; native radios under the hood (keyboard arrow-nav free). |
+| 21 | `Select` | Native-backed single-select for finite option sets; Cathode chrome + chevron. |
+| 22 | `TextArea` | Multi-line monospace input; optional char counter; resize disabled by default. Regular weight by default; `weight="bold"` switches to 600. |
+| 23 | `FormField` | Label + input + hint/error wrapper; auto-wires `aria-labelledby` + `aria-describedby`. |
+| 24 | `Badge` | Small inline status marker (solid or outline). "NEW", "BETA", "v0.3.0". |
+| 25 | `Tag` | Outlined accent marker for keywords/filters; optional `onRemove` × button. |
+| 26 | `Avatar` | Square identity — image, initials fallback, optional status dot. |
+| 27 | `Kbd` | Keyboard shortcut indicator — each key in its own bordered `<kbd>` box. |
+| 28 | `CodeBlock` | Multi-line code sample with language label + copy button. Accepts plain text or pre-highlighted HTML. |
+| 29 | `Table` | Terminal-style tabular display with controlled sort + optional row-click (keyboard-activatable). |
+| 30 | `Tabs` | Horizontal tab row, one active. Controlled via value + onChange. |
+| 31 | `Breadcrumbs` | Path-style nav — last item marked `aria-current="page"`. |
+| 32 | `Menu` | Click-triggered dropdown. Keyboard arrow-nav + Enter/Escape. Portaled to `document.body` so ancestor overflow can't clip it. |
+| 33 | `Pagination` | Prev/next arrows + windowed page buttons with ellipses. |
+| 34 | `Popover` | Anchored floating panel, click-to-open. Portaled; closes on outside click + Escape. |
+| 35 | `Tooltip` | Hover/focus hint; wraps children in an anchor `<span>` (no `forwardRef` required downstream); portaled to document.body. |
+| 36 | `Drawer` | Portaled slide-in panel from any of four edges; non-modal by default. |
+| 37 | `ProgressBar` | Continuous determinate bar; omit `value` for indeterminate shimmer. |
+| 38 | `Loader` | Indeterminate loader; four pixel-square cells cycling. (Renamed from `Spinner` in 0.3.1.) |
+| 39 | `Skeleton` | Loading-state placeholder box with a shimmer sweep. |
+| 40 | `SignalBars` | Cellular-style ascending bars for strength/battery/reception readings. |
+| 41 | `ScanLine` | Decorative CRT overlay — translucent grid + sweeping beam. |
+| 42 | `TypewriterText` | Character-by-character reveal; SR gets the full text immediately via visually-hidden sibling. `color` + `cursorColor` props. |
+| 43 | `Countdown` | T-minus timer (HH:MM:SS or DD:HH:MM:SS); auto-flips to danger in the last minute. |
+| 44 | `Stack` | Utility flex wrapper — direction/gap/align/justify/wrap via props; optional `as` tag. |
+| 45 | `Accordion` | Expand/collapse sections; controlled or uncontrolled; `allowMultiple={false}` for exclusive mode. |
 
 ### Icons (src/icons.ts)
 Curated Phosphor Icons re-exports under `@cathode-ui/react/icons`. Includes `IconBroadcast`, `IconChat`, `IconEar`, `IconSignal`, `IconCheck`, `IconCamera`, `IconSparkle`, `IconClose`, `IconSettings`, `IconSearch`, `IconBrain`, `IconRobot`, and more.
@@ -181,7 +185,7 @@ Register via `.mcp.json` in Claude Code / Cursor:
 
 ## Machine-readable manifest — `cathode.manifest.json`
 
-Committed at repo root. **17 components** fully specified. Each entry includes:
+Committed at repo root. **45 components** fully specified. Each entry includes:
 - `name`, `import`, `summary`
 - `props[]` (name, type, required, default, description)
 - `motionStates[]`
@@ -195,49 +199,75 @@ Generated by `scripts/gen-manifest.js`; regenerate via `npm run gen:manifest` af
 
 ## Docs site — `site/`
 
-Astro + MDX + React islands. **23 static pages** at build time. Dogfoods `@cathode-ui/react/tokens.css` — the docs chrome respects the same theme variables as the components it documents.
+Astro + MDX + React islands. **51 static pages** at build time. Dogfoods `@cathode-ui/react/tokens.css` — the docs chrome respects the same theme variables as the components it documents.
 
 **Pages (top-level):**
 - `/` — hero + principles + quick-taste snippet
 - `/getting-started` — install / provider / first render
 - `/tokens` — color grids (both themes), type scale, spacing, motion durations, sound + haptic tables — all rendered from `tokens/tokens.json`
-- `/components` — auto-generated index from `cathode.manifest.json`
+- `/components` — alphabetical index from `cathode.manifest.json`
 - `/ai` — `CathodeAIProvider` interface + OpenAI adapter example
 - `/mcp` — MCP tool list, `.mcp.json` config, sample agent transcript
 
-**Component detail pages** — one per primitive (17 total):
+**Component detail pages** — one per primitive (45 total):
 - Chat + Dialog have dedicated `.astro` files with richer live layouts
-- The other 15 are generated by a dynamic `[name].astro` route via `getStaticPaths` over `cathode.manifest.json`
-- Every page renders: **live interactive demo** (via a shared `ComponentDemo` React island), import line, props table, manifest examples, a11y role + requirements, feedback spec, motion states
+- The other 43 are generated by a dynamic `[name].astro` route via `getStaticPaths` over `cathode.manifest.json`
+- Every page renders: live interactive demo (via a shared `ComponentDemo` React island), import line, props table, manifest examples, a11y role + requirements, feedback spec, motion states
 
-Paths: `/components/terminalframe`, `/components/pill`, `/components/button`, `/components/textfield`, `/components/stepper`, `/components/toggle`, `/components/chips`, `/components/searchbar`, `/components/statustile`, `/components/pixelbar`, `/components/activitybar`, `/components/pulsingdot`, `/components/dotleader`, `/components/hazardstripes`, `/components/toast`, `/components/chat`, `/components/dialog`.
+**Site-wide controls bar** (top of every page, React island):
+- Theme (auto / dark / light) — persists via localStorage + `data-theme` on `<html>`, inline head script prevents theme flash on first paint
+- Motion intensity (none / subtle / strong)
+- Haptic on/off, Sound on/off
+- Every `ComponentDemo` + `ChatDemo` + `DialogDemo` subscribes via a shared settings module and forwards the values into its embedded `<CathodeProvider>` — so flipping any control re-renders every demo live
+
+**Sidebar** — alphabetical listing of all 45 components, auto-populated from the manifest. Scroll position persists across in-site navigation via sessionStorage (inline script in `Main.astro`).
 
 **Run**: `cd site && npm run dev` → `http://127.0.0.1:4321/`.
 
 **Build**: `npm run build` — ~3 s, outputs pure static HTML + React island bundles for the interactive demos.
 
+**a11y gate**: `npm run test:a11y` (root) builds the docs site, serves it via `astro preview`, and runs `@axe-core/playwright` against every page with WCAG 2.0/2.1 A+AA tags. All 51 pages pass cleanly.
+
 **Deploy target**: any static host (Vercel / Netlify / Cloudflare Pages / GitHub Pages).
 
 ---
 
+## Figma library
+
+**File**: `figma.com/design/yudyQFCPwX1FSLcXBXuVvY/Cathode-UI`.
+
+Built programmatically via the figma-remote MCP's `use_figma` tool (Plugin API) — no designer hand-crafting. Strokes, fills, and text colors are bound to Figma Variables so toggling a page's mode Dark ↔ Light re-colors every instance live.
+
+**8 pages, 45 component sets, 210 components/variants total.**
+
+| Page | Contents |
+|---|---|
+| Tokens | 5 Variable collections (Color with Dark + Light modes, Spacing, Size, Type, Motion) — 54 variables. Plus a visual swatch page. |
+| Layout | TerminalFrame (5 variants), Card (10), HazardStripes (1) |
+| Forms | Button (6), TextField (4), TextArea (3), Select (3), Counter (3), Checkbox (4), Radio (3), Toggle (3), SearchBar (3), FormField (4), Chip (3) |
+| Data | Badge (10), Tag (20), Avatar (7), Kbd (4), DotLeader (3), Pill (18), CodeBlock (3), Table (1), StatusTile (5) |
+| Navigation | Tabs (5), Breadcrumbs (1), Menu (2), Pagination (3) |
+| Feedback | ProgressBar (7), Loader (6), Skeleton (6), PixelBar (4), ActivityBar (3), SignalBars (6), PulsingDot (5), Toast (4) |
+| Overlays | Dialog (3), Drawer (4), Popover (2), Tooltip (2) |
+| Misc | Stack (4), Accordion (3), Chat (3), ScanLine (1), TypewriterText (5), Countdown (5) |
+
+**Static-Figma caveats:**
+- Animation-heavy primitives (`Loader`, `PulsingDot`, `TypewriterText`, `ScanLine`, `Countdown`, `Chat` streaming) render as static "at-rest" representations — Figma can't drive CSS keyframes.
+- Composite multi-state components (`Menu`, `Popover`, `Tooltip`, `Drawer`) ship as separate variants per state rather than live interactions.
+- `ScanLine`'s scanline grid is omitted in Figma (gradients can't truly repeat like CSS `repeating-linear-gradient`); only the stationary beam + content are shown.
+- `HazardStripes` uses a manually-constructed 45° stripe pattern since Figma can't do `repeating-linear-gradient` at arbitrary angles.
+
+---
+
+## a11y
+
+- **`npm run test:a11y`** (root script) builds the docs site, serves it via `astro preview`, iterates every page via `@axe-core/playwright` with WCAG 2.0/2.1 A+AA tags, exits non-zero on any serious/critical violation.
+- **51/51 pages pass** cleanly (0 serious, 0 critical, 0 minor).
+- Violations fixed during build-out: bumped light-theme accent tokens for ≥4.5:1 contrast, swapped `.cathode-chat-empty` to `text-dim`, added `aria-label` to `PixelBar`, `aria-disabled` on `Toggle`'s outer label, `role="img"` on `Avatar`'s status dot, clone-element `aria-haspopup/aria-expanded` onto `Menu` + `Popover` triggers (not wrapper div), visually-hidden full-text sibling on `TypewriterText`, `tabindex="0"` on scrollable code blocks.
+
+---
+
 ## Not yet implemented
-
-### Phase 2: Figma library — **in progress** (built via figma-remote MCP)
-
-File: `https://www.figma.com/design/yudyQFCPwX1FSLcXBXuVvY/Cathode-UI`. Building programmatically via the Figma Plugin API (no designer hand-crafting). Strokes, fills, and text colors are bound to Figma Variables so Light ↔ Dark mode switches re-color every instance.
-
-| Phase | Page | Components | Status |
-|---|---|---|---|
-| 1 | Tokens | 5 Variable collections (Color Dark+Light, Spacing, Size, Type, Motion) + visual swatch page | ✅ |
-| 2 | Layout | TerminalFrame (5 variants), Card (10), HazardStripes (1) | ✅ |
-| 3 | Forms | Button (6), TextField (4), TextArea (3), Select (3), Counter (3), Checkbox (4), Radio (3), Toggle (3), SearchBar (3), FormField (4), Chip (3) | ✅ |
-| 4 | Data | Badge (10), Tag (20), Avatar (7), Kbd (4), DotLeader (3), Pill (18), CodeBlock (3), Table (1), StatusTile (5) | ✅ |
-| 5 | Navigation | Tabs (5), Breadcrumbs (1), Menu (2), Pagination (3) | ✅ |
-| 6 | Feedback | ProgressBar (7), Loader (6), Skeleton (6), PixelBar (4), ActivityBar (3), SignalBars (6), PulsingDot (5), Toast (4) | ✅ |
-| 7 | Overlays | Dialog (3), Drawer (4), Popover (2), Tooltip (2) | ✅ |
-| 8 | Misc | Stack (4), Accordion (3), Chat (3), ScanLine (1), TypewriterText (5), Countdown (5) | ✅ |
-
-**Caveats (static Figma):** animation-heavy primitives (`Loader`, `PulsingDot`, `TypewriterText`, `ScanLine`, `Countdown`, `Chat` streaming) render as static "at-rest" representations — Figma can't drive CSS keyframes. Composite multi-state components (`Menu`, `Popover`, `Tooltip`, `Drawer`) ship as separate variants per state rather than live interactions.
 
 ### Phase 3: Swift package
 Planned. `scripts/gen-swift.js` will emit `Sources/Cathode/Tokens.swift`
@@ -250,18 +280,18 @@ React Native, Vue, Svelte wrappers — architecture supports it (tokens
 are framework-agnostic) but deferred.
 
 ### Housekeeping
-- Pushed to https://github.com/cyphermadhan/cathode-ui (default branch `main`). Not yet published to npm — `@cathode-ui/react` + `@cathode-ui/mcp` install via workspace path only.
-- **a11y CI**: `npm run test:a11y` builds the docs site, serves it via `astro preview`, and runs `@axe-core/playwright` against every page (23 total) with the WCAG 2.0/2.1 A+AA tag set. All 23 pass with 0 serious/critical violations. Fixing the initial 28 violations took token tweaks (darker light-theme accents for ≥4.5:1 contrast), a `.cathode-chat-empty` color swap, an `aria-label` on `PixelBar`, and `aria-disabled` on `Toggle`'s outer label.
+- **npm publish pending.** `@cathode-ui/react` + `@cathode-ui/mcp` install via workspace path only. Need to register the `@cathode-ui` scope (or fall back to flat names), wire release scripts, cut 0.3.0.
 - No Storybook. The `dev.tsx` preview + docs site cover the same ground without the additional dependency weight.
-- No visual regression tests (Chromatic / Playwright).
-- MCP server uses substring search for `cathode_search`; a vector-embedding mode would be a nice upgrade but the corpus is <20 components, so cost outweighs benefit right now.
+- No visual regression tests (Chromatic / Playwright) beyond axe-core a11y.
+- MCP server uses substring search for `cathode_search`; a vector-embedding mode would be a nice upgrade but the corpus is <50 components, so cost outweighs benefit right now.
 
 ---
 
 ## Divergences from plan.md
 
 - **pnpm → npm workspaces.** Swapped for fewer toolchain dependencies; npm workspaces cover our needs fine.
-- **Storybook deferred.** `dev.tsx` preview inside `packages/react/` + live islands in the docs site do the same job without a separate build pipeline. Revisit if the primitive count balloons.
+- **Storybook deferred.** `dev.tsx` preview inside `packages/react/` + live islands in the docs site do the same job without a separate build pipeline. Revisit if the primitive count balloons further.
 - **Reference AI provider deferred.** Core package stays dependency-free; the docs demo uses an inline mock. Separate `@cathode-ui/provider-openai` / `-anthropic` adapters are TBD packages.
-- **Figma library: JSON export instead of `.fig`** (see above).
+- **Figma library built programmatically via MCP, not hand-crafted in Figma or exported as Tokens Studio JSON.** The `figma-remote` MCP's `use_figma` tool runs arbitrary JavaScript in the file via Figma's Plugin API, so we can create Variables, component sets, variants, and token bindings directly from `tokens.json` — no designer bottleneck and no `.fig` binary to maintain.
 - **Custom pixel-art icons**: not started. Phosphor covers the current need; custom set becomes relevant only if we find Phosphor gaps in the wild.
+- **Primitive count expanded from 17 to 45.** The plan scoped the initial set tightly (`TerminalFrame`, `Pill`, etc. — mostly Klick ports + a handful of new ones). Subsequent rounds added forms (Checkbox/RadioGroup/Select/TextArea/FormField), data (Badge/Tag/Avatar/Kbd/CodeBlock/Table), navigation (Tabs/Breadcrumbs/Menu/Pagination), feedback (ProgressBar/Loader/Skeleton/SignalBars), overlays (Popover/Tooltip/Drawer), layout (Stack/Accordion/Card), and Cathode-flavor (ScanLine/TypewriterText/Countdown) clusters.
