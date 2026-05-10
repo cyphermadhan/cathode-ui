@@ -20,7 +20,7 @@ import {
   StatusTile,
   Toast,
   Toggle,
-  Stepper,
+  Counter,
   Chips,
   SearchBar,
   Dialog,
@@ -267,7 +267,7 @@ function App() {
         <Section title="TOGGLE + STEPPER">
           <Row align="center">
             <Toggle value={notify} onChange={setNotify} label="NOTIFICATIONS" />
-            <Stepper value={wpm} onChange={setWpm} min={5} max={40} label="WPM" />
+            <Counter value={wpm} onChange={setWpm} min={5} max={40} label="WPM" />
             <Toggle value={!notify} onChange={(v) => setNotify(!v)} label="DANGER" accent="danger" />
           </Row>
         </Section>

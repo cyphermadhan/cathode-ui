@@ -241,6 +241,77 @@ td code { font-size: 11px; }
   line-height: 1.45;
 }
 
+/* Site preference strip at the top of every page. Pins theme +
+ * motion + haptic + sound for every CathodeProvider instance below.
+ */
+.site-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 14px;
+  margin: 0 0 24px 0;
+  background: var(--cathode-color-panel);
+  border: 1px solid var(--cathode-color-border);
+  font-family: var(--cathode-type-font-stack);
+}
+
+.site-controls-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.site-controls-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  color: var(--cathode-color-text-dim);
+}
+
+.site-controls-segmented {
+  display: inline-flex;
+  border: 1px solid var(--cathode-color-border);
+}
+
+.site-controls-segment {
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--cathode-color-border);
+  color: var(--cathode-color-text-dim);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  cursor: pointer;
+  line-height: 1;
+}
+.site-controls-segment:first-child { border-left: none; }
+.site-controls-segment[data-on="true"] {
+  background: var(--cathode-color-info);
+  color: var(--cathode-color-bg);
+}
+
+.site-controls-toggle {
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid var(--cathode-color-border);
+  color: var(--cathode-color-text-dim);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  cursor: pointer;
+  min-width: 44px;
+  line-height: 1;
+}
+.site-controls-toggle[data-on="true"] {
+  background: var(--cathode-color-success);
+  border-color: var(--cathode-color-success);
+  color: var(--cathode-color-bg);
+}
+
 /* Dogfood reduced-motion — the Cathode base CSS already slashes
  * animation durations, but the docs site's extra transitions benefit
  * from explicit handling too.

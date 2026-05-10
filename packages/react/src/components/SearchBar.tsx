@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
 import { useCathode } from '../CathodeProvider';
 import type { CathodeAIProvider } from '../ai/provider';
 
@@ -39,6 +40,12 @@ export interface SearchBarProps {
   ai?: SearchBarAIConfig;
   /** Max results shown in the dropdown. Default 8. */
   limit?: number;
+  /**
+   * Leading icon inside the input. Pass `false` to hide, `true` (the
+   * default) to show a built-in monospace "⌕" glyph, or a ReactNode
+   * (e.g. `<IconSearch weight="bold" />`) to supply your own.
+   */
+  icon?: boolean | ReactNode;
   className?: string;
 }
 
@@ -48,6 +55,7 @@ export function SearchBar({
   placeholder = 'SEARCH…',
   ai,
   limit = 8,
+  icon = true,
   className,
 }: SearchBarProps) {
   const { ai: globalAI } = useCathode();
@@ -104,8 +112,15 @@ export function SearchBar({
     setAiRanking(null);
   };
 
+  const iconNode = icon === false
+    ? null
+    : icon === true
+      ? <span className="cathode-searchbar-glyph" aria-hidden>⌕</span>
+      : <span className="cathode-searchbar-iconslot" aria-hidden>{icon}</span>;
+
   return (
-    <div className={['cathode-searchbar', className].filter(Boolean).join(' ')}>
+    <div className={['cathode-searchbar', className].filter(Boolean).join(' ')} data-has-icon={icon ? 'true' : 'false'}>
+      {iconNode}
       <input
         type="text"
         className="cathode-searchbar-input"

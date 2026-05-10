@@ -39,6 +39,25 @@ const components = [
     ],
   },
   {
+    name: 'Card',
+    import: "import { Card } from '@cathode-ui/react';",
+    summary: 'Generic bordered panel — same chrome as TerminalFrame without the inset title. Use for readouts, info blocks, or grouped form fields where the content speaks for itself.',
+    props: [
+      { name: 'children', type: 'ReactNode',                                       required: true },
+      { name: 'accent',   type: "'neutral'|'info'|'success'|'warning'|'danger'",   required: false, default: 'neutral' },
+      { name: 'surface',  type: "'flat'|'elevated'",                                required: false, default: 'flat', description: '`elevated` uses panel bg; `flat` is transparent.' },
+      { name: 'padding',  type: "'none'|'sm'|'md'|'lg'",                            required: false, default: 'md' },
+      { name: 'onClick',  type: '() => void',                                      required: false, description: 'When set, the Card renders as a focusable button.' },
+    ],
+    motionStates: [],
+    a11y: { role: 'region (button when onClick)', requires: ['aria-label if clickable and children are icon-only'] },
+    feedback: { haptic: null, sound: null },
+    examples: [
+      { name: 'info',      snippet: '<Card accent="info" surface="elevated"><DotLeader label="LAT" value="42 MS" /></Card>' },
+      { name: 'clickable', snippet: '<Card onClick={open} aria-label="Show details">…</Card>' },
+    ],
+  },
+  {
     name: 'PixelBar',
     import: "import { PixelBar } from '@cathode-ui/react';",
     summary: 'Discrete-cell horizontal level meter. Fill proportional to `level` (0–1).',
@@ -217,9 +236,9 @@ const components = [
     examples: [{ name: 'basic', snippet: '<Toggle value={on} onChange={setOn} label="ENABLED" />' }],
   },
   {
-    name: 'Stepper',
-    import: "import { Stepper } from '@cathode-ui/react';",
-    summary: 'Numeric rocker "[−] LABEL VALUE [+]" — fused label/arrows read as one control.',
+    name: 'Counter',
+    import: "import { Counter } from '@cathode-ui/react';",
+    summary: 'Numeric rocker "[−] LABEL VALUE [+]" — fused label/arrows read as one control. (Formerly named Stepper.)',
     props: [
       { name: 'value',    type: 'number',               required: true },
       { name: 'onChange', type: '(v: number) => void',  required: true },
@@ -233,7 +252,7 @@ const components = [
     motionStates: ['idle', 'press'],
     a11y: { role: 'group', requires: [] },
     feedback: { haptic: 'tap', sound: 'tick' },
-    examples: [{ name: 'wpm', snippet: '<Stepper value={wpm} onChange={setWpm} min={5} max={40} label="WPM" />' }],
+    examples: [{ name: 'wpm', snippet: '<Counter value={wpm} onChange={setWpm} min={5} max={40} label="WPM" />' }],
   },
   {
     name: 'Chips',
@@ -261,6 +280,7 @@ const components = [
       { name: 'placeholder', type: 'string',                      required: false, default: 'SEARCH…' },
       { name: 'ai',          type: 'SearchBarAIConfig',           required: false },
       { name: 'limit',       type: 'number',                      required: false, default: 8 },
+      { name: 'icon',        type: 'boolean | ReactNode',         required: false, default: true, description: '`true` → built-in "⌕" glyph (default). `false` → no icon. Pass a ReactNode to supply your own (e.g. Phosphor IconSearch).' },
     ],
     motionStates: [],
     a11y: { role: 'combobox', requires: ['aria-label on the input'] },

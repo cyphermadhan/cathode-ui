@@ -17,6 +17,11 @@
   padding: var(--cathode-space-frame-pad);
   border: var(--cathode-size-border-width) solid var(--cathode-color-border);
   border-radius: var(--cathode-size-tile-corner);
+  /* The frame's height is its content plus padding. If an ancestor
+   * (CSS grid cell, flex item, auto-layout row) tries to stretch the
+   * frame to equal siblings, align-self:start prevents it. */
+  align-self: start;
+  height: max-content;
 }
 
 .cathode-frame[data-accent="danger"]   { border-color: var(--cathode-color-danger);  }
@@ -362,7 +367,7 @@
 
 /* ── Stepper ───────────────────────────────────────────────────── */
 
-.cathode-stepper {
+.cathode-counter {
   display: inline-flex;
   align-items: stretch;
   border: var(--cathode-size-border-width) solid var(--cathode-color-border);
@@ -370,7 +375,7 @@
   font-family: var(--cathode-type-font-stack);
 }
 
-.cathode-stepper-btn {
+.cathode-counter-btn {
   width: 32px;
   height: 32px;
   background: transparent;
@@ -381,12 +386,12 @@
   cursor: pointer;
 }
 
-.cathode-stepper-btn:disabled {
+.cathode-counter-btn:disabled {
   color: var(--cathode-color-text-faint);
   cursor: not-allowed;
 }
 
-.cathode-stepper-display {
+.cathode-counter-display {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -397,14 +402,14 @@
   justify-content: center;
 }
 
-.cathode-stepper-label {
+.cathode-counter-label {
   font-size: 10px;
   color: var(--cathode-color-text-dim);
   letter-spacing: var(--cathode-type-tracking-label);
   text-transform: uppercase;
 }
 
-.cathode-stepper-value {
+.cathode-counter-value {
   font-size: 12px;
   font-weight: 700;
   color: var(--cathode-color-text);
@@ -471,6 +476,27 @@
   font-weight: 600;
   outline: none;
   box-sizing: border-box;
+}
+
+/* When an icon is present, nudge the input's left padding so the
+ * glyph sits inside without overlapping the caret. */
+.cathode-searchbar[data-has-icon="true"] .cathode-searchbar-input {
+  padding-left: 32px;
+}
+
+.cathode-searchbar-glyph,
+.cathode-searchbar-iconslot {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cathode-color-text-dim);
+  pointer-events: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
 }
 
 .cathode-searchbar-results {
@@ -883,6 +909,44 @@
   font-weight: 600;
   color: var(--cathode-color-danger);
   line-height: 1.4;
+}
+
+/* ── Card ─────────────────────────────────────────────────────── */
+
+.cathode-card {
+  display: block;
+  border: var(--cathode-size-border-width) solid var(--cathode-color-border);
+  border-radius: var(--cathode-size-tile-corner);
+  color: var(--cathode-color-text);
+  text-align: left;
+  font-family: var(--cathode-type-font-stack);
+  align-self: start;
+  height: max-content;
+}
+
+.cathode-card[data-surface="elevated"] { background: var(--cathode-color-panel); }
+.cathode-card[data-surface="flat"]     { background: transparent; }
+
+.cathode-card[data-padding="none"] { padding: 0; }
+.cathode-card[data-padding="sm"]   { padding: var(--cathode-space-sm); }
+.cathode-card[data-padding="md"]   { padding: var(--cathode-space-md); }
+.cathode-card[data-padding="lg"]   { padding: var(--cathode-space-lg); }
+
+.cathode-card[data-accent="info"]    { border-color: var(--cathode-color-info);    }
+.cathode-card[data-accent="success"] { border-color: var(--cathode-color-success); }
+.cathode-card[data-accent="warning"] { border-color: var(--cathode-color-warning); }
+.cathode-card[data-accent="danger"]  { border-color: var(--cathode-color-danger);  }
+
+.cathode-card.is-clickable {
+  cursor: pointer;
+  transition: border-color 120ms, background 120ms;
+}
+.cathode-card.is-clickable:hover {
+  border-color: var(--cathode-color-info);
+}
+.cathode-card.is-clickable:focus-visible {
+  outline: 2px solid var(--cathode-color-info);
+  outline-offset: 2px;
 }
 
 /* ── Reduced motion ───────────────────────────────────────────── */

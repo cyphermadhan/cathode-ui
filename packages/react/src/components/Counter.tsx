@@ -5,8 +5,8 @@ import { sound } from '../feedback/sound';
 
 /**
  * Numeric rocker — `[−]  LABEL VALUE  [+]`. Replaces the generic HTML
- * `<input type="number">` (bad on mobile) and the SwiftUI `Stepper`-
- * style layout where the +/- buttons are detached and confusing.
+ * `<input type="number">` (bad on mobile) and the SwiftUI-style layout
+ * where +/- buttons are detached from their label.
  *
  * Here the label + current value are welded into the same bordered
  * container as the two buttons, which reads as one control. Ideal for
@@ -15,7 +15,7 @@ import { sound } from '../feedback/sound';
  * Feedback: `tick` sound + `tap` haptic on every step. At the edges
  * (min reached / max reached) the button dims; no feedback fires.
  */
-export interface StepperProps {
+export interface CounterProps {
   value: number;
   onChange: (v: number) => void;
   min?: number;
@@ -29,7 +29,7 @@ export interface StepperProps {
   className?: string;
 }
 
-export function Stepper({
+export function Counter({
   value,
   onChange,
   min = 0,
@@ -39,7 +39,7 @@ export function Stepper({
   format,
   disabled,
   className,
-}: StepperProps) {
+}: CounterProps) {
   const { motion: motionIntensity, haptic: hapticOn, sound: soundOn } = useCathode();
 
   const canDec = !disabled && value - step >= min;
@@ -58,10 +58,10 @@ export function Stepper({
     { scale: motionIntensity === 'subtle' ? 0.99 : 0.97 };
 
   return (
-    <div className={['cathode-stepper', className].filter(Boolean).join(' ')}>
+    <div className={['cathode-counter', className].filter(Boolean).join(' ')}>
       <motion.button
         type="button"
-        className="cathode-stepper-btn"
+        className="cathode-counter-btn"
         onClick={() => fire(-1)}
         disabled={!canDec}
         whileTap={canDec ? whileTap : undefined}
@@ -69,13 +69,13 @@ export function Stepper({
       >
         −
       </motion.button>
-      <div className="cathode-stepper-display">
-        {label ? <span className="cathode-stepper-label">{label}</span> : null}
-        <span className="cathode-stepper-value">{fmt(value)}</span>
+      <div className="cathode-counter-display">
+        {label ? <span className="cathode-counter-label">{label}</span> : null}
+        <span className="cathode-counter-value">{fmt(value)}</span>
       </div>
       <motion.button
         type="button"
-        className="cathode-stepper-btn"
+        className="cathode-counter-btn"
         onClick={() => fire(1)}
         disabled={!canInc}
         whileTap={canInc ? whileTap : undefined}

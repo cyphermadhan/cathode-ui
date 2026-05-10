@@ -8,6 +8,7 @@ import '@cathode-ui/react/tokens.css';
 import '@cathode-ui/react/fonts.css';
 import '@cathode-ui/react/styles.css';
 import '../styles/site.css';
+import { SiteControls } from '../components/SiteControls';
 
 interface Props {
   title: string;
@@ -56,6 +57,17 @@ function isActive(href: string): boolean {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} · Cathode UI</title>
     {description ? <meta name="description" content={description} /> : null}
+    {/* Avoid a theme flash: pin data-theme before first paint from
+        whatever the user last chose. Runs inline before <body>. */}
+    <script is:inline>
+      try {
+        const raw = localStorage.getItem('cathode-site-settings');
+        const theme = raw ? JSON.parse(raw).theme : 'auto';
+        if (theme === 'dark' || theme === 'light') {
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+      } catch (e) { /* ignore — fall back to auto */ }
+    </script>
   </head>
   <body>
     <div class="site-shell">
@@ -77,6 +89,7 @@ function isActive(href: string): boolean {
       </aside>
 
       <main class="site-main">
+        <SiteControls client:load />
         <slot />
       </main>
     </div>

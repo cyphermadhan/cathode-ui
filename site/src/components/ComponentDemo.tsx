@@ -1,7 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { DEFAULT_SETTINGS, readSettings, subscribe } from './cathodeSettings';
+import type { SiteSettings } from './cathodeSettings';
 import {
   CathodeProvider,
   TerminalFrame,
+  Card,
   PixelBar,
   ActivityBar,
   PulsingDot,
@@ -12,7 +15,7 @@ import {
   StatusTile,
   Toast,
   Toggle,
-  Stepper,
+  Counter,
   Chips,
   SearchBar,
   HazardStripes,
@@ -32,6 +35,7 @@ import {
   IconCheck,
   IconSparkle,
   IconClose,
+  IconSearch,
 } from '@cathode-ui/react/icons';
 
 /**
@@ -41,11 +45,23 @@ import {
  * deliberately short — pages link here, not the other way around.
  */
 export function ComponentDemo({ name }: { name: string }) {
+  const settings = useSiteSettings();
   return (
-    <CathodeProvider>
+    <CathodeProvider theme={settings.theme} motion={settings.motion} haptic={settings.haptic} sound={settings.sound}>
       <Demos name={name} />
     </CathodeProvider>
   );
+}
+
+// Pulls the current Cathode preferences from shared storage and
+// re-renders when the header control dispatches a change.
+function useSiteSettings(): SiteSettings {
+  const [s, setS] = useState<SiteSettings>(DEFAULT_SETTINGS);
+  useEffect(() => {
+    setS(readSettings());
+    return subscribe(setS);
+  }, []);
+  return s;
 }
 
 function Demos({ name }: { name: string }) {
@@ -53,6 +69,7 @@ function Demos({ name }: { name: string }) {
   // display-only primitives (DotLeader, PulsingDot, ...) render inline.
   switch (name) {
     case 'TerminalFrame':   return <TerminalFrameDemo />;
+    case 'Card':            return <CardDemo />;
     case 'PixelBar':        return <PixelBarDemo />;
     case 'ActivityBar':     return <ActivityBarDemo />;
     case 'PulsingDot':      return <PulsingDotDemo />;
@@ -63,7 +80,7 @@ function Demos({ name }: { name: string }) {
     case 'StatusTile':      return <StatusTileDemo />;
     case 'Toast':           return <ToastDemo />;
     case 'Toggle':          return <ToggleDemo />;
-    case 'Stepper':         return <StepperDemo />;
+    case 'Counter':         return <CounterDemo />;
     case 'Chips':           return <ChipsDemo />;
     case 'SearchBar':       return <SearchBarDemo />;
     case 'HazardStripes':   return <HazardStripesDemo />;
@@ -83,7 +100,13 @@ function Demos({ name }: { name: string }) {
 
 function TerminalFrameDemo() {
   return (
-    <div style={{ display: 'grid', gap: 12, gridTemplateColumns: '1fr 1fr' }}>
+    <div style={{
+      display: 'grid',
+      gap: 12,
+      gridTemplateColumns: '1fr 1fr',
+      alignItems: 'start',  /* grid items default to stretch — force each frame to its own content height */
+      width: '100%',
+    }}>
       <TerminalFrame title="TELEMETRY">
         <DotLeader label="LATENCY" value="42 MS" />
         <DotLeader label="STATE" value="LIVE" valueColor="var(--cathode-color-success)" />
@@ -91,6 +114,40 @@ function TerminalFrameDemo() {
       <TerminalFrame title="DANGER" accent="danger">
         <DotLeader label="LINK" value="DOWN" valueColor="var(--cathode-color-danger)" />
       </TerminalFrame>
+    </div>
+  );
+}
+
+function CardDemo() {
+  const [pressCount, setPressCount] = useState(0);
+  return (
+    <div style={{
+      display: 'grid', gap: 12,
+      gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+      alignItems: 'start',
+      width: '100%',
+    }}>
+      <Card surface="elevated">
+        <DotLeader label="LATENCY" value="42 MS" />
+        <DotLeader label="LOSS" value="0.2%" />
+        <DotLeader label="STATE" value="LIVE" valueColor="var(--cathode-color-success)" />
+      </Card>
+      <Card surface="elevated" accent="info">
+        <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4, marginBottom: 6 }}>INFO</div>
+        <div style={{ fontSize: 13, lineHeight: 1.5 }}>
+          Card is TerminalFrame without the label. Same border, same radius.
+        </div>
+      </Card>
+      <Card surface="elevated" accent="danger">
+        <div style={{ fontSize: 10, color: 'var(--cathode-color-danger)', letterSpacing: 1.4, marginBottom: 6 }}>DANGER</div>
+        <div style={{ fontSize: 12, color: 'var(--cathode-color-text-dim)', lineHeight: 1.5 }}>
+          Use `accent` to highlight caution or error zones.
+        </div>
+      </Card>
+      <Card onClick={() => setPressCount((n) => n + 1)} aria-label="Clickable card" surface="elevated">
+        <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4, marginBottom: 6 }}>CLICKABLE</div>
+        <div style={{ fontSize: 12 }}>TAP ME · pressed {pressCount}×</div>
+      </Card>
     </div>
   );
 }
@@ -250,13 +307,13 @@ function ToggleDemo() {
   );
 }
 
-function StepperDemo() {
+function CounterDemo() {
   const [wpm, setWpm] = useState(12);
   const [count, setCount] = useState(3);
   return (
     <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-      <Stepper value={wpm} onChange={setWpm} min={5} max={40} label="WPM" />
-      <Stepper value={count} onChange={setCount} min={0} max={10} label="COUNT" />
+      <Counter value={wpm} onChange={setWpm} min={5} max={40} label="WPM" />
+      <Counter value={count} onChange={setCount} min={0} max={10} label="COUNT" />
     </div>
   );
 }
@@ -290,8 +347,13 @@ function SearchBarDemo() {
     { id: '5', label: 'TOGGLE DIAGNOSTICS' },
   ], []);
   return (
-    <div style={{ display: 'grid', gap: 8 }}>
+    <div style={{ display: 'grid', gap: 12, width: '100%', maxWidth: 420 }}>
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>DEFAULT (glyph icon)</div>
       <SearchBar items={items} onSelect={(it) => setPicked(it.label)} placeholder="SEARCH COMMANDS…" />
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>PHOSPHOR ICON</div>
+      <SearchBar items={items} onSelect={(it) => setPicked(it.label)} placeholder="SEARCH COMMANDS…" icon={<IconSearch size={14} weight="bold" />} />
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>NO ICON</div>
+      <SearchBar items={items} onSelect={(it) => setPicked(it.label)} placeholder="SEARCH COMMANDS…" icon={false} />
       {picked ? (
         <div style={{ fontSize: 11, color: 'var(--cathode-color-text-dim)' }}>
           PICKED: <code>{picked}</code>

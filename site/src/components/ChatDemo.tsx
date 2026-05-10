@@ -1,6 +1,8 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CathodeProvider, Chat } from '@cathode-ui/react';
 import type { CathodeAIProvider, ChatMessage } from '@cathode-ui/react';
+import { DEFAULT_SETTINGS, readSettings, subscribe } from './cathodeSettings';
+import type { SiteSettings } from './cathodeSettings';
 
 /**
  * Live Chat island for the docs site. Uses a simple mock provider so
@@ -38,8 +40,10 @@ function makeMockProvider(): CathodeAIProvider {
 
 export function ChatDemo() {
   const ai = useMemo(makeMockProvider, []);
+  const [s, setS] = useState<SiteSettings>(DEFAULT_SETTINGS);
+  useEffect(() => { setS(readSettings()); return subscribe(setS); }, []);
   return (
-    <CathodeProvider ai={ai} sound={true}>
+    <CathodeProvider ai={ai} theme={s.theme} motion={s.motion} haptic={s.haptic} sound={s.sound}>
       <Chat title="CATHODE · CHAT DEMO" maxHeight={360} />
     </CathodeProvider>
   );

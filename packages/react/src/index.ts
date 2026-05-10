@@ -29,6 +29,9 @@ import './components/base.css';
 export { TerminalFrame } from './components/TerminalFrame';
 export type { TerminalFrameProps } from './components/TerminalFrame';
 
+export { Card } from './components/Card';
+export type { CardProps } from './components/Card';
+
 export { PixelBar } from './components/PixelBar';
 export type { PixelBarProps } from './components/PixelBar';
 
@@ -62,8 +65,8 @@ export type { HazardStripesProps } from './components/HazardStripes';
 export { Toggle } from './components/Toggle';
 export type { ToggleProps } from './components/Toggle';
 
-export { Stepper } from './components/Stepper';
-export type { StepperProps } from './components/Stepper';
+export { Counter } from './components/Counter';
+export type { CounterProps } from './components/Counter';
 
 export { Chips } from './components/Chips';
 export type { ChipsProps, Chip } from './components/Chips';

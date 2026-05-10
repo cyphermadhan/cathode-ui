@@ -11,7 +11,7 @@
  * This gives us room for character:
  *
  *   - `click`      — single short square pulse (button tap)
- *   - `tick`       — very short, low gain (slider / stepper tick)
+ *   - `tick`       — very short, low gain (slider / counter tick)
  *   - `confirm`    — sine two-note rising (success)
  *   - `warn`       — triangle single mid-low note (heads-up)
  *   - `error`      — sawtooth descending two-note buzz (system error)

@@ -7,7 +7,7 @@ Run `git log --oneline` in the repo for the exact commit history.
 
 ## Summary
 
-- **22 React primitives** shipped under `@cathode-ui/react`. ~8 KB gzipped.
+- **23 React primitives** shipped under `@cathode-ui/react`. ~8 KB gzipped.
 - **Dark + light themes** driven by `prefers-color-scheme`, pinnable via `<CathodeProvider theme="…">` or `data-theme`.
 - **Motion, haptics, sound** baked in. Six-pattern sound palette, five-pattern haptic palette.
 - **AI-native**: `CathodeAIProvider` interface, three React hooks, first-class `Chat` component, opt-in AI in `TextField` / `SearchBar` / `Button`.
@@ -92,11 +92,12 @@ Context with `theme` (auto/dark/light), `motion` (none/subtle/strong), `haptic` 
 
 ### Components (src/components/)
 
-**22 primitives**, all with motion profiles, opt-in haptic/sound, accessibility attributes.
+**23 primitives**, all with motion profiles, opt-in haptic/sound, accessibility attributes.
 
 | # | Primitive | Summary |
 |---|---|---|
 | 1 | `TerminalFrame` | Bordered box w/ inset title. Accent variants (neutral/info/success/warning/danger). |
+| 1b | `Card` | TerminalFrame minus the inset title. Generic panel; clickable variant via `onClick`. |
 | 2 | `PixelBar` | Discrete-cell level meter, 0–1 level, configurable cells + fill. |
 | 3 | `ActivityBar` | Pseudo-random VU meter (deterministic hash per cell/seed). |
 | 4 | `PulsingDot` | Small CSS-animated square for "active/scanning" indicators. |
@@ -110,7 +111,7 @@ Context with `theme` (auto/dark/light), `motion` (none/subtle/strong), `haptic` 
 | 12 | `Toast` | Inline status notification, 4 kinds (info/success/warning/error). |
 | 13 | `Dialog` | Portal-rendered modal with TerminalFrame chrome. ESC + backdrop close. |
 | 14 | `Chips` | Horizontal-scroll preset chips, supports grouped layouts with dividers. |
-| 15 | `Stepper` | `[−]  LABEL VALUE  [+]` rocker; welded label reads as one control. |
+| 15 | `Counter` | `[−]  LABEL VALUE  [+]` rocker; welded label reads as one control. (Renamed from `Stepper` in 0.3.0.) |
 | 16 | `Toggle` | Binary on/off switch with accent fill when on. |
 | 17 | `HazardStripes` | Decorative diagonal-stripe overlay for "armed/caution" states. |
 | 18 | `Checkbox` | Binary form input; supports `indeterminate` for tri-state parent rows. |

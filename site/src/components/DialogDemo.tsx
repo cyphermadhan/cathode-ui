@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CathodeProvider, Button, Dialog } from '@cathode-ui/react';
+import { DEFAULT_SETTINGS, readSettings, subscribe } from './cathodeSettings';
+import type { SiteSettings } from './cathodeSettings';
 
 /** Live Dialog island for the docs. */
 export function DialogDemo() {
   const [confirm, setConfirm] = useState(false);
   const [info, setInfo] = useState(false);
+  const [s, setS] = useState<SiteSettings>(DEFAULT_SETTINGS);
+  useEffect(() => { setS(readSettings()); return subscribe(setS); }, []);
 
   return (
-    <CathodeProvider>
+    <CathodeProvider theme={s.theme} motion={s.motion} haptic={s.haptic} sound={s.sound}>
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
         <Button onClick={() => setInfo(true)}>OPEN INFO DIALOG</Button>
         <Button variant="danger" onClick={() => setConfirm(true)}>OPEN DANGER DIALOG</Button>
