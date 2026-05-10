@@ -33,6 +33,8 @@ export interface TextFieldProps {
   ai?: TextFieldAIConfig;
   className?: string;
   'aria-label'?: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
 }
 
 export function TextField({
@@ -43,6 +45,8 @@ export function TextField({
   ai,
   className,
   'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
 }: TextFieldProps) {
   const { ai: globalAI } = useCathode();
   const provider = ai?.provider ?? globalAI;
@@ -98,7 +102,9 @@ export function TextField({
         onKeyDown={onKey}
         placeholder={placeholder}
         disabled={disabled}
-        aria-label={ariaLabel}
+        aria-label={ariaLabelledBy ? undefined : ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
         autoComplete="off"
         spellCheck={false}
       />

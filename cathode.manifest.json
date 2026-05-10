@@ -890,6 +890,319 @@
       ]
     },
     {
+      "name": "Checkbox",
+      "import": "import { Checkbox } from '@cathode-ui/react';",
+      "summary": "Binary form checkbox for multi-select values. Distinct from Toggle; supports indeterminate (tri-state).",
+      "props": [
+        {
+          "name": "value",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "onChange",
+          "type": "(v: boolean) => void",
+          "required": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        },
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "required": false,
+          "default": false,
+          "description": "Renders a dash — use for parent rows of mixed children."
+        },
+        {
+          "name": "accent",
+          "type": "'success'|'info'|'warning'|'danger'|'accent'",
+          "required": false,
+          "default": "success"
+        }
+      ],
+      "motionStates": [
+        "idle",
+        "press"
+      ],
+      "a11y": {
+        "role": "checkbox",
+        "requires": [
+          "aria-label if no visible label"
+        ]
+      },
+      "feedback": {
+        "haptic": "tap",
+        "sound": "tick"
+      },
+      "examples": [
+        {
+          "name": "basic",
+          "snippet": "<Checkbox value={on} onChange={setOn} label=\"NOTIFY ME\" />"
+        },
+        {
+          "name": "indeterminate",
+          "snippet": "<Checkbox value={partial} onChange={selectAll} indeterminate label=\"ALL\" />"
+        }
+      ]
+    },
+    {
+      "name": "RadioGroup",
+      "import": "import { RadioGroup } from '@cathode-ui/react';",
+      "summary": "Single-select from 2+ options. Renders native radios under the hood; browser handles keyboard arrow-nav.",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "onChange",
+          "type": "(v: string) => void",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "Array<{value, label, disabled?}>",
+          "required": true
+        },
+        {
+          "name": "orientation",
+          "type": "'horizontal'|'vertical'",
+          "required": false,
+          "default": "horizontal"
+        },
+        {
+          "name": "accent",
+          "type": "'success'|'info'|'warning'|'danger'|'accent'",
+          "required": false,
+          "default": "info"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "Shared form name. Auto-generated if omitted."
+        }
+      ],
+      "motionStates": [
+        "idle",
+        "press"
+      ],
+      "a11y": {
+        "role": "radiogroup",
+        "requires": [
+          "aria-label or aria-labelledby for the group"
+        ]
+      },
+      "feedback": {
+        "haptic": "tap",
+        "sound": "tick"
+      },
+      "examples": [
+        {
+          "name": "modes",
+          "snippet": "<RadioGroup value={mode} onChange={setMode} options={[{value:\"a\",label:\"Alpha\"},{value:\"b\",label:\"Beta\"}]} aria-label=\"Mode\" />"
+        },
+        {
+          "name": "stacked",
+          "snippet": "<RadioGroup value={v} onChange={setV} options={opts} orientation=\"vertical\" />"
+        }
+      ]
+    },
+    {
+      "name": "Select",
+      "import": "import { Select } from '@cathode-ui/react';",
+      "summary": "Single-select dropdown for a finite option set. Wraps native <select> for a11y + mobile-picker compatibility.",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "onChange",
+          "type": "(v: string) => void",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "Array<{value, label, disabled?}>",
+          "required": true
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "combobox",
+        "requires": [
+          "aria-label if no visible label"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "modes",
+          "snippet": "<Select value={mode} onChange={setMode} options={[{value:\"dark\",label:\"Dark\"},{value:\"light\",label:\"Light\"}]} aria-label=\"Theme\" />"
+        },
+        {
+          "name": "placeholder",
+          "snippet": "<Select value={v} onChange={setV} options={opts} placeholder=\"CHOOSE…\" />"
+        }
+      ]
+    },
+    {
+      "name": "TextArea",
+      "import": "import { TextArea } from '@cathode-ui/react';",
+      "summary": "Multi-line monospace text input. Resize handle disabled by default to match the terminal chrome.",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "onChange",
+          "type": "(v: string) => void",
+          "required": true
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        },
+        {
+          "name": "rows",
+          "type": "number",
+          "required": false,
+          "default": 4
+        },
+        {
+          "name": "maxLength",
+          "type": "number",
+          "required": false,
+          "description": "Shows a character counter below when set."
+        },
+        {
+          "name": "resizable",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "textbox",
+        "requires": [
+          "aria-label if no visible label"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "basic",
+          "snippet": "<TextArea value={notes} onChange={setNotes} placeholder=\"ADD NOTES…\" />"
+        },
+        {
+          "name": "counted",
+          "snippet": "<TextArea value={bio} onChange={setBio} maxLength={160} />"
+        }
+      ]
+    },
+    {
+      "name": "FormField",
+      "import": "import { FormField } from '@cathode-ui/react';",
+      "summary": "Stacks a label, a Cathode input, and an optional hint or error message. Auto-wires aria attributes.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "children",
+          "type": "ReactElement",
+          "required": true,
+          "description": "Single Cathode input."
+        },
+        {
+          "name": "hint",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": "Swaps the hint slot and turns the label danger-red."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "default": false,
+          "description": "Renders a \"*\" next to the label."
+        }
+      ],
+      "motionStates": [],
+      "a11y": {
+        "role": "group",
+        "requires": [
+          "child receives aria-labelledby automatically"
+        ]
+      },
+      "feedback": {
+        "haptic": null,
+        "sound": null
+      },
+      "examples": [
+        {
+          "name": "basic",
+          "snippet": "<FormField label=\"CALLSIGN\" hint=\"4 characters.\"><TextField value={c} onChange={setC} /></FormField>"
+        },
+        {
+          "name": "error",
+          "snippet": "<FormField label=\"EMAIL\" error=\"Invalid address.\"><TextField value={e} onChange={setE} /></FormField>"
+        }
+      ]
+    },
+    {
       "name": "Toast",
       "import": "import { Toast } from '@cathode-ui/react';",
       "summary": "Inline status notification. Controlled via `visible`; apps handle queuing/timing.",

@@ -16,6 +16,11 @@ import {
   Chips,
   SearchBar,
   HazardStripes,
+  Checkbox,
+  RadioGroup,
+  Select,
+  TextArea,
+  FormField,
   sound,
 } from '@cathode-ui/react';
 import {
@@ -62,6 +67,11 @@ function Demos({ name }: { name: string }) {
     case 'Chips':           return <ChipsDemo />;
     case 'SearchBar':       return <SearchBarDemo />;
     case 'HazardStripes':   return <HazardStripesDemo />;
+    case 'Checkbox':        return <CheckboxDemo />;
+    case 'RadioGroup':      return <RadioGroupDemo />;
+    case 'Select':          return <SelectDemo />;
+    case 'TextArea':        return <TextAreaDemo />;
+    case 'FormField':       return <FormFieldDemo />;
     default:
       return <div style={{ color: 'var(--cathode-color-text-dim)' }}>
         No live demo for <code>{name}</code> yet.
@@ -287,6 +297,111 @@ function SearchBarDemo() {
           PICKED: <code>{picked}</code>
         </div>
       ) : null}
+    </div>
+  );
+}
+
+function CheckboxDemo() {
+  const [a, setA] = useState(true);
+  const [b, setB] = useState(false);
+  return (
+    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+      <Checkbox value={a} onChange={setA} label="NOTIFY ME" />
+      <Checkbox value={b} onChange={setB} label="DANGER MODE" accent="danger" />
+      <Checkbox value={false} onChange={() => {}} label="INDETERMINATE" indeterminate />
+      <Checkbox value={true} onChange={() => {}} label="DISABLED" disabled />
+    </div>
+  );
+}
+
+function RadioGroupDemo() {
+  const [mode, setMode] = useState<'alpha' | 'beta' | 'gamma'>('alpha');
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <RadioGroup
+        value={mode}
+        onChange={setMode}
+        aria-label="Mode"
+        options={[
+          { value: 'alpha', label: 'ALPHA' },
+          { value: 'beta',  label: 'BETA' },
+          { value: 'gamma', label: 'GAMMA', disabled: true },
+        ]}
+      />
+      <div style={{ fontSize: 11, color: 'var(--cathode-color-text-dim)' }}>
+        PICKED: <code>{mode}</code>
+      </div>
+    </div>
+  );
+}
+
+function SelectDemo() {
+  const [theme, setTheme] = useState('auto');
+  const [region, setRegion] = useState('');
+  return (
+    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+      <Select
+        value={theme}
+        onChange={setTheme}
+        aria-label="Theme"
+        options={[
+          { value: 'auto',  label: 'AUTO' },
+          { value: 'dark',  label: 'DARK' },
+          { value: 'light', label: 'LIGHT' },
+        ]}
+      />
+      <Select
+        value={region}
+        onChange={setRegion}
+        placeholder="CHOOSE REGION…"
+        aria-label="Region"
+        options={[
+          { value: 'us', label: 'UNITED STATES' },
+          { value: 'eu', label: 'EUROPE' },
+          { value: 'ap', label: 'ASIA-PACIFIC' },
+        ]}
+      />
+      <div style={{ fontSize: 11, color: 'var(--cathode-color-text-dim)' }}>
+        THEME: <code>{theme}</code> · REGION: <code>{region || 'none'}</code>
+      </div>
+    </div>
+  );
+}
+
+function TextAreaDemo() {
+  const [notes, setNotes] = useState('Pattern locked.\nAcquisition in 3.');
+  const [bio, setBio] = useState('');
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <TextArea value={notes} onChange={setNotes} placeholder="ADD NOTES…" aria-label="Notes" />
+      <TextArea
+        value={bio}
+        onChange={setBio}
+        placeholder="SHORT BIO (max 160)…"
+        aria-label="Bio"
+        maxLength={160}
+        rows={3}
+      />
+    </div>
+  );
+}
+
+function FormFieldDemo() {
+  const [callsign, setCallsign] = useState('KA4');
+  const [email, setEmail] = useState('not-an-email');
+  const [notes, setNotes] = useState('');
+  const emailErr = email.includes('@') ? undefined : 'Must contain an @.';
+  return (
+    <div style={{ display: 'grid', gap: 14, maxWidth: 420 }}>
+      <FormField label="CALLSIGN" hint="4 characters, alphanumeric." required>
+        <TextField value={callsign} onChange={setCallsign} placeholder="KA4X" />
+      </FormField>
+      <FormField label="EMAIL" error={emailErr}>
+        <TextField value={email} onChange={setEmail} placeholder="you@example.com" />
+      </FormField>
+      <FormField label="NOTES" hint="Freeform. Max 200 chars.">
+        <TextArea value={notes} onChange={setNotes} maxLength={200} rows={3} />
+      </FormField>
     </div>
   );
 }

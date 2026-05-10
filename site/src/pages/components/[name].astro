@@ -31,7 +31,7 @@ const c = component;
   </div>
 
   <h2>Import</h2>
-  <pre><code>{c.import}</code></pre>
+  <pre tabindex="0"><code>{c.import}</code></pre>
 
   <h2>Props</h2>
   {c.props.length > 0 ? (
@@ -69,7 +69,7 @@ const c = component;
       {c.examples.map((ex: any) => (
         <>
           <h3>{ex.name}</h3>
-          <pre><code>{ex.snippet}</code></pre>
+          <pre tabindex="0"><code>{ex.snippet}</code></pre>
         </>
       ))}
     </>
