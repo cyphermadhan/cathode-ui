@@ -8,9 +8,9 @@
   font-family: var(--cathode-type-font-stack);
   color: var(--cathode-color-text);
   background: var(--cathode-color-bg);
-  /* Provider wrapper — prevent a runaway child (e.g. a dot-leader row
-   * with a long literal string) from forcing a parent grid/flex item
-   * wider than its allotted track. */
+  /* Width containment only — no overflow:hidden here, because the
+   * provider wraps portaled Dialogs and frame titles that render
+   * slightly outside their box. */
   min-width: 0;
   max-width: 100%;
 }
@@ -32,7 +32,11 @@
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  overflow: hidden;
+  /* NOTE: do NOT set overflow here. The frame title uses
+   * `transform: translateY(-50%)` to sit astride the top border,
+   * and overflow:hidden would clip its upper half. Internal width
+   * control is handled by each child (DotLeader already clips
+   * its dot string; Dialog + Chat carry their own overflow rules). */
 }
 
 .cathode-frame[data-accent="danger"]   { border-color: var(--cathode-color-danger);  }
