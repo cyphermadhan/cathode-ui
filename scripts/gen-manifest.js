@@ -622,7 +622,7 @@ const components = [
       { name: 'children', type: 'ReactElement',  required: true, description: 'The element the tooltip describes.' },
       { name: 'label',    type: 'string',        required: true },
       { name: 'side',     type: "'top'|'bottom'|'left'|'right'", required: false, default: 'top' },
-      { name: 'delay',    type: 'number',        required: false, default: 200 },
+      { name: 'delay',    type: 'number',        required: false, default: 200, description: 'Delay before showing, in MILLISECONDS.' },
     ],
     motionStates: [],
     a11y: { role: 'tooltip', requires: ['aria-describedby threaded into child automatically'] },

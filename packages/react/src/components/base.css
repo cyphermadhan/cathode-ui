@@ -489,8 +489,11 @@
 /* ── SearchBar ─────────────────────────────────────────────────── */
 
 .cathode-searchbar {
-  position: relative;
   font-family: var(--cathode-type-font-stack);
+}
+
+.cathode-searchbar-row-input {
+  position: relative;
 }
 
 .cathode-searchbar-input {
@@ -1438,8 +1441,13 @@
 .cathode-popover-panel[data-align="end"] { left: auto; right: 0; }
 
 /* ── Tooltip ──────────────────────────────────────────────────── */
-/* Portaled to document.body; anchored via inline top/left (position
- * is set inline by the component using getBoundingClientRect). */
+/* Anchor element stays in flow (inline-block so it measures
+ * correctly); body is portaled to document.body and anchored via
+ * inline top/left using getBoundingClientRect. */
+
+.cathode-tooltip-anchor {
+  display: inline-block;
+}
 
 .cathode-tooltip-body {
   z-index: 2000;

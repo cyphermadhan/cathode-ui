@@ -1,28 +1,27 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import type { ReactElement } from 'react';
-import { cloneElement } from 'react';
+import type { ReactNode } from 'react';
 
 /**
  * Tooltip — short hover/focus-triggered hint. Text-only; if you need
- * rich content use Popover. Renders on hover/focus of the wrapped
- * child, hides on blur/mouseleave.
+ * rich content use Popover.
  *
- * The tooltip body is portaled to `document.body` and positioned with
+ * Wraps children in a plain <span> that owns the ref + hover/focus
+ * events. Trying to forward a ref into the child via cloneElement
+ * only works for `forwardRef` components — Button / Pill / etc. are
+ * plain functions and silently drop a ref prop, so we anchor to our
+ * own wrapping element instead.
+ *
+ * The body is portaled to `document.body` and positioned with
  * `position: fixed` relative to the trigger's viewport rect, so
  * ancestor `overflow: hidden` / `transform` can't clip it.
- *
- * Accessibility: the body is linked to the trigger via
- * aria-describedby so assistive tech reads it when the control is
- * focused.
  */
 export interface TooltipProps {
-  /** The element the tooltip describes. Must accept a ref + aria-describedby. */
-  children: ReactElement<any>;
+  children: ReactNode;
   label: string;
   /** Position hint. Default "top". */
   side?: 'top' | 'bottom' | 'left' | 'right';
-  /** Delay before showing, ms. Default 200. */
+  /** Delay before showing, in milliseconds. Default 200. */
   delay?: number;
   className?: string;
 }
@@ -31,7 +30,7 @@ export function Tooltip({ children, label, side = 'top', delay = 200, className 
   const [show, setShow] = useState(false);
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
   const id = useId();
-  const anchorRef = useRef<HTMLElement | null>(null);
+  const anchorRef = useRef<HTMLSpanElement | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const openAfter = () => {
@@ -69,25 +68,6 @@ export function Tooltip({ children, label, side = 'top', delay = 200, className 
     };
   }, [show, side, label]);
 
-  // Attach handlers + describedby + ref to the trigger child. We
-  // clone the element so consumers can pass any focusable primitive
-  // (Button, Pill, etc.) and the tooltip decorates without wrapping
-  // markup.
-  const trigger = cloneElement(children, {
-    ref: (el: HTMLElement | null) => {
-      anchorRef.current = el;
-      // Preserve any existing ref on the child.
-      const prev = (children as any).ref;
-      if (typeof prev === 'function') prev(el);
-      else if (prev && typeof prev === 'object') prev.current = el;
-    },
-    'aria-describedby': show ? id : undefined,
-    onMouseEnter: (...args: unknown[]) => { openAfter(); children.props.onMouseEnter?.(...args); },
-    onMouseLeave: (...args: unknown[]) => { close(); children.props.onMouseLeave?.(...args); },
-    onFocus:      (...args: unknown[]) => { openAfter(); children.props.onFocus?.(...args); },
-    onBlur:       (...args: unknown[]) => { close(); children.props.onBlur?.(...args); },
-  });
-
   const body = show && pos && typeof document !== 'undefined'
     ? createPortal(
         <span
@@ -103,5 +83,20 @@ export function Tooltip({ children, label, side = 'top', delay = 200, className 
       )
     : null;
 
-  return <>{trigger}{body}</>;
+  return (
+    <>
+      <span
+        ref={anchorRef}
+        className="cathode-tooltip-anchor"
+        aria-describedby={show ? id : undefined}
+        onMouseEnter={openAfter}
+        onMouseLeave={close}
+        onFocus={openAfter}
+        onBlur={close}
+      >
+        {children}
+      </span>
+      {body}
+    </>
+  );
 }

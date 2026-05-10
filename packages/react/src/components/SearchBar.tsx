@@ -121,17 +121,22 @@ export function SearchBar({
 
   return (
     <div className={['cathode-searchbar', className].filter(Boolean).join(' ')} data-has-icon={icon ? 'true' : 'false'}>
-      {iconNode}
-      <input
-        type="text"
-        className="cathode-searchbar-input"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder={placeholder}
-        spellCheck={false}
-        autoComplete="off"
-        aria-label="Search"
-      />
+      {/* Input row is its own positioning context — the leading
+       * icon's `top: 50%` centers against JUST the input, not
+       * against the expanded (input + results) component. */}
+      <div className="cathode-searchbar-row-input">
+        {iconNode}
+        <input
+          type="text"
+          className="cathode-searchbar-input"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={placeholder}
+          spellCheck={false}
+          autoComplete="off"
+          aria-label="Search"
+        />
+      </div>
       {results.length > 0 ? (
         <ul className="cathode-searchbar-results">
           {results.map((it) => (

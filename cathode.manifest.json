@@ -1874,7 +1874,8 @@
           "name": "delay",
           "type": "number",
           "required": false,
-          "default": 200
+          "default": 200,
+          "description": "Delay before showing, in MILLISECONDS."
         }
       ],
       "motionStates": [],
