@@ -154,3 +154,9 @@ export type { TypewriterTextProps } from './components/TypewriterText';
 
 export { Countdown } from './components/Countdown';
 export type { CountdownProps } from './components/Countdown';
+
+export { Stack } from './components/Stack';
+export type { StackProps } from './components/Stack';
+
+export { Accordion } from './components/Accordion';
+export type { AccordionProps, AccordionItem } from './components/Accordion';

@@ -1735,6 +1735,74 @@
 .cathode-countdown[data-accent="danger"]  .cathode-countdown-value { color: var(--cathode-color-danger);  }
 .cathode-countdown[data-accent="accent"]  .cathode-countdown-value { color: var(--cathode-color-accent);  }
 
+/* ── Accordion ────────────────────────────────────────────────── */
+
+.cathode-accordion {
+  font-family: var(--cathode-type-font-stack);
+  border: var(--cathode-size-border-width) solid var(--cathode-color-border);
+}
+
+.cathode-accordion-item + .cathode-accordion-item {
+  border-top: var(--cathode-size-border-width) solid var(--cathode-color-border);
+}
+
+.cathode-accordion-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  color: var(--cathode-color-text);
+  text-align: left;
+  cursor: pointer;
+  line-height: 1.2;
+}
+.cathode-accordion-header:hover {
+  background: color-mix(in srgb, var(--cathode-color-info) 6%, transparent);
+}
+.cathode-accordion-header:focus-visible {
+  outline: 2px solid var(--cathode-color-info);
+  outline-offset: -2px;
+}
+.cathode-accordion-header:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.cathode-accordion-chevron {
+  display: inline-block;
+  color: var(--cathode-color-text-dim);
+  font-size: 11px;
+  line-height: 1;
+  transition: transform 140ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.cathode-accordion-chevron[data-open="true"] { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) {
+  .cathode-accordion-chevron { transition: none; }
+}
+
+.cathode-accordion-title {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: var(--cathode-type-tracking-label);
+  text-transform: uppercase;
+}
+
+.cathode-accordion-meta {
+  font-size: 10px;
+  color: var(--cathode-color-text-dim);
+  letter-spacing: var(--cathode-type-tracking-label);
+}
+
+.cathode-accordion-body {
+  padding: 10px 14px 14px;
+  color: var(--cathode-color-text);
+  font-size: 13px;
+  line-height: 1.55;
+  border-top: var(--cathode-size-border-width) solid var(--cathode-color-border);
+}
+
 /* ── Reduced motion ───────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {

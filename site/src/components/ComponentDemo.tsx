@@ -44,6 +44,8 @@ import {
   ScanLine,
   TypewriterText,
   Countdown,
+  Stack,
+  Accordion,
   sound,
 } from '@cathode-ui/react';
 import {
@@ -129,6 +131,8 @@ function Demos({ name }: { name: string }) {
     case 'ScanLine':        return <ScanLineDemo />;
     case 'TypewriterText':  return <TypewriterTextDemo />;
     case 'Countdown':       return <CountdownDemo />;
+    case 'Stack':           return <StackDemo />;
+    case 'Accordion':       return <AccordionDemo />;
     default:
       return <div style={{ color: 'var(--cathode-color-text-dim)' }}>
         No live demo for <code>{name}</code> yet.
@@ -863,6 +867,80 @@ function CountdownDemo() {
         <Button onClick={() => setTarget(Date.now() + 2 * 60_000)}>2 MIN</Button>
         <Button onClick={() => setTarget(Date.now() + 25 * 3600_000)}>25 H</Button>
       </div>
+    </div>
+  );
+}
+
+function StackDemo() {
+  return (
+    <Stack gap={16} fullWidth>
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>
+        ROW · gap 8 · center
+      </div>
+      <Stack direction="row" gap={8} align="center" wrap>
+        <Pill title="HOME"     accent="info" active />
+        <Pill title="LOGS"     accent="info" />
+        <Pill title="SETTINGS" accent="info" />
+      </Stack>
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>
+        COLUMN · gap 6 (default)
+      </div>
+      <Stack gap={6}>
+        <DotLeader label="LATENCY" value="42 MS" />
+        <DotLeader label="LOSS"    value="0.2%" />
+        <DotLeader label="STATE"   value="LIVE" valueColor="var(--cathode-color-success)" />
+      </Stack>
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>
+        ROW · justify space-between
+      </div>
+      <Stack direction="row" gap={8} justify="space-between" align="center" fullWidth>
+        <Tag accent="info">DEPLOYED</Tag>
+        <Kbd keys="Cmd+D" size="sm" />
+      </Stack>
+    </Stack>
+  );
+}
+
+function AccordionDemo() {
+  const [ids, setIds] = useState<ReadonlyArray<string>>(['a']);
+  return (
+    <div style={{ width: '100%', maxWidth: 540 }}>
+      <Accordion
+        expandedIds={ids}
+        onExpandedChange={setIds}
+        items={[
+          {
+            id: 'a',
+            title: 'Telemetry',
+            meta: <Badge kind="success" variant="outline" size="sm">LIVE</Badge>,
+            content: (
+              <Stack gap={4}>
+                <DotLeader label="LATENCY" value="42 MS" />
+                <DotLeader label="LOSS"    value="0%" />
+                <DotLeader label="STATE"   value="LIVE" valueColor="var(--cathode-color-success)" />
+              </Stack>
+            ),
+          },
+          {
+            id: 'b',
+            title: 'Advanced',
+            meta: '3',
+            content: (
+              <Stack gap={8}>
+                <Toggle value onChange={() => {}} label="SHOW DEBUG OVERLAY" />
+                <Toggle value={false} onChange={() => {}} label="EXPERIMENTAL ROUTER" />
+                <Toggle value={false} onChange={() => {}} label="DANGER MODE" accent="danger" />
+              </Stack>
+            ),
+          },
+          {
+            id: 'c',
+            title: 'Experimental',
+            meta: <Badge kind="warning" variant="outline" size="sm">BETA</Badge>,
+            content: <p style={{ margin: 0 }}>These toggles are subject to change.</p>,
+          },
+        ]}
+      />
     </div>
   );
 }

@@ -7,7 +7,7 @@ Run `git log --oneline` in the repo for the exact commit history.
 
 ## Summary
 
-- **43 React primitives** shipped under `@cathode-ui/react`. ~13 KB gzipped.
+- **45 React primitives** shipped under `@cathode-ui/react`. ~12 KB gzipped.
 - **Dark + light themes** driven by `prefers-color-scheme`, pinnable via `<CathodeProvider theme="…">` or `data-theme`.
 - **Motion, haptics, sound** baked in. Six-pattern sound palette, five-pattern haptic palette.
 - **AI-native**: `CathodeAIProvider` interface, three React hooks, first-class `Chat` component, opt-in AI in `TextField` / `SearchBar` / `Button`.
@@ -92,7 +92,7 @@ Context with `theme` (auto/dark/light), `motion` (none/subtle/strong), `haptic` 
 
 ### Components (src/components/)
 
-**43 primitives**, all with motion profiles, opt-in haptic/sound, accessibility attributes.
+**45 primitives**, all with motion profiles, opt-in haptic/sound, accessibility attributes.
 
 | # | Primitive | Summary |
 |---|---|---|
@@ -139,6 +139,8 @@ Context with `theme` (auto/dark/light), `motion` (none/subtle/strong), `haptic` 
 | 40 | `ScanLine` | Decorative CRT overlay — translucent grid + sweeping beam. |
 | 41 | `TypewriterText` | Character-by-character reveal; SR gets the full text immediately via visually-hidden sibling. |
 | 42 | `Countdown` | T-minus timer (HH:MM:SS or DD:HH:MM:SS); auto-flips to danger in the last minute. |
+| 43 | `Stack` | Utility flex wrapper — direction/gap/align/justify/wrap via props; optional `as` tag. |
+| 44 | `Accordion` | Expand/collapse sections; controlled or uncontrolled; `allowMultiple={false}` for exclusive mode. |
 
 ### Icons (src/icons.ts)
 Curated Phosphor Icons re-exports under `@cathode-ui/react/icons`. Includes `IconBroadcast`, `IconChat`, `IconEar`, `IconSignal`, `IconCheck`, `IconCamera`, `IconSparkle`, `IconClose`, `IconSettings`, `IconSearch`, `IconBrain`, `IconRobot`, and more.
