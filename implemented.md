@@ -222,10 +222,22 @@ Paths: `/components/terminalframe`, `/components/pill`, `/components/button`, `/
 
 ## Not yet implemented
 
-### Phase 2 gap: Figma library
-The `.fig` binary can't be produced from code. To unblock designers, a
-follow-up will emit a [Tokens Studio](https://tokens.studio/)-compatible
-JSON export that imports into a blank Figma file in one click.
+### Phase 2: Figma library — **in progress** (built via figma-remote MCP)
+
+File: `https://www.figma.com/design/yudyQFCPwX1FSLcXBXuVvY/Cathode-UI`. Building programmatically via the Figma Plugin API (no designer hand-crafting). Strokes, fills, and text colors are bound to Figma Variables so Light ↔ Dark mode switches re-color every instance.
+
+| Phase | Page | Components | Status |
+|---|---|---|---|
+| 1 | Tokens | 5 Variable collections (Color Dark+Light, Spacing, Size, Type, Motion) + visual swatch page | ✅ |
+| 2 | Layout | TerminalFrame (5 variants), Card (10), HazardStripes (1) | ✅ |
+| 3 | Forms | Button (6), TextField (4), TextArea (3), Select (3), Counter (3), Checkbox (4), Radio (3), Toggle (3), SearchBar (3), FormField (4), Chip (3) | ✅ |
+| 4 | Data | Badge (10), Tag (20), Avatar (7), Kbd (4), DotLeader (3), Pill (18), CodeBlock (3), Table (1), StatusTile (5) | ✅ |
+| 5 | Navigation | Tabs (5), Breadcrumbs (1), Menu (2), Pagination (3) | ✅ |
+| 6 | Feedback | ProgressBar (7), Loader (6), Skeleton (6), PixelBar (4), ActivityBar (3), SignalBars (6), PulsingDot (5), Toast (4) | ✅ |
+| 7 | Overlays | Dialog (3), Drawer (4), Popover (2), Tooltip (2) | ✅ |
+| 8 | Remaining | Stack, Accordion, Chat, ScanLine, TypewriterText, Countdown | ⏳ |
+
+**Caveats (static Figma):** animation-heavy primitives (`Loader`, `PulsingDot`, `TypewriterText`, `ScanLine`, `Countdown`, `Chat` streaming) render as static "at-rest" representations — Figma can't drive CSS keyframes. Composite multi-state components (`Menu`, `Popover`, `Tooltip`, `Drawer`) ship as separate variants per state rather than live interactions.
 
 ### Phase 3: Swift package
 Planned. `scripts/gen-swift.js` will emit `Sources/Cathode/Tokens.swift`
