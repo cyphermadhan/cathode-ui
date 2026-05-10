@@ -94,3 +94,21 @@ export type { TextAreaProps } from './components/TextArea';
 
 export { FormField } from './components/FormField';
 export type { FormFieldProps } from './components/FormField';
+
+export { Badge } from './components/Badge';
+export type { BadgeProps } from './components/Badge';
+
+export { Tag } from './components/Tag';
+export type { TagProps, TagAccent } from './components/Tag';
+
+export { Avatar } from './components/Avatar';
+export type { AvatarProps, AvatarStatus, AvatarAccent } from './components/Avatar';
+
+export { Kbd } from './components/Kbd';
+export type { KbdProps } from './components/Kbd';
+
+export { CodeBlock } from './components/CodeBlock';
+export type { CodeBlockProps } from './components/CodeBlock';
+
+export { Table } from './components/Table';
+export type { TableProps, TableColumn } from './components/Table';

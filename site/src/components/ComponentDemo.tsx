@@ -24,6 +24,12 @@ import {
   Select,
   TextArea,
   FormField,
+  Badge,
+  Tag,
+  Avatar,
+  Kbd,
+  CodeBlock,
+  Table,
   sound,
 } from '@cathode-ui/react';
 import {
@@ -89,6 +95,12 @@ function Demos({ name }: { name: string }) {
     case 'Select':          return <SelectDemo />;
     case 'TextArea':        return <TextAreaDemo />;
     case 'FormField':       return <FormFieldDemo />;
+    case 'Badge':           return <BadgeDemo />;
+    case 'Tag':             return <TagDemo />;
+    case 'Avatar':          return <AvatarDemo />;
+    case 'Kbd':             return <KbdDemo />;
+    case 'CodeBlock':       return <CodeBlockDemo />;
+    case 'Table':           return <TableDemo />;
     default:
       return <div style={{ color: 'var(--cathode-color-text-dim)' }}>
         No live demo for <code>{name}</code> yet.
@@ -464,6 +476,164 @@ function FormFieldDemo() {
       <FormField label="NOTES" hint="Freeform. Max 200 chars.">
         <TextArea value={notes} onChange={setNotes} maxLength={200} rows={3} />
       </FormField>
+    </div>
+  );
+}
+
+function BadgeDemo() {
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>SOLID</div>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+        <Badge>NEUTRAL</Badge>
+        <Badge kind="info">INFO</Badge>
+        <Badge kind="success">NEW</Badge>
+        <Badge kind="warning">BETA</Badge>
+        <Badge kind="danger">DEPRECATED</Badge>
+      </div>
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>OUTLINE</div>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+        <Badge variant="outline">v0.3.0</Badge>
+        <Badge variant="outline" kind="info">PRO</Badge>
+        <Badge variant="outline" kind="success" size="sm">SM</Badge>
+      </div>
+    </div>
+  );
+}
+
+function TagDemo() {
+  const [tags, setTags] = useState(['ENGINEERING', 'DESIGN', 'LATE']);
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+        <Tag accent="info">ENGINEERING</Tag>
+        <Tag accent="success">APPROVED</Tag>
+        <Tag accent="warning">BLOCKED</Tag>
+        <Tag accent="danger">REJECTED</Tag>
+        <Tag accent="teal">QA</Tag>
+        <Tag accent="pink">UX</Tag>
+        <Tag accent="amber">OPS</Tag>
+        <Tag accent="purple">SEC</Tag>
+      </div>
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>REMOVABLE</div>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+        {tags.map((t) => (
+          <Tag key={t} accent="info" onRemove={() => setTags((all) => all.filter((x) => x !== t))}>
+            {t}
+          </Tag>
+        ))}
+        {tags.length === 0 ? (
+          <span style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)' }}>ALL CLEARED</span>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function AvatarDemo() {
+  return (
+    <div style={{ display: 'grid', gap: 14 }}>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <Avatar name="Madhan Raj" accent="teal" />
+        <Avatar name="Ada Lovelace" accent="pink" />
+        <Avatar name="KA" accent="amber" />
+        <Avatar accent="info"><IconSparkle size={16} weight="bold" /></Avatar>
+      </div>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <Avatar name="Small" size="sm" accent="purple" />
+        <Avatar name="Medium" size="md" accent="purple" />
+        <Avatar name="Large" size="lg" accent="purple" />
+      </div>
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>WITH STATUS</div>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <Avatar name="Online" status="online" accent="teal" />
+        <Avatar name="Away" status="away" accent="amber" />
+        <Avatar name="Busy" status="busy" accent="danger" />
+        <Avatar name="Offline" status="offline" accent="grey" />
+      </div>
+    </div>
+  );
+}
+
+function KbdDemo() {
+  return (
+    <div style={{ display: 'grid', gap: 14 }}>
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+        <span style={{ fontSize: 12, color: 'var(--cathode-color-text-dim)' }}>COMMAND PALETTE</span>
+        <Kbd keys="Cmd+K" />
+      </div>
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+        <span style={{ fontSize: 12, color: 'var(--cathode-color-text-dim)' }}>SAVE</span>
+        <Kbd keys={['Ctrl', 'Shift', 'S']} />
+      </div>
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+        <span style={{ fontSize: 12, color: 'var(--cathode-color-text-dim)' }}>SEARCH (SM)</span>
+        <Kbd keys="/" size="sm" />
+      </div>
+    </div>
+  );
+}
+
+function CodeBlockDemo() {
+  return (
+    <div style={{ display: 'grid', gap: 16, width: '100%' }}>
+      <CodeBlock
+        language="tsx"
+        code={`import { Button, Pill } from '@cathode-ui/react';
+
+<Pill title="LIVE" accent="success" active />
+<Button variant="primary">SUBMIT</Button>`}
+      />
+      <CodeBlock
+        language="bash"
+        code={`npm install @cathode-ui/react`}
+        showCopy={false}
+      />
+    </div>
+  );
+}
+
+function TableDemo() {
+  const [sortBy, setSortBy] = useState<string>('name');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+
+  const rawRows = useMemo(() => [
+    { id: '001', name: 'PKT.GATEWAY', status: 'ONLINE',  latency: 28  },
+    { id: '002', name: 'PKT.EDGE-01', status: 'ONLINE',  latency: 46  },
+    { id: '003', name: 'PKT.EDGE-02', status: 'OFFLINE', latency: 999 },
+    { id: '004', name: 'PKT.CACHE',   status: 'DEGRADED', latency: 132 },
+  ], []);
+
+  const rows = useMemo(() => {
+    const sign = sortDir === 'asc' ? 1 : -1;
+    return [...rawRows].sort((a, b) => {
+      const av = a[sortBy as keyof typeof a];
+      const bv = b[sortBy as keyof typeof b];
+      if (typeof av === 'number' && typeof bv === 'number') return (av - bv) * sign;
+      return String(av).localeCompare(String(bv)) * sign;
+    });
+  }, [rawRows, sortBy, sortDir]);
+
+  return (
+    <div style={{ width: '100%' }}>
+      <Table
+        caption="Peer nodes"
+        columns={[
+          { key: 'id',      header: 'ID',      width: '80px' },
+          { key: 'name',    header: 'NAME',    sortable: true },
+          { key: 'status',  header: 'STATUS',  sortable: true, render: (r) => (
+            <Badge variant="outline" kind={
+              r.status === 'ONLINE' ? 'success' : r.status === 'OFFLINE' ? 'danger' : 'warning'
+            }>{r.status}</Badge>
+          ) },
+          { key: 'latency', header: 'LATENCY', align: 'right', sortable: true, render: (r) => `${r.latency} ms` },
+        ]}
+        rows={rows}
+        sortBy={sortBy}
+        sortDir={sortDir}
+        onSortChange={(k, d) => { setSortBy(k); setSortDir(d); }}
+        onRowClick={(row) => alert(`Clicked ${row.name}`)}
+      />
     </div>
   );
 }

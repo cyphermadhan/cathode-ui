@@ -7,7 +7,7 @@ Run `git log --oneline` in the repo for the exact commit history.
 
 ## Summary
 
-- **23 React primitives** shipped under `@cathode-ui/react`. ~8 KB gzipped.
+- **29 React primitives** shipped under `@cathode-ui/react`. ~9.8 KB gzipped.
 - **Dark + light themes** driven by `prefers-color-scheme`, pinnable via `<CathodeProvider theme="…">` or `data-theme`.
 - **Motion, haptics, sound** baked in. Six-pattern sound palette, five-pattern haptic palette.
 - **AI-native**: `CathodeAIProvider` interface, three React hooks, first-class `Chat` component, opt-in AI in `TextField` / `SearchBar` / `Button`.
@@ -92,7 +92,7 @@ Context with `theme` (auto/dark/light), `motion` (none/subtle/strong), `haptic` 
 
 ### Components (src/components/)
 
-**23 primitives**, all with motion profiles, opt-in haptic/sound, accessibility attributes.
+**29 primitives**, all with motion profiles, opt-in haptic/sound, accessibility attributes.
 
 | # | Primitive | Summary |
 |---|---|---|
@@ -119,6 +119,12 @@ Context with `theme` (auto/dark/light), `motion` (none/subtle/strong), `haptic` 
 | 20 | `Select` | Native-backed single-select for finite option sets; Cathode chrome + chevron. |
 | 21 | `TextArea` | Multi-line monospace input; optional char counter; resize disabled by default. |
 | 22 | `FormField` | Label + input + hint/error wrapper; auto-wires `aria-labelledby` + `aria-describedby`. |
+| 23 | `Badge` | Small inline status marker (solid or outline). "NEW", "BETA", "v0.3.0". |
+| 24 | `Tag` | Outlined accent marker for keywords/filters; optional `onRemove` × button. |
+| 25 | `Avatar` | Square identity — image, initials fallback, optional status dot. |
+| 26 | `Kbd` | Keyboard shortcut indicator — each key in its own bordered `<kbd>` box. |
+| 27 | `CodeBlock` | Multi-line code sample with language label + copy button. Accepts plain text or pre-highlighted HTML. |
+| 28 | `Table` | Terminal-style tabular display with controlled sort + optional row-click (keyboard-activatable). |
 
 ### Icons (src/icons.ts)
 Curated Phosphor Icons re-exports under `@cathode-ui/react/icons`. Includes `IconBroadcast`, `IconChat`, `IconEar`, `IconSignal`, `IconCheck`, `IconCamera`, `IconSparkle`, `IconClose`, `IconSettings`, `IconSearch`, `IconBrain`, `IconRobot`, and more.
