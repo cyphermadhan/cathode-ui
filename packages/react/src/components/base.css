@@ -577,7 +577,7 @@
 }
 
 .cathode-chat-empty {
-  color: var(--cathode-color-text-faint);
+  color: var(--cathode-color-text-dim);
   font-size: 10px;
   letter-spacing: var(--cathode-type-tracking-label);
   text-transform: uppercase;

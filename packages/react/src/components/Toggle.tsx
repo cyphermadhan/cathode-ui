@@ -45,6 +45,7 @@ export function Toggle({
   return (
     <label
       className={['cathode-toggle', disabled ? 'is-disabled' : '', className].filter(Boolean).join(' ')}
+      aria-disabled={disabled || undefined}
     >
       <button
         type="button"

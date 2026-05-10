@@ -14,7 +14,8 @@
     "gen": "npm run gen:css && npm run gen:manifest",
     "build": "npm run build -w @cathode-ui/react",
     "dev": "npm run dev -w @cathode-ui/react",
-    "storybook": "npm run storybook -w @cathode-ui/react"
+    "storybook": "npm run storybook -w @cathode-ui/react",
+    "test:a11y": "node scripts/a11y-test.js"
   },
   "engines": {
     "node": ">=20"

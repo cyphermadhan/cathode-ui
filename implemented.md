@@ -210,10 +210,9 @@ React Native, Vue, Svelte wrappers — architecture supports it (tokens
 are framework-agnostic) but deferred.
 
 ### Housekeeping
-- No GitHub remote yet. Repo is local-only.
-- Not published to npm. `@cathode-ui/react` + `@cathode-ui/mcp` install via workspace path only.
+- Pushed to https://github.com/cyphermadhan/cathode-ui (default branch `main`). Not yet published to npm — `@cathode-ui/react` + `@cathode-ui/mcp` install via workspace path only.
+- **a11y CI**: `npm run test:a11y` builds the docs site, serves it via `astro preview`, and runs `@axe-core/playwright` against every page (23 total) with the WCAG 2.0/2.1 A+AA tag set. All 23 pass with 0 serious/critical violations. Fixing the initial 28 violations took token tweaks (darker light-theme accents for ≥4.5:1 contrast), a `.cathode-chat-empty` color swap, an `aria-label` on `PixelBar`, and `aria-disabled` on `Toggle`'s outer label.
 - No Storybook. The `dev.tsx` preview + docs site cover the same ground without the additional dependency weight.
-- No automated a11y testing (axe-core) yet.
 - No visual regression tests (Chromatic / Playwright).
 - MCP server uses substring search for `cathode_search`; a vector-embedding mode would be a nice upgrade but the corpus is <20 components, so cost outweighs benefit right now.
 

@@ -22,6 +22,10 @@ export interface PixelBarProps {
   fill?: string;
   /** Bar height in px — each cell is square. Default 6. */
   cellSize?: number;
+  /** Accessible name for the progress indicator. Defaults to "Level". */
+  'aria-label'?: string;
+  /** ID of an element labelling this bar; takes precedence over aria-label. */
+  'aria-labelledby'?: string;
   className?: string;
 }
 
@@ -30,6 +34,8 @@ export function PixelBar({
   cells = 24,
   fill,
   cellSize = 6,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
   className,
 }: PixelBarProps) {
   useCathode(); // subscribe so motion intensity changes trigger re-render
@@ -47,6 +53,8 @@ export function PixelBar({
       aria-valuemin={0}
       aria-valuemax={1}
       aria-valuenow={clamped}
+      aria-label={ariaLabelledBy ? undefined : (ariaLabel ?? 'Level')}
+      aria-labelledby={ariaLabelledBy}
     >
       {Array.from({ length: cells }, (_, i) => (
         <span

@@ -17,6 +17,10 @@ html, body {
 
 a { color: var(--cathode-color-info); text-decoration: none; }
 a:hover { text-decoration: underline; }
+/* Links embedded in text must be distinguishable by more than color
+ * alone (WCAG 1.4.1). Sidebar / card links opt out via `.site-nav a`
+ * and `.component-card` specificity above. */
+p a, li a, td a { text-decoration: underline; }
 
 .site-shell {
   display: grid;
@@ -53,7 +57,7 @@ a:hover { text-decoration: underline; }
   font-size: 9px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
-  color: var(--cathode-color-text-faint);
+  color: var(--cathode-color-text-dim);
   padding: 14px 8px 4px;
 }
 .site-nav a {

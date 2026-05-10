@@ -89,8 +89,9 @@ function PixelBarDemo() {
   const [level, setLevel] = useState(0.6);
   return (
     <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-      <PixelBar level={level} cells={30} fill="var(--cathode-color-danger)" />
+      <PixelBar level={level} cells={30} fill="var(--cathode-color-danger)" aria-label="Signal level" />
       <input type="range" min={0} max={1} step={0.01}
+             aria-label="Adjust signal level"
              value={level} onChange={(e) => setLevel(parseFloat(e.target.value))} />
       <span style={{ fontSize: 11, color: 'var(--cathode-color-text-dim)' }}>
         {Math.round(level * 100)}%
@@ -183,7 +184,7 @@ function TextFieldDemo() {
   return (
     <div style={{ display: 'grid', gap: 10 }}>
       <TextField value={text} onChange={setText} placeholder="TYPE HERE" aria-label="demo" />
-      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-faint)' }}>
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)' }}>
         PASS <code>ai=&#123;&#123; suggest: true &#125;&#125;</code> WITH A PROVIDER FOR INLINE AI COMPLETIONS.
       </div>
     </div>

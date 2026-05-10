@@ -9,16 +9,16 @@
   --cathode-color-text: #1B2030;
   --cathode-color-text-dim: #545B6B;
   --cathode-color-text-faint: #B0B4A8;
-  --cathode-color-danger: #C8261F;
-  --cathode-color-danger-deep: #9C1913;
-  --cathode-color-warning: #C07218;
-  --cathode-color-success: #2E8A44;
+  --cathode-color-danger: #B42019;
+  --cathode-color-danger-deep: #8A1410;
+  --cathode-color-warning: #9E5B13;
+  --cathode-color-success: #247235;
   --cathode-color-info: #1E6FA8;
-  --cathode-color-accent: #C23E94;
-  --cathode-color-amber: #A9811F;
-  --cathode-color-pink: #B33079;
-  --cathode-color-purple: #6E3CC3;
-  --cathode-color-teal: #1A8578;
+  --cathode-color-accent: #A6327D;
+  --cathode-color-amber: #7F5F10;
+  --cathode-color-pink: #9C2868;
+  --cathode-color-purple: #5B31A6;
+  --cathode-color-teal: #0F6E62;
   --cathode-color-grey: #4D5160;
 
 /* Typography, spacing, size, motion, sound, haptic — theme-independent */
@@ -130,15 +130,15 @@
   --cathode-color-text: #1B2030;
   --cathode-color-text-dim: #545B6B;
   --cathode-color-text-faint: #B0B4A8;
-  --cathode-color-danger: #C8261F;
-  --cathode-color-danger-deep: #9C1913;
-  --cathode-color-warning: #C07218;
-  --cathode-color-success: #2E8A44;
+  --cathode-color-danger: #B42019;
+  --cathode-color-danger-deep: #8A1410;
+  --cathode-color-warning: #9E5B13;
+  --cathode-color-success: #247235;
   --cathode-color-info: #1E6FA8;
-  --cathode-color-accent: #C23E94;
-  --cathode-color-amber: #A9811F;
-  --cathode-color-pink: #B33079;
-  --cathode-color-purple: #6E3CC3;
-  --cathode-color-teal: #1A8578;
+  --cathode-color-accent: #A6327D;
+  --cathode-color-amber: #7F5F10;
+  --cathode-color-pink: #9C2868;
+  --cathode-color-purple: #5B31A6;
+  --cathode-color-teal: #0F6E62;
   --cathode-color-grey: #4D5160;
 }
