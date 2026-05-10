@@ -12,7 +12,14 @@ import { useCathode } from '../CathodeProvider';
  */
 export interface ToastProps {
   visible: boolean;
-  kind?: 'info' | 'success' | 'warn' | 'error';
+  /**
+   * Semantic kind drives the border accent and ARIA liveness:
+   *   - `info`    — blue border, polite live region
+   *   - `success` — green border, polite live region
+   *   - `warning` — amber border, polite live region
+   *   - `error`   — red border, assertive live region
+   */
+  kind?: 'info' | 'success' | 'warning' | 'error';
   children: ReactNode;
   className?: string;
 }

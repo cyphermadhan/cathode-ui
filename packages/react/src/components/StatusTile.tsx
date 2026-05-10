@@ -14,15 +14,16 @@ import type { PillAccent } from './Pill';
  * display component.
  */
 const ACCENT_VAR: Record<PillAccent, string> = {
-  info:        'var(--cathode-color-info)',
-  ok:          'var(--cathode-color-ok)',
-  warn:        'var(--cathode-color-warn)',
-  tx:          'var(--cathode-color-tx)',
-  sys:         'var(--cathode-color-sys)',
-  navTalk:     'var(--cathode-color-nav-talk)',
-  navChat:     'var(--cathode-color-nav-chat)',
-  navListen:   'var(--cathode-color-nav-listen)',
-  navSettings: 'var(--cathode-color-nav-settings)',
+  info:    'var(--cathode-color-info)',
+  success: 'var(--cathode-color-success)',
+  warning: 'var(--cathode-color-warning)',
+  danger:  'var(--cathode-color-danger)',
+  accent:  'var(--cathode-color-accent)',
+  amber:   'var(--cathode-color-amber)',
+  pink:    'var(--cathode-color-pink)',
+  purple:  'var(--cathode-color-purple)',
+  teal:    'var(--cathode-color-teal)',
+  grey:    'var(--cathode-color-grey)',
 };
 
 export interface StatusTileProps {

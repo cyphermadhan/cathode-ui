@@ -1,7 +1,7 @@
 {
   "$schema": "https://cathode-ui.dev/manifest.schema.json",
   "name": "Cathode UI",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Retro-future design system — monospace, pixel shapes, motion + haptics + sound + AI-native surfaces. Read this manifest to understand how to compose Cathode primitives without scraping React source.",
   "fontStack": "'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', monospace",
   "themes": [
@@ -30,7 +30,7 @@
         },
         {
           "name": "accent",
-          "type": "'neutral'|'tx'|'info'|'ok'|'warn'",
+          "type": "'neutral'|'info'|'success'|'warning'|'danger'",
           "required": false,
           "default": "neutral"
         },
@@ -208,7 +208,7 @@
         },
         {
           "name": "accent",
-          "type": "PillAccent ('info'|'ok'|'warn'|'tx'|'sys'|'navTalk'|'navChat'|'navListen'|'navSettings')",
+          "type": "PillAccent ('info'|'success'|'warning'|'danger'|'accent'|'amber'|'pink'|'purple'|'teal'|'grey')",
           "required": false,
           "default": "info"
         },
@@ -255,11 +255,11 @@
       "examples": [
         {
           "name": "nav-active",
-          "snippet": "<Pill title=\"TALK\" active accent=\"navTalk\" />"
+          "snippet": "<Pill title=\"HOME\" active accent=\"amber\" />"
         },
         {
           "name": "with-icon",
-          "snippet": "<Pill title=\"CHAT\" icon={<IconChat weight=\"bold\" />} onClick={openChat} accent=\"navChat\" />"
+          "snippet": "<Pill title=\"SAVE\" icon={<IconCheck weight=\"bold\" />} onClick={save} accent=\"success\" />"
         }
       ]
     },
@@ -318,8 +318,8 @@
         ]
       },
       "feedback": {
-        "haptic": "confirm (primary) | tap",
-        "sound": "confirm (primary) | click"
+        "haptic": "primary→confirm · danger→destructive · default→tap",
+        "sound": "primary→confirm · danger→destructive · default→click"
       },
       "examples": [
         {
@@ -439,11 +439,11 @@
       "examples": [
         {
           "name": "display",
-          "snippet": "<StatusTile title=\"LINK\" subtitle=\"LIVE\" icon={<IconBroadcast weight=\"bold\" />} active accent=\"ok\" />"
+          "snippet": "<StatusTile title=\"STATUS\" subtitle=\"HEALTHY\" icon={<IconCheck weight=\"bold\" />} active accent=\"success\" />"
         },
         {
           "name": "button",
-          "snippet": "<StatusTile title=\"PAIR\" subtitle=\"TAP TO PAIR\" icon={<IconCheck />} onClick={pair} />"
+          "snippet": "<StatusTile title=\"ACTION\" subtitle=\"TAP TO RUN\" icon={<IconSparkle />} onClick={handler} />"
         }
       ]
     },
@@ -459,7 +459,7 @@
         },
         {
           "name": "kind",
-          "type": "'info'|'success'|'warn'|'error'",
+          "type": "'info'|'success'|'warning'|'error'",
           "required": false,
           "default": "info"
         },

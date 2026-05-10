@@ -64,9 +64,21 @@ export function Button({
 
   const handleClick = async () => {
     if (disabled) return;
-    const pattern = variant === 'primary' ? 'confirm' : 'click';
-    if (hapticOn) haptic(pattern === 'confirm' ? 'confirm' : 'tap');
-    if (soundOn) sound(pattern, { enabled: true });
+    // Map variant to sensory feedback:
+    //   primary  → confirm (rising two-tone)
+    //   danger   → destructive (single low harsh note, warns the user
+    //              something irreversible just happened)
+    //   default  → click (neutral short blip)
+    const soundPattern =
+      variant === 'primary' ? 'confirm'
+      : variant === 'danger' ? 'destructive'
+      : 'click';
+    const hapticPattern =
+      variant === 'primary' ? 'confirm'
+      : variant === 'danger' ? 'destructive'
+      : 'tap';
+    if (hapticOn) haptic(hapticPattern);
+    if (soundOn) sound(soundPattern, { enabled: true });
     onClick?.();
     // AI action path — swallows provider errors so a single failure
     // doesn't throw out of the click handler and into React's error boundary.

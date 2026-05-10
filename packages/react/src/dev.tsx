@@ -8,6 +8,7 @@ import { StrictMode, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   CathodeProvider,
+  sound,
   TerminalFrame,
   PixelBar,
   PulsingDot,
@@ -58,8 +59,10 @@ const mockAI: CathodeAIProvider = {
 
 function App() {
   const [theme, setTheme] = useState<'auto' | 'dark' | 'light'>('dark');
-  const [sound, setSound] = useState(false);
-  const [haptic, setHaptic] = useState(true);
+  // Named with an `On` suffix so they don't shadow the imported
+  // `sound` / `haptic` functions we call directly in the audition row.
+  const [soundOn, setSoundOn] = useState(false);
+  const [hapticOn, setHapticOn] = useState(true);
   const [motion, setMotion] = useState<'subtle' | 'strong' | 'none'>('strong');
   const [text, setText] = useState('Hello');
   const [level, setLevel] = useState(0.4);
@@ -67,8 +70,8 @@ function App() {
   const [actionResult, setActionResult] = useState<string>('');
 
   const providerProps = useMemo(
-    () => ({ theme, sound, haptic, motion, ai: mockAI }),
-    [theme, sound, haptic, motion]
+    () => ({ theme, sound: soundOn, haptic: hapticOn, motion, ai: mockAI }),
+    [theme, soundOn, hapticOn, motion]
   );
 
   return (
@@ -94,45 +97,56 @@ function App() {
         <Controls
           theme={theme}
           setTheme={setTheme}
-          sound={sound}
-          setSound={setSound}
-          haptic={haptic}
-          setHaptic={setHaptic}
+          sound={soundOn}
+          setSound={setSoundOn}
+          haptic={hapticOn}
+          setHaptic={setHapticOn}
           motion={motion}
           setMotion={setMotion}
         />
 
-        <Section title="NAV PILLS">
+        <Section title="PILLS — PALETTE">
           <Row>
-            <Pill title="TALK" accent="navTalk" active icon={<IconBroadcast size={12} weight="bold" />} />
-            <Pill title="CHAT" accent="navChat" icon={<IconChat size={12} weight="bold" />} onClick={() => setToast(true)} />
-            <Pill title="LISTEN" accent="navListen" icon={<IconEar size={12} weight="bold" />} />
-            <Pill title="SETTINGS" accent="navSettings" icon={<IconSettings size={12} weight="bold" />} />
+            <Pill title="AMBER" accent="amber" active icon={<IconBroadcast size={12} weight="bold" />} />
+            <Pill title="PINK" accent="pink" icon={<IconChat size={12} weight="bold" />} onClick={() => setToast(true)} />
+            <Pill title="PURPLE" accent="purple" icon={<IconEar size={12} weight="bold" />} />
+            <Pill title="TEAL" accent="teal" icon={<IconSparkle size={12} weight="bold" />} />
+            <Pill title="GREY" accent="grey" icon={<IconSettings size={12} weight="bold" />} />
+          </Row>
+        </Section>
+
+        <Section title="PILLS — SEMANTIC">
+          <Row>
+            <Pill title="INFO" accent="info" icon={<IconSignal size={12} weight="bold" />} />
+            <Pill title="SUCCESS" accent="success" icon={<IconCheck size={12} weight="bold" />} />
+            <Pill title="WARNING" accent="warning" icon={<IconSparkle size={12} weight="bold" />} />
+            <Pill title="DANGER" accent="danger" icon={<IconClose size={12} weight="bold" />} />
+            <Pill title="ACCENT" accent="accent" icon={<IconSparkle size={12} weight="bold" />} />
           </Row>
         </Section>
 
         <Section title="STATUS TILES">
           <Row>
             <StatusTile
-              title="LINK"
-              subtitle="LIVE · TAP TO STOP"
+              title="ACTIVE"
+              subtitle="ALL SYSTEMS GO"
               icon={<IconBroadcast size={24} weight="bold" />}
-              accent="ok"
+              accent="success"
               active
               onClick={() => setToast(true)}
             />
             <StatusTile
-              title="PAIR"
+              title="READY"
               subtitle="FPRINT · 4A2B-9C1D"
               icon={<IconCheck size={24} weight="bold" />}
-              accent="ok"
+              accent="success"
               active
             />
             <StatusTile
-              title="PEER"
-              subtitle="NO PEERS · TAP TO RESCAN"
+              title="IDLE"
+              subtitle="WAITING FOR INPUT"
               icon={<IconSignal size={24} weight="bold" />}
-              accent="sys"
+              accent="grey"
             />
           </Row>
         </Section>
@@ -148,7 +162,7 @@ function App() {
 
         <Section title="PIXEL BAR">
           <Row align="center">
-            <PixelBar level={level} cells={30} fill="var(--cathode-color-tx)" />
+            <PixelBar level={level} cells={30} fill="var(--cathode-color-danger)" />
             <input
               type="range"
               min={0}
@@ -165,7 +179,7 @@ function App() {
 
         <Section title="PULSING DOT">
           <Row align="center">
-            <PulsingDot color="var(--cathode-color-ok)" />
+            <PulsingDot color="var(--cathode-color-success)" />
             <span style={{ fontSize: 11, color: 'var(--cathode-color-text-dim)' }}>SCANNING</span>
           </Row>
         </Section>
@@ -225,6 +239,32 @@ function App() {
             <Toast visible={toast} kind="info">
               <IconCamera size={12} weight="bold" /> SOMETHING HAPPENED
             </Toast>
+          </div>
+        </Section>
+
+        <Section title="SOUND PALETTE">
+          <Row>
+            <Button onClick={() => { sound('click', { enabled: true }); }}>
+              CLICK
+            </Button>
+            <Button onClick={() => { sound('tick', { enabled: true }); }}>
+              TICK
+            </Button>
+            <Button onClick={() => { sound('confirm', { enabled: true }); }}>
+              CONFIRM
+            </Button>
+            <Button onClick={() => { sound('warn', { enabled: true }); }}>
+              WARN
+            </Button>
+            <Button onClick={() => { sound('error', { enabled: true }); }}>
+              ERROR
+            </Button>
+            <Button onClick={() => { sound('destructive', { enabled: true }); }}>
+              DESTRUCTIVE
+            </Button>
+          </Row>
+          <div style={{ fontSize: 10, color: 'var(--cathode-color-text-faint)', marginTop: 8 }}>
+            THESE BYPASS THE GLOBAL SOUND TOGGLE — TAP TO AUDITION EACH PATTERN.
           </div>
         </Section>
       </div>

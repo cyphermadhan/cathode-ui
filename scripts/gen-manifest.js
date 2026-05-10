@@ -26,7 +26,7 @@ const components = [
       'Bordered box with a small inset title — the "┌─ PEERS ─" terminal look. Use to group related readouts.',
     props: [
       { name: 'title',    type: 'string',                                   required: false, default: undefined },
-      { name: 'accent',   type: "'neutral'|'tx'|'info'|'ok'|'warn'",        required: false, default: 'neutral' },
+      { name: 'accent',   type: "'neutral'|'info'|'success'|'warning'|'danger'", required: false, default: 'neutral' },
       { name: 'children', type: 'ReactNode',                                 required: true },
       { name: 'className',type: 'string',                                    required: false },
     ],
@@ -91,7 +91,7 @@ const components = [
     props: [
       { name: 'title',    type: 'string',     required: true },
       { name: 'icon',     type: 'ReactNode',  required: false },
-      { name: 'accent',   type: "PillAccent ('info'|'ok'|'warn'|'tx'|'sys'|'navTalk'|'navChat'|'navListen'|'navSettings')", required: false, default: 'info' },
+      { name: 'accent',   type: "PillAccent ('info'|'success'|'warning'|'danger'|'accent'|'amber'|'pink'|'purple'|'teal'|'grey')", required: false, default: 'info' },
       { name: 'active',   type: 'boolean',    required: false, default: false, description: 'Marks the current tab/state; visually highlights and disables click.' },
       { name: 'disabled', type: 'boolean',    required: false, default: false },
       { name: 'feedback', type: 'boolean',    required: false, default: true,  description: 'Local override for haptic+sound.' },
@@ -101,8 +101,8 @@ const components = [
     a11y: { role: 'button', requires: ['aria-label if title is unclear'] },
     feedback: { haptic: 'tap', sound: 'click' },
     examples: [
-      { name: 'nav-active',  snippet: '<Pill title="TALK" active accent="navTalk" />' },
-      { name: 'with-icon',   snippet: '<Pill title="CHAT" icon={<IconChat weight="bold" />} onClick={openChat} accent="navChat" />' },
+      { name: 'nav-active',  snippet: '<Pill title="HOME" active accent="amber" />' },
+      { name: 'with-icon',   snippet: '<Pill title="SAVE" icon={<IconCheck weight="bold" />} onClick={save} accent="success" />' },
     ],
   },
   {
@@ -120,7 +120,10 @@ const components = [
     ],
     motionStates: ['idle', 'press'],
     a11y: { role: 'button', requires: ['aria-label for icon-only usage'] },
-    feedback: { haptic: 'confirm (primary) | tap', sound: 'confirm (primary) | click' },
+    feedback: {
+      haptic: 'primary→confirm · danger→destructive · default→tap',
+      sound:  'primary→confirm · danger→destructive · default→click',
+    },
     examples: [
       { name: 'primary', snippet: '<Button variant="primary" onClick={save}>SAVE</Button>' },
       { name: 'ai',      snippet: '<Button ai={{ action: "explain", context: data }} onActionResult={setExplanation}>EXPLAIN</Button>' },
@@ -161,8 +164,8 @@ const components = [
     a11y: { role: 'button (when onClick) / region', requires: [] },
     feedback: { haptic: 'tap', sound: 'click' },
     examples: [
-      { name: 'display', snippet: '<StatusTile title="LINK" subtitle="LIVE" icon={<IconBroadcast weight="bold" />} active accent="ok" />' },
-      { name: 'button',  snippet: '<StatusTile title="PAIR" subtitle="TAP TO PAIR" icon={<IconCheck />} onClick={pair} />' },
+      { name: 'display', snippet: '<StatusTile title="STATUS" subtitle="HEALTHY" icon={<IconCheck weight="bold" />} active accent="success" />' },
+      { name: 'button',  snippet: '<StatusTile title="ACTION" subtitle="TAP TO RUN" icon={<IconSparkle />} onClick={handler} />' },
     ],
   },
   {
@@ -171,7 +174,7 @@ const components = [
     summary: 'Inline status notification. Controlled via `visible`; apps handle queuing/timing.',
     props: [
       { name: 'visible',  type: 'boolean',                                     required: true },
-      { name: 'kind',     type: "'info'|'success'|'warn'|'error'",             required: false, default: 'info' },
+      { name: 'kind',     type: "'info'|'success'|'warning'|'error'",          required: false, default: 'info' },
       { name: 'children', type: 'ReactNode',                                   required: true },
     ],
     motionStates: ['enter', 'exit'],

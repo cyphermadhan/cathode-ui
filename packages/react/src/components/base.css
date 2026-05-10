@@ -19,10 +19,10 @@
   border-radius: var(--cathode-size-tile-corner);
 }
 
-.cathode-frame[data-accent="tx"]       { border-color: var(--cathode-color-tx);   }
-.cathode-frame[data-accent="info"]     { border-color: var(--cathode-color-info); }
-.cathode-frame[data-accent="ok"]       { border-color: var(--cathode-color-ok);   }
-.cathode-frame[data-accent="warn"]     { border-color: var(--cathode-color-warn); }
+.cathode-frame[data-accent="danger"]   { border-color: var(--cathode-color-danger);  }
+.cathode-frame[data-accent="info"]     { border-color: var(--cathode-color-info);    }
+.cathode-frame[data-accent="success"]  { border-color: var(--cathode-color-success); }
+.cathode-frame[data-accent="warning"]  { border-color: var(--cathode-color-warning); }
 
 .cathode-frame-title {
   position: absolute;
@@ -54,7 +54,7 @@
 }
 
 .cathode-pixelbar-cell[data-lit="true"] {
-  background: var(--cathode-pixelbar-fill, var(--cathode-color-tx));
+  background: var(--cathode-pixelbar-fill, var(--cathode-color-danger));
 }
 
 /* ── DotLeader ─────────────────────────────────────────────────── */
@@ -168,14 +168,14 @@
 }
 
 .cathode-button[data-variant="primary"] {
-  background: var(--cathode-color-ok);
-  border-color: var(--cathode-color-ok);
+  background: var(--cathode-color-success);
+  border-color: var(--cathode-color-success);
   color: var(--cathode-color-bg);
 }
 
 .cathode-button[data-variant="danger"] {
-  background: var(--cathode-color-tx);
-  border-color: var(--cathode-color-tx);
+  background: var(--cathode-color-danger);
+  border-color: var(--cathode-color-danger);
   color: var(--cathode-color-bg);
 }
 
@@ -205,7 +205,7 @@
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
-  caret-color: var(--cathode-color-ok);
+  caret-color: var(--cathode-color-success);
 }
 
 .cathode-textfield-suggest {
@@ -294,9 +294,9 @@
   letter-spacing: var(--cathode-type-tracking-label);
 }
 
-.cathode-toast[data-kind="error"]   { border-color: var(--cathode-color-tx);   }
-.cathode-toast[data-kind="warn"]    { border-color: var(--cathode-color-warn); }
-.cathode-toast[data-kind="success"] { border-color: var(--cathode-color-ok);   }
+.cathode-toast[data-kind="error"]   { border-color: var(--cathode-color-danger);   }
+.cathode-toast[data-kind="warning"] { border-color: var(--cathode-color-warning); }
+.cathode-toast[data-kind="success"] { border-color: var(--cathode-color-success);   }
 
 /* ── Reduced motion ───────────────────────────────────────────── */
 

@@ -9,16 +9,17 @@
   --cathode-color-text: #1B2030;
   --cathode-color-text-dim: #545B6B;
   --cathode-color-text-faint: #B0B4A8;
-  --cathode-color-tx: #C8261F;
-  --cathode-color-tx-deep: #9C1913;
+  --cathode-color-danger: #C8261F;
+  --cathode-color-danger-deep: #9C1913;
+  --cathode-color-warning: #C07218;
+  --cathode-color-success: #2E8A44;
   --cathode-color-info: #1E6FA8;
-  --cathode-color-ok: #2E8A44;
-  --cathode-color-warn: #C07218;
-  --cathode-color-sys: #C23E94;
-  --cathode-color-nav-talk: #A9811F;
-  --cathode-color-nav-chat: #B33079;
-  --cathode-color-nav-listen: #6E3CC3;
-  --cathode-color-nav-settings: #4D5160;
+  --cathode-color-accent: #C23E94;
+  --cathode-color-amber: #A9811F;
+  --cathode-color-pink: #B33079;
+  --cathode-color-purple: #6E3CC3;
+  --cathode-color-teal: #1A8578;
+  --cathode-color-grey: #4D5160;
 
 /* Typography, spacing, size, motion, sound, haptic — theme-independent */
   --cathode-type-scale-caption: 9px;
@@ -62,25 +63,17 @@
   --cathode-motion-ease-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1);
   --cathode-motion-scale-press: 0.97;
   --cathode-motion-scale-pop: 1.03;
-  --cathode-sound-click-freq: 1200;
-  --cathode-sound-click-ms: 30;
-  --cathode-sound-click-wave: square;
-  --cathode-sound-click-gain: 0.05;
-  --cathode-sound-confirm-freq: 800;
-  --cathode-sound-confirm-ms: 80;
-  --cathode-sound-confirm-wave: sine;
-  --cathode-sound-confirm-gain: 0.06;
-  --cathode-sound-error-freq: 200;
-  --cathode-sound-error-ms: 120;
-  --cathode-sound-error-wave: sawtooth;
-  --cathode-sound-error-gain: 0.05;
-  --cathode-sound-tick-freq: 1600;
-  --cathode-sound-tick-ms: 15;
-  --cathode-sound-tick-wave: square;
-  --cathode-sound-tick-gain: 0.03;
+  --cathode-sound-click: [object Object];
+  --cathode-sound-tick: [object Object];
+  --cathode-sound-confirm: [object Object],[object Object];
+  --cathode-sound-warn: [object Object];
+  --cathode-sound-error: [object Object],[object Object];
+  --cathode-sound-destructive: [object Object];
   --cathode-haptic-tap: 10;
   --cathode-haptic-confirm: 20;
+  --cathode-haptic-warn: 10,30,10;
   --cathode-haptic-error: 20,40,20;
+  --cathode-haptic-destructive: 35;
   --cathode-haptic-long: 40;
   --cathode-bp-sm: 480px;
   --cathode-bp-md: 768px;
@@ -96,16 +89,17 @@
   --cathode-color-text: #EAEAEA;
   --cathode-color-text-dim: #858585;
   --cathode-color-text-faint: #383838;
-  --cathode-color-tx: #EB3D38;
-  --cathode-color-tx-deep: #C22926;
+  --cathode-color-danger: #EB3D38;
+  --cathode-color-danger-deep: #C22926;
+  --cathode-color-warning: #F29E33;
+  --cathode-color-success: #59D173;
   --cathode-color-info: #38A8E2;
-  --cathode-color-ok: #59D173;
-  --cathode-color-warn: #F29E33;
-  --cathode-color-sys: #EB73C7;
-  --cathode-color-nav-talk: #F2C133;
-  --cathode-color-nav-chat: #F266AD;
-  --cathode-color-nav-listen: #B273F2;
-  --cathode-color-nav-settings: #9EA5B7;
+  --cathode-color-accent: #EB73C7;
+  --cathode-color-amber: #F2C133;
+  --cathode-color-pink: #F266AD;
+  --cathode-color-purple: #B273F2;
+  --cathode-color-teal: #3AD6C7;
+  --cathode-color-grey: #9EA5B7;
   }
 }
 
@@ -116,16 +110,17 @@
   --cathode-color-text: #EAEAEA;
   --cathode-color-text-dim: #858585;
   --cathode-color-text-faint: #383838;
-  --cathode-color-tx: #EB3D38;
-  --cathode-color-tx-deep: #C22926;
+  --cathode-color-danger: #EB3D38;
+  --cathode-color-danger-deep: #C22926;
+  --cathode-color-warning: #F29E33;
+  --cathode-color-success: #59D173;
   --cathode-color-info: #38A8E2;
-  --cathode-color-ok: #59D173;
-  --cathode-color-warn: #F29E33;
-  --cathode-color-sys: #EB73C7;
-  --cathode-color-nav-talk: #F2C133;
-  --cathode-color-nav-chat: #F266AD;
-  --cathode-color-nav-listen: #B273F2;
-  --cathode-color-nav-settings: #9EA5B7;
+  --cathode-color-accent: #EB73C7;
+  --cathode-color-amber: #F2C133;
+  --cathode-color-pink: #F266AD;
+  --cathode-color-purple: #B273F2;
+  --cathode-color-teal: #3AD6C7;
+  --cathode-color-grey: #9EA5B7;
 }
 
 [data-theme="light"] {
@@ -135,14 +130,15 @@
   --cathode-color-text: #1B2030;
   --cathode-color-text-dim: #545B6B;
   --cathode-color-text-faint: #B0B4A8;
-  --cathode-color-tx: #C8261F;
-  --cathode-color-tx-deep: #9C1913;
+  --cathode-color-danger: #C8261F;
+  --cathode-color-danger-deep: #9C1913;
+  --cathode-color-warning: #C07218;
+  --cathode-color-success: #2E8A44;
   --cathode-color-info: #1E6FA8;
-  --cathode-color-ok: #2E8A44;
-  --cathode-color-warn: #C07218;
-  --cathode-color-sys: #C23E94;
-  --cathode-color-nav-talk: #A9811F;
-  --cathode-color-nav-chat: #B33079;
-  --cathode-color-nav-listen: #6E3CC3;
-  --cathode-color-nav-settings: #4D5160;
+  --cathode-color-accent: #C23E94;
+  --cathode-color-amber: #A9811F;
+  --cathode-color-pink: #B33079;
+  --cathode-color-purple: #6E3CC3;
+  --cathode-color-teal: #1A8578;
+  --cathode-color-grey: #4D5160;
 }

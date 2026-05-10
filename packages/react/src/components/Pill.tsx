@@ -24,27 +24,40 @@ import { sound } from '../feedback/sound';
  * Feedback: `tap` haptic + `click` sound fire on interaction unless
  * `feedback={false}` is passed or globally disabled.
  */
+/**
+ * Pill accents split into two families:
+ *
+ *   Semantic    — `info | success | warning | danger | accent`
+ *   Palette     — `amber | pink | purple | teal | grey`
+ *
+ * Semantics are for meaning-carrying state (e.g. "error button" →
+ * `danger`). Palette names are for differentiating multiple pills
+ * where the color doesn't encode a specific semantic — e.g. a
+ * navigation row where each tab is just a different color.
+ */
 export type PillAccent =
   | 'info'
-  | 'ok'
-  | 'warn'
-  | 'tx'
-  | 'sys'
-  | 'navTalk'
-  | 'navChat'
-  | 'navListen'
-  | 'navSettings';
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'accent'
+  | 'amber'
+  | 'pink'
+  | 'purple'
+  | 'teal'
+  | 'grey';
 
 const ACCENT_VAR: Record<PillAccent, string> = {
-  info:         'var(--cathode-color-info)',
-  ok:           'var(--cathode-color-ok)',
-  warn:         'var(--cathode-color-warn)',
-  tx:           'var(--cathode-color-tx)',
-  sys:          'var(--cathode-color-sys)',
-  navTalk:      'var(--cathode-color-nav-talk)',
-  navChat:      'var(--cathode-color-nav-chat)',
-  navListen:    'var(--cathode-color-nav-listen)',
-  navSettings:  'var(--cathode-color-nav-settings)',
+  info:    'var(--cathode-color-info)',
+  success: 'var(--cathode-color-success)',
+  warning: 'var(--cathode-color-warning)',
+  danger:  'var(--cathode-color-danger)',
+  accent:  'var(--cathode-color-accent)',
+  amber:   'var(--cathode-color-amber)',
+  pink:    'var(--cathode-color-pink)',
+  purple:  'var(--cathode-color-purple)',
+  teal:    'var(--cathode-color-teal)',
+  grey:    'var(--cathode-color-grey)',
 };
 
 export interface PillProps {
