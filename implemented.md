@@ -235,7 +235,7 @@ File: `https://www.figma.com/design/yudyQFCPwX1FSLcXBXuVvY/Cathode-UI`. Building
 | 5 | Navigation | Tabs (5), Breadcrumbs (1), Menu (2), Pagination (3) | ✅ |
 | 6 | Feedback | ProgressBar (7), Loader (6), Skeleton (6), PixelBar (4), ActivityBar (3), SignalBars (6), PulsingDot (5), Toast (4) | ✅ |
 | 7 | Overlays | Dialog (3), Drawer (4), Popover (2), Tooltip (2) | ✅ |
-| 8 | Remaining | Stack, Accordion, Chat, ScanLine, TypewriterText, Countdown | ⏳ |
+| 8 | Misc | Stack (4), Accordion (3), Chat (3), ScanLine (1), TypewriterText (5), Countdown (5) | ✅ |
 
 **Caveats (static Figma):** animation-heavy primitives (`Loader`, `PulsingDot`, `TypewriterText`, `ScanLine`, `Countdown`, `Chat` streaming) render as static "at-rest" representations — Figma can't drive CSS keyframes. Composite multi-state components (`Menu`, `Popover`, `Tooltip`, `Drawer`) ship as separate variants per state rather than live interactions.
 
