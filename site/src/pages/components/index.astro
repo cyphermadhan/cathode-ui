@@ -1,0 +1,34 @@
+---
+import Main from '../../layouts/Main.astro';
+import manifest from '../../../../cathode.manifest.json';
+
+const components = manifest.components;
+---
+
+<Main title="Components" description="All Cathode UI components, lifted straight from the manifest.">
+  <h1>COMPONENTS</h1>
+  <div class="page-lead">
+    Every primitive in the library. Summaries and prop specs are generated
+    from <code>cathode.manifest.json</code> — the same file the MCP server
+    serves to AI agents, so what you see here is what the robots see.
+  </div>
+
+  <div class="component-grid">
+    {components.map((c: any) => (
+      <a class="component-card" href={`/components/${c.name.toLowerCase()}`}>
+        <div class="component-card-name">{c.name}</div>
+        <div class="component-card-summary">{c.summary}</div>
+      </a>
+    ))}
+  </div>
+
+  <hr />
+
+  <h2>Auto-generated from manifest</h2>
+  <p>
+    Want the raw data? <code>cathode.manifest.json</code> ships at the
+    root of the repo and is the authoritative description of every
+    component. It validates against a JSON Schema published at
+    <code>https://cathode-ui.dev/manifest.schema.json</code> (placeholder URL).
+  </p>
+</Main>

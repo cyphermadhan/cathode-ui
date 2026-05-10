@@ -1,0 +1,64 @@
+---
+import Main from '../../layouts/Main.astro';
+import { ChatDemo } from '../../components/ChatDemo';
+---
+
+<Main title="Chat" description="First-class AI conversation component with streaming, cancel, and auto-scroll.">
+  <h1>CHAT</h1>
+  <div class="page-lead">
+    A streaming AI conversation component. Handles the full loop — input
+    composer, streaming assistant response, STOP to cancel mid-stream, CLR
+    to reset the transcript. Wraps whatever <code>CathodeAIProvider</code>
+    your app supplies; Cathode UI doesn't ship one.
+  </div>
+
+  <h2>Live demo</h2>
+  <p>
+    Below runs against a mock provider defined in the docs site itself, so
+    it works offline. In your app you'd swap <code>makeMockProvider()</code>
+    for an adapter that streams from your real LLM.
+  </p>
+  <div class="demo-frame">
+    <div style="width: 100%;">
+      <ChatDemo client:only="react" />
+    </div>
+  </div>
+
+  <h2>Usage</h2>
+  <pre><code>{`import { CathodeProvider, Chat } from '@cathode-ui/react';
+import { myProvider } from './my-ai-provider';
+
+export function ChatScreen() {
+  return (
+    <CathodeProvider ai={myProvider}>
+      <Chat title="SUPPORT" maxHeight={480} />
+    </CathodeProvider>
+  );
+}`}</code></pre>
+
+  <h2>Provider interface</h2>
+  <p>Your provider implements three verbs:</p>
+  <pre><code>{`interface CathodeAIProvider {
+  suggest(prefix: string, signal?: AbortSignal): AsyncIterable<string>;
+  chat(messages: ChatMessage[], signal?: AbortSignal): AsyncIterable<string>;
+  act(intent: string, context?: unknown, signal?: AbortSignal): Promise<string>;
+}`}</code></pre>
+  <p>
+    <code>suggest</code> powers <code>TextField</code> ghost-text,
+    <code>chat</code> powers <code>Chat</code>, <code>act</code> powers
+    <code>Button</code> AI actions and <code>SearchBar</code> semantic ranking.
+    One provider, all four surfaces — or implement just the ones you need.
+  </p>
+
+  <h2>Props</h2>
+  <table>
+    <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>provider</code></td>     <td><code>CathodeAIProvider</code></td> <td>—</td>              <td>Overrides the provider supplied via CathodeProvider.</td></tr>
+      <tr><td><code>systemPrompt</code></td> <td><code>string</code></td>            <td>—</td>              <td>Injected before the first user turn.</td></tr>
+      <tr><td><code>placeholder</code></td>  <td><code>string</code></td>            <td>"TYPE A MESSAGE…"</td><td>Composer placeholder.</td></tr>
+      <tr><td><code>title</code></td>        <td><code>string</code></td>            <td>"CHAT"</td>         <td>Title rendered on the TerminalFrame.</td></tr>
+      <tr><td><code>maxHeight</code></td>    <td><code>number</code></td>            <td>320</td>            <td>Scroll cap in px.</td></tr>
+    </tbody>
+  </table>
+</Main>

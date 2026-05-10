@@ -1,0 +1,46 @@
+---
+import Main from '../../layouts/Main.astro';
+import { DialogDemo } from '../../components/DialogDemo';
+---
+
+<Main title="Dialog">
+  <h1>DIALOG</h1>
+  <div class="page-lead">
+    Portal-rendered modal with TerminalFrame chrome. Escape and backdrop
+    click both close; pass <code>modal=&#123;true&#125;</code> to disable the
+    backdrop-close for required-choice dialogs.
+  </div>
+
+  <h2>Live demo</h2>
+  <div class="demo-frame">
+    <DialogDemo client:only="react" />
+  </div>
+
+  <h2>Usage</h2>
+  <pre><code>{`import { useState } from 'react';
+import { Dialog, Button } from '@cathode-ui/react';
+
+function ConfirmDelete() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button variant="danger" onClick={() => setOpen(true)}>DELETE</Button>
+      <Dialog open={open} onClose={() => setOpen(false)} title="DELETE?" accent="danger">
+        <p>No undo.</p>
+        <Button variant="danger" onClick={() => { /* … */ setOpen(false); }}>
+          CONFIRM
+        </Button>
+      </Dialog>
+    </>
+  );
+}`}</code></pre>
+
+  <h2>A11y notes</h2>
+  <ul style="color: var(--cathode-color-text-dim);">
+    <li><code>role="dialog"</code> + <code>aria-modal="true"</code> set automatically.</li>
+    <li>When <code>title</code> is set, <code>aria-labelledby</code> points at it.</li>
+    <li>ESC key closes the topmost dialog.</li>
+    <li>Backdrop click closes unless <code>modal=&#123;true&#125;</code>.</li>
+    <li>Focus trapping isn't built in — most Cathode dialogs are short confirmations, and pulling in a focus-trap dep for that is a bad trade. Roll your own when you need deeper modal UX.</li>
+  </ul>
+</Main>

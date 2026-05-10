@@ -1,0 +1,83 @@
+---
+import Main from '../layouts/Main.astro';
+---
+
+<Main title="AI providers">
+  <h1>AI PROVIDERS</h1>
+  <div class="page-lead">
+    Cathode UI is provider-agnostic. Four components — <code>TextField</code>,
+    <code>SearchBar</code>, <code>Chat</code>, <code>Button</code> — have
+    opt-in AI behavior. You supply a provider; Cathode routes through it.
+  </div>
+
+  <h2>The interface</h2>
+  <pre><code>{`interface CathodeAIProvider {
+  /** Inline completion for a TextField. Yields the tail to append. */
+  suggest(prefix: string, signal?: AbortSignal): AsyncIterable<string>;
+
+  /** Streaming conversation for Chat. Yields assistant text chunks. */
+  chat(messages: ChatMessage[], signal?: AbortSignal): AsyncIterable<string>;
+
+  /** One-shot intent — Button AI actions, SearchBar semantic ranking. */
+  act(intent: string, context?: unknown, signal?: AbortSignal): Promise<string>;
+}`}</code></pre>
+
+  <h2>Wiring it up</h2>
+  <pre><code>{`import { CathodeProvider } from '@cathode-ui/react';
+import { myProvider } from './my-ai-provider';  // your adapter
+
+<CathodeProvider ai={myProvider}>
+  {/* TextField / SearchBar / Chat / Button automatically light up */}
+</CathodeProvider>`}</code></pre>
+
+  <h2>Example: tiny OpenAI adapter</h2>
+  <p>
+    Illustrative only — Cathode UI doesn't bundle this. Adapters live
+    separately so the core package stays free of SDK weight.
+  </p>
+  <pre><code>{`import OpenAI from 'openai';
+
+const client = new OpenAI({ apiKey: import.meta.env.VITE_OPENAI_KEY });
+
+export const openAIProvider: CathodeAIProvider = {
+  async *suggest(prefix, signal) {
+    const stream = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        { role: 'system', content: 'Return 3-8 words completing the user prefix. No quotes.' },
+        { role: 'user', content: prefix },
+      ],
+      stream: true,
+    }, { signal });
+    for await (const chunk of stream) {
+      const delta = chunk.choices[0]?.delta?.content;
+      if (delta) yield delta;
+    }
+  },
+  async *chat(messages, signal) {
+    const stream = await client.chat.completions.create({
+      model: 'gpt-4o-mini', messages, stream: true,
+    }, { signal });
+    for await (const chunk of stream) {
+      const delta = chunk.choices[0]?.delta?.content;
+      if (delta) yield delta;
+    }
+  },
+  async act(intent, context, signal) {
+    const r = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        { role: 'system', content: \`Respond to intent: \${intent}\` },
+        { role: 'user', content: JSON.stringify(context ?? {}) },
+      ],
+    }, { signal });
+    return r.choices[0].message.content ?? '';
+  },
+};`}</code></pre>
+
+  <p>
+    Same shape works for Anthropic, Gemini, local Ollama, your own backend,
+    or a mock for tests (<a href="/components/chat">see the Chat showcase</a>
+    for a working mock).
+  </p>
+</Main>

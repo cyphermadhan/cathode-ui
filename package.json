@@ -5,7 +5,8 @@
   "description": "Cathode UI — retro-future design system for mobile and web with motion, haptics, sound, and AI-native surfaces.",
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "site"
   ],
   "scripts": {
     "gen:css": "node scripts/gen-css.js",

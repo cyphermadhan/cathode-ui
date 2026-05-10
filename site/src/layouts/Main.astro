@@ -1,0 +1,83 @@
+---
+/**
+ * Main site layout — sidebar + content grid. Imports Cathode's
+ * tokens.css so every `var(--cathode-*)` reference on the docs
+ * resolves, and dogfoods the design system end-to-end.
+ */
+import '@cathode-ui/react/tokens.css';
+import '@cathode-ui/react/fonts.css';
+import '../styles/site.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const path = Astro.url.pathname;
+
+const nav = [
+  {
+    label: 'Intro',
+    items: [
+      { href: '/',                label: 'Home' },
+      { href: '/getting-started', label: 'Getting Started' },
+      { href: '/tokens',          label: 'Tokens' },
+    ],
+  },
+  {
+    label: 'Components',
+    items: [
+      { href: '/components',            label: 'All components' },
+      { href: '/components/chat',       label: 'Chat (AI)' },
+      { href: '/components/dialog',     label: 'Dialog' },
+    ],
+  },
+  {
+    label: 'AI',
+    items: [
+      { href: '/ai',  label: 'AI providers' },
+      { href: '/mcp', label: 'MCP server' },
+    ],
+  },
+];
+
+function isActive(href: string): boolean {
+  if (href === '/') return path === '/';
+  return path === href || path.startsWith(href + '/');
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} · Cathode UI</title>
+    {description ? <meta name="description" content={description} /> : null}
+  </head>
+  <body>
+    <div class="site-shell">
+      <aside class="site-sidebar">
+        <div class="site-brand">CATHODE · UI</div>
+        <div class="site-tagline">Retro-future design system</div>
+        <nav class="site-nav" aria-label="Documentation">
+          {nav.map((group) => (
+            <>
+              <div class="site-nav-group-label">{group.label}</div>
+              {group.items.map((item) => (
+                <a href={item.href} class={isActive(item.href) ? 'is-active' : ''}>
+                  {item.label}
+                </a>
+              ))}
+            </>
+          ))}
+        </nav>
+      </aside>
+
+      <main class="site-main">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

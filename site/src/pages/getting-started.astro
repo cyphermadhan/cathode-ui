@@ -1,0 +1,83 @@
+---
+import Main from '../layouts/Main.astro';
+---
+
+<Main title="Getting Started">
+  <h1>GETTING STARTED</h1>
+  <div class="page-lead">
+    Five minutes from empty folder to first Cathode UI component on screen.
+  </div>
+
+  <h2>Install</h2>
+  <pre><code>npm install @cathode-ui/react
+
+# Peer deps (usually already present):
+npm install react react-dom framer-motion @phosphor-icons/react</code></pre>
+
+  <h2>Import the tokens</h2>
+  <p>
+    Cathode UI ships a single <code>tokens.css</code> that publishes every
+    color, spacing, motion, sound, and haptic token as CSS custom
+    properties. Import it once at your app's root.
+  </p>
+  <pre><code>{`// app entry (main.tsx / _app.tsx / root layout)
+import '@cathode-ui/react/tokens.css';
+import '@cathode-ui/react/fonts.css';  // optional — loads JetBrains Mono`}</code></pre>
+
+  <h2>Wrap your app</h2>
+  <p>
+    <code>CathodeProvider</code> carries runtime settings — theme mode,
+    motion intensity, whether haptics and sound are enabled, an optional
+    AI provider. Every prop has a sensible default, so an empty provider
+    is fine.
+  </p>
+  <pre><code>{`import { CathodeProvider } from '@cathode-ui/react';
+
+export function App() {
+  return (
+    <CathodeProvider>
+      <YourUI />
+    </CathodeProvider>
+  );
+}`}</code></pre>
+
+  <h2>Render something</h2>
+  <pre><code>{`import { TerminalFrame, Pill, Button, PixelBar } from '@cathode-ui/react';
+
+<TerminalFrame title="STATUS">
+  <Pill title="ONLINE" accent="success" active />
+  <PixelBar level={0.6} cells={24} fill="var(--cathode-color-success)" />
+  <Button variant="primary">SUBMIT</Button>
+</TerminalFrame>`}</code></pre>
+
+  <h2>Theming</h2>
+  <p>
+    Cathode UI follows <code>prefers-color-scheme</code> by default. Light
+    is the CSS root default (avoids flash-of-dark on light-mode devices),
+    dark kicks in via media query. Pin explicitly with either:
+  </p>
+  <pre><code>{`// document-level override
+<html data-theme="dark">…</html>
+
+// or scoped via the provider
+<CathodeProvider theme="dark">…</CathodeProvider>`}</code></pre>
+
+  <h2>Feedback opt-ins</h2>
+  <p>
+    Haptics are on by default; sounds are off (unexpected audio is
+    hostile). Enable sound globally with <code>sound&#x3d;&#123;true&#125;</code> on
+    the provider, or opt out of either per-component via a
+    <code>feedback&#x3d;&#123;false&#125;</code> prop.
+  </p>
+
+  <h2>AI (optional)</h2>
+  <p>
+    Components like <code>TextField</code>, <code>SearchBar</code>,
+    <code>Chat</code>, and <code>Button</code> light up additional behavior
+    when you hand the provider a <code>CathodeAIProvider</code>. See
+    the <a href="/ai">AI providers</a> page for the interface.
+  </p>
+
+  <hr />
+  <p>Next: <a href="/tokens">browse the token palette</a>, or jump to the <a href="/components">component index</a>.</p>
+</Main>

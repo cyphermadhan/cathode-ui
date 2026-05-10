@@ -1,0 +1,56 @@
+---
+import Main from '../layouts/Main.astro';
+---
+
+<Main title="Home" description="Cathode UI — a retro-future design system for React, with motion, haptics, sound, and AI-native surfaces.">
+  <h1>CATHODE · UI</h1>
+  <div class="page-lead">
+    A retro-future design system. Monospace type, pixel shapes, tight saturated accents,
+    motion + haptics + sound baked in, AI-native surfaces for agent-driven apps.
+  </div>
+
+  <h2>What's inside</h2>
+  <p>
+    Seventeen React primitives under <code>@cathode-ui/react</code> — layout boxes,
+    pixel meters, pills, tiles, chips, steppers, toggles, a portal-rendered Dialog,
+    a first-class streaming Chat, and an AI-enabled TextField with ghost-text
+    suggestions. All under a <strong>7 KB gzipped</strong> index bundle.
+  </p>
+  <p>
+    A machine-readable <code>cathode.manifest.json</code> describes every
+    component so AI coding agents can discover + compose Cathode primitives
+    without scraping source. A companion <a href="/mcp">MCP server</a> exposes
+    those same facts as tool calls.
+  </p>
+
+  <h2>Quick taste</h2>
+  <pre><code>{`npm install @cathode-ui/react
+
+// in your root
+import '@cathode-ui/react/tokens.css';
+import '@cathode-ui/react/fonts.css'; // optional
+
+import { CathodeProvider, TerminalFrame, Pill, Button } from '@cathode-ui/react';
+
+<CathodeProvider>
+  <TerminalFrame title="TELEMETRY">
+    <Pill title="LIVE" accent="success" active />
+    <Button variant="primary">SUBMIT</Button>
+  </TerminalFrame>
+</CathodeProvider>`}</code></pre>
+
+  <h2>Design principles</h2>
+  <ul style="color: var(--cathode-color-text-dim); line-height: 1.7;">
+    <li><strong>Pixel squares, not pills.</strong> Near-zero border radius; the aesthetic is hardware-instrument, not friendly-web.</li>
+    <li><strong>Monospace everywhere.</strong> One font stack, one voice.</li>
+    <li><strong>Semantic + palette colors, cleanly split.</strong> <code>danger / success / warning / info / accent</code> carry meaning; <code>amber / pink / purple / teal / grey</code> are just colors.</li>
+    <li><strong>Feedback is first-class.</strong> Every interactive primitive supports motion + haptics + sound out of the box, with a global opt-out.</li>
+    <li><strong>AI is a collaborator.</strong> Components expose AI hooks; the manifest lets AI agents author Cathode UIs directly.</li>
+  </ul>
+
+  <hr />
+
+  <p style="color: var(--cathode-color-text-faint); font-size: 11px;">
+    Version 0.2.0 · MIT · Lifted from <a href="https://github.com/cyphermadhan/Klick">Klick</a>'s UI layer and generalized.
+  </p>
+</Main>

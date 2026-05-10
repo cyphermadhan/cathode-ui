@@ -1,0 +1,71 @@
+---
+import Main from '../layouts/Main.astro';
+---
+
+<Main title="MCP server">
+  <h1>MCP SERVER</h1>
+  <div class="page-lead">
+    Cathode UI ships a Model Context Protocol server so AI coding agents
+    (Claude Code, Cursor, etc.) can discover and query the design system
+    without scraping source. Four tools, zero network calls — just reads
+    the local <code>cathode.manifest.json</code> and <code>tokens.json</code>.
+  </div>
+
+  <h2>Why</h2>
+  <p>
+    Design systems are tricky for LLMs: the component list, prop shapes,
+    acceptable accent values, motion states, a11y expectations — they
+    change over time and aren't obvious from source alone. The manifest
+    encodes all of this intent-rich metadata. The MCP server surfaces it
+    as tool calls so an agent can pull answers at authoring time.
+  </p>
+
+  <h2>Tools</h2>
+  <table>
+    <thead><tr><th>Tool</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td><code>cathode_list_components()</code></td> <td>Start here. Returns every component with a one-line summary.</td></tr>
+      <tr><td><code>cathode_get_component(name)</code></td> <td>Full spec for a named component — props, variants, motion states, a11y, feedback, examples.</td></tr>
+      <tr><td><code>cathode_get_tokens(theme?)</code></td> <td>Resolved color set for a theme plus the theme-independent type / spacing / motion / sound / haptic tokens.</td></tr>
+      <tr><td><code>cathode_search(query)</code></td> <td>Fuzzy match against names + summaries. Use when you have intent but not a component name.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Register in Claude Code</h2>
+  <pre><code>{`// .mcp.json
+{
+  "mcpServers": {
+    "cathode-ui": {
+      "command": "node",
+      "args": ["/path/to/cathode-ui/packages/mcp-server/dist/server.js"]
+    }
+  }
+}`}</code></pre>
+  <p>
+    After publishing to npm the command simplifies to
+    <code>npx -y @cathode-ui/mcp</code>.
+  </p>
+
+  <h2>Register in Cursor / VS Code</h2>
+  <p>
+    Same JSON shape, pasted into each editor's MCP settings. The
+    protocol is identical across clients.
+  </p>
+
+  <h2>What an agent interaction looks like</h2>
+  <pre><code>{`User: "Build me a status panel with three tiles in Cathode UI."
+
+Agent (behind the scenes):
+  → cathode_list_components()
+  → cathode_get_component("StatusTile")
+  → cathode_get_component("TerminalFrame")
+  → cathode_get_tokens("dark")
+  → writes code using StatusTile with the correct prop shapes,
+    accent values, and icon slots — first try, no scraping.`}</code></pre>
+
+  <p>
+    The manifest also lives at <code>cathode.manifest.json</code> in the
+    repo root for agents that can read files directly but don't speak
+    MCP.
+  </p>
+</Main>
