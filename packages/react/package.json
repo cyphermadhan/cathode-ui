@@ -14,6 +14,7 @@
     },
     "./tokens.css": "./src/tokens.css",
     "./fonts.css": "./src/fonts.css",
+    "./styles.css": "./dist/style.css",
     "./icons": {
       "import": "./dist/icons.js",
       "types": "./dist/icons.d.ts"
