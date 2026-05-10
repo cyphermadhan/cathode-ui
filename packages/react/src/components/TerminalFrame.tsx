@@ -12,7 +12,7 @@ export interface TerminalFrameProps {
   /** Uppercased and rendered as the inset title. Omit for an untitled box. */
   title?: string;
   /** Semantic border accent. Defaults to neutral. */
-  accent?: 'neutral' | 'tx' | 'info' | 'ok' | 'warn';
+  accent?: 'neutral' | 'info' | 'success' | 'warning' | 'danger';
   children: ReactNode;
   className?: string;
 }

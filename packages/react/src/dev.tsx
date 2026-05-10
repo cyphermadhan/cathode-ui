@@ -11,6 +11,7 @@ import {
   sound,
   TerminalFrame,
   PixelBar,
+  ActivityBar,
   PulsingDot,
   DotLeader,
   Pill,
@@ -18,6 +19,13 @@ import {
   TextField,
   StatusTile,
   Toast,
+  Toggle,
+  Stepper,
+  Chips,
+  SearchBar,
+  Dialog,
+  Chat,
+  HazardStripes,
 } from './index';
 import {
   IconBroadcast,
@@ -68,6 +76,20 @@ function App() {
   const [level, setLevel] = useState(0.4);
   const [toast, setToast] = useState(false);
   const [actionResult, setActionResult] = useState<string>('');
+  const [wpm, setWpm] = useState(12);
+  const [notify, setNotify] = useState(true);
+  const [activityTick, setActivityTick] = useState(0);
+  const [dialog, setDialog] = useState(false);
+  const searchItems = useMemo(
+    () => [
+      { id: '1', label: 'START RECORDING', subtitle: 'Cmd+R' },
+      { id: '2', label: 'PAIR NEW DEVICE', subtitle: 'Cmd+P' },
+      { id: '3', label: 'CLEAR BUFFER', subtitle: 'Cmd+K' },
+      { id: '4', label: 'EXPORT SESSION', subtitle: 'Cmd+E' },
+      { id: '5', label: 'TOGGLE DIAGNOSTICS' },
+    ],
+    []
+  );
 
   const providerProps = useMemo(
     () => ({ theme, sound: soundOn, haptic: hapticOn, motion, ai: mockAI }),
@@ -240,6 +262,101 @@ function App() {
               <IconCamera size={12} weight="bold" /> SOMETHING HAPPENED
             </Toast>
           </div>
+        </Section>
+
+        <Section title="TOGGLE + STEPPER">
+          <Row align="center">
+            <Toggle value={notify} onChange={setNotify} label="NOTIFICATIONS" />
+            <Stepper value={wpm} onChange={setWpm} min={5} max={40} label="WPM" />
+            <Toggle value={!notify} onChange={(v) => setNotify(!v)} label="DANGER" accent="danger" />
+          </Row>
+        </Section>
+
+        <Section title="CHIPS">
+          <Chips
+            groups={[
+              [
+                { label: 'SOS' },
+                { label: 'MAYDAY' },
+                { label: 'HELP' },
+              ],
+              [
+                { label: 'OK' },
+                { label: 'YES' },
+                { label: 'NO' },
+                { label: 'BYE' },
+              ],
+              [
+                { label: 'ON MY WAY' },
+                { label: 'WAIT' },
+                { label: 'READY' },
+              ],
+            ]}
+            onSelect={(c) => setText((v) => (v ? `${v} ${c.label}` : c.label))}
+          />
+          <div style={{ fontSize: 10, color: 'var(--cathode-color-text-faint)', marginTop: 6 }}>
+            TAPPING A CHIP APPENDS TO THE TEXT FIELD ABOVE.
+          </div>
+        </Section>
+
+        <Section title="SEARCH BAR">
+          <SearchBar
+            items={searchItems}
+            onSelect={(it) => { setText(it.label); setToast(true); }}
+            placeholder="SEARCH COMMANDS…"
+          />
+        </Section>
+
+        <Section title="ACTIVITY BAR">
+          <Row align="center">
+            <ActivityBar
+              intensity={0.6}
+              seed={activityTick}
+              cells={30}
+              fill="var(--cathode-color-danger)"
+            />
+            <Button onClick={() => setActivityTick((t) => t + 1)}>STEP SEED</Button>
+          </Row>
+        </Section>
+
+        <Section title="HAZARD STRIPES">
+          <HazardStripes intensity={0.18}>
+            <div style={{
+              padding: 24,
+              background: 'var(--cathode-color-danger)',
+              color: 'white',
+              fontWeight: 800,
+              letterSpacing: 3,
+              textAlign: 'center',
+            }}>
+              ARMED · HOLD TO FIRE
+            </div>
+          </HazardStripes>
+        </Section>
+
+        <Section title="DIALOG">
+          <Row>
+            <Button onClick={() => setDialog(true)}>OPEN DIALOG</Button>
+            <Button variant="danger" onClick={() => setDialog(true)}>OPEN DANGER DIALOG</Button>
+          </Row>
+          <Dialog
+            open={dialog}
+            onClose={() => setDialog(false)}
+            title="CONFIRM ACTION"
+            accent="danger"
+          >
+            <div style={{ marginBottom: 16 }}>
+              This will delete every session recorded after midnight. There is no undo.
+            </div>
+            <Row>
+              <Button onClick={() => setDialog(false)}>CANCEL</Button>
+              <Button variant="danger" onClick={() => setDialog(false)}>DELETE</Button>
+            </Row>
+          </Dialog>
+        </Section>
+
+        <Section title="CHAT (streaming AI via mock provider)">
+          <Chat title="MOCK CHAT" maxHeight={280} />
         </Section>
 
         <Section title="SOUND PALETTE">

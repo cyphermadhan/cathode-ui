@@ -52,3 +52,27 @@ export type { StatusTileProps } from './components/StatusTile';
 
 export { Toast } from './components/Toast';
 export type { ToastProps } from './components/Toast';
+
+export { ActivityBar } from './components/ActivityBar';
+export type { ActivityBarProps } from './components/ActivityBar';
+
+export { HazardStripes } from './components/HazardStripes';
+export type { HazardStripesProps } from './components/HazardStripes';
+
+export { Toggle } from './components/Toggle';
+export type { ToggleProps } from './components/Toggle';
+
+export { Stepper } from './components/Stepper';
+export type { StepperProps } from './components/Stepper';
+
+export { Chips } from './components/Chips';
+export type { ChipsProps, Chip } from './components/Chips';
+
+export { SearchBar } from './components/SearchBar';
+export type { SearchBarProps, SearchBarAIConfig, SearchItem } from './components/SearchBar';
+
+export { Dialog } from './components/Dialog';
+export type { DialogProps } from './components/Dialog';
+
+export { Chat } from './components/Chat';
+export type { ChatProps } from './components/Chat';
