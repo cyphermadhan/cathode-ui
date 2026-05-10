@@ -18,6 +18,10 @@ export interface TypewriterTextProps {
   cursorAfter?: boolean;
   /** Delay before typing starts, ms. Default 0. */
   delay?: number;
+  /** CSS color for the typed text. Default `currentColor`. */
+  color?: string;
+  /** CSS color for the blinking cursor. Default = info token. */
+  cursorColor?: string;
   className?: string;
   /** Called once the last character is in. */
   onDone?: () => void;
@@ -28,6 +32,8 @@ export function TypewriterText({
   speed = 40,
   cursorAfter = true,
   delay = 0,
+  color,
+  cursorColor,
   className,
   onDone,
 }: TypewriterTextProps) {
@@ -60,7 +66,10 @@ export function TypewriterText({
   const done = shown.length === text.length;
 
   return (
-    <span className={['cathode-typewriter', className].filter(Boolean).join(' ')}>
+    <span
+      className={['cathode-typewriter', className].filter(Boolean).join(' ')}
+      style={color ? { color } : undefined}
+    >
       {/* Visually-hidden full text — SR reads it once, immediately,
        * without being thrashed by the typewriter animation. The
        * visible <span> is aria-hidden so the animation doesn't reach
@@ -68,7 +77,11 @@ export function TypewriterText({
       <span className="cathode-typewriter-sr">{text}</span>
       <span aria-hidden>{shown}</span>
       {(!done || cursorAfter) && !reduced ? (
-        <span className="cathode-typewriter-cursor" aria-hidden>▊</span>
+        <span
+          className="cathode-typewriter-cursor"
+          style={cursorColor ? { color: cursorColor } : undefined}
+          aria-hidden
+        >▊</span>
       ) : null}
     </span>
   );

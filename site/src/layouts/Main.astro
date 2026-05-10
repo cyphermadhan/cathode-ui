@@ -78,6 +78,30 @@ function isActive(href: string): boolean {
         }
       } catch (e) { /* ignore — fall back to auto */ }
     </script>
+    {/* Persist the sidebar scroll position across in-site
+        navigations so clicking a component in the long sidebar
+        doesn't reset the list to the top each time. */}
+    <script is:inline>
+      (function () {
+        const KEY = 'cathode-site-sidebar-scroll';
+        function restore() {
+          try {
+            const el = document.querySelector('.site-sidebar');
+            if (!el) return;
+            const stored = sessionStorage.getItem(KEY);
+            if (stored) el.scrollTop = parseInt(stored, 10);
+            el.addEventListener('scroll', function () {
+              sessionStorage.setItem(KEY, String(el.scrollTop));
+            }, { passive: true });
+          } catch (e) { /* ignore */ }
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', restore);
+        } else {
+          restore();
+        }
+      })();
+    </script>
   </head>
   <body>
     <div class="site-shell">

@@ -235,9 +235,10 @@
   color: var(--cathode-color-text);
   font-family: inherit;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 400;
   caret-color: var(--cathode-color-success);
 }
+.cathode-textfield[data-weight="bold"] .cathode-textfield-input { font-weight: 600; }
 
 .cathode-textfield-suggest {
   position: absolute;
@@ -247,10 +248,11 @@
   color: var(--cathode-color-text-dim);
   font-family: inherit;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 400;
   white-space: pre;
   opacity: 0.6;
 }
+.cathode-textfield[data-weight="bold"] .cathode-textfield-suggest { font-weight: 600; }
 
 /* ── StatusTile ────────────────────────────────────────────────── */
 
@@ -510,7 +512,6 @@
   padding-left: 32px;
 }
 
-.cathode-searchbar-glyph,
 .cathode-searchbar-iconslot {
   position: absolute;
   left: 10px;
@@ -879,11 +880,12 @@
   color: var(--cathode-color-text);
   font-family: inherit;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.5;
   caret-color: var(--cathode-color-success);
   min-height: 72px;
 }
+.cathode-textarea[data-weight="bold"] .cathode-textarea-native { font-weight: 600; }
 
 .cathode-textarea-native:disabled { opacity: 0.6; cursor: not-allowed; }
 
@@ -1436,18 +1438,15 @@
 .cathode-popover-panel[data-align="end"] { left: auto; right: 0; }
 
 /* ── Tooltip ──────────────────────────────────────────────────── */
+/* Portaled to document.body; anchored via inline top/left (position
+ * is set inline by the component using getBoundingClientRect). */
 
-.cathode-tooltip {
-  position: relative;
-  display: inline-block;
-  font-family: var(--cathode-type-font-stack);
-}
 .cathode-tooltip-body {
-  position: absolute;
-  z-index: 200;
+  z-index: 2000;
   padding: 4px 8px;
   background: var(--cathode-color-text);
   color: var(--cathode-color-bg);
+  font-family: var(--cathode-type-font-stack);
   font-size: 10px;
   font-weight: 600;
   letter-spacing: var(--cathode-type-tracking-label);
@@ -1455,10 +1454,6 @@
   white-space: nowrap;
   pointer-events: none;
 }
-.cathode-tooltip-body[data-side="top"]    { bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); }
-.cathode-tooltip-body[data-side="bottom"] { top: calc(100% + 6px);    left: 50%; transform: translateX(-50%); }
-.cathode-tooltip-body[data-side="left"]   { right: calc(100% + 6px);  top: 50%;  transform: translateY(-50%); }
-.cathode-tooltip-body[data-side="right"]  { left: calc(100% + 6px);   top: 50%;  transform: translateY(-50%); }
 
 /* ── Drawer ───────────────────────────────────────────────────── */
 
@@ -1565,33 +1560,37 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Spinner ──────────────────────────────────────────────────── */
+/* ── Loader (formerly Spinner) ────────────────────────────────── */
 
-.cathode-spinner {
+.cathode-loader {
   display: inline-flex;
   gap: 2px;
-  align-items: center;
+  align-items: stretch;  /* cells inherit the container height */
+  vertical-align: middle;
 }
-.cathode-spinner[data-size="sm"] { width: 16px; height: 16px; }
-.cathode-spinner[data-size="md"] { width: 20px; height: 20px; }
-.cathode-spinner[data-size="lg"] { width: 28px; height: 28px; }
+.cathode-loader[data-size="sm"] { width: 16px; height: 14px; }
+.cathode-loader[data-size="md"] { width: 22px; height: 20px; }
+.cathode-loader[data-size="lg"] { width: 32px; height: 28px; }
 
-.cathode-spinner-cell {
+.cathode-loader-cell {
   flex: 1;
+  height: 100%;        /* without this the empty span has 0 height */
+  display: block;
   background: var(--cathode-color-info);
-  animation: cathode-spinner-pulse 1s infinite ease-in-out;
+  transform-origin: center;
+  animation: cathode-loader-pulse 1s infinite ease-in-out;
 }
-.cathode-spinner[data-accent="success"] .cathode-spinner-cell { background: var(--cathode-color-success); }
-.cathode-spinner[data-accent="warning"] .cathode-spinner-cell { background: var(--cathode-color-warning); }
-.cathode-spinner[data-accent="danger"]  .cathode-spinner-cell { background: var(--cathode-color-danger);  }
-.cathode-spinner[data-accent="accent"]  .cathode-spinner-cell { background: var(--cathode-color-accent);  }
+.cathode-loader[data-accent="success"] .cathode-loader-cell { background: var(--cathode-color-success); }
+.cathode-loader[data-accent="warning"] .cathode-loader-cell { background: var(--cathode-color-warning); }
+.cathode-loader[data-accent="danger"]  .cathode-loader-cell { background: var(--cathode-color-danger);  }
+.cathode-loader[data-accent="accent"]  .cathode-loader-cell { background: var(--cathode-color-accent);  }
 
-.cathode-spinner-cell:nth-child(1) { animation-delay: 0s;    }
-.cathode-spinner-cell:nth-child(2) { animation-delay: 0.12s; }
-.cathode-spinner-cell:nth-child(3) { animation-delay: 0.24s; }
-.cathode-spinner-cell:nth-child(4) { animation-delay: 0.36s; }
+.cathode-loader-cell:nth-child(1) { animation-delay: 0s;    }
+.cathode-loader-cell:nth-child(2) { animation-delay: 0.12s; }
+.cathode-loader-cell:nth-child(3) { animation-delay: 0.24s; }
+.cathode-loader-cell:nth-child(4) { animation-delay: 0.36s; }
 
-@keyframes cathode-spinner-pulse {
+@keyframes cathode-loader-pulse {
   0%, 40%, 100% { opacity: 0.25; transform: scaleY(0.4); }
   20%           { opacity: 1;    transform: scaleY(1);   }
 }

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
+import { MagnifyingGlass } from '@phosphor-icons/react';
 import { useCathode } from '../CathodeProvider';
 import type { CathodeAIProvider } from '../ai/provider';
 
@@ -41,9 +42,9 @@ export interface SearchBarProps {
   /** Max results shown in the dropdown. Default 8. */
   limit?: number;
   /**
-   * Leading icon inside the input. Pass `false` to hide, `true` (the
-   * default) to show a built-in monospace "⌕" glyph, or a ReactNode
-   * (e.g. `<IconSearch weight="bold" />`) to supply your own.
+   * Leading icon inside the input. Defaults to the Phosphor
+   * `MagnifyingGlass` (bold). Pass `false` to hide the slot entirely,
+   * or any ReactNode to supply a custom icon.
    */
   icon?: boolean | ReactNode;
   className?: string;
@@ -115,7 +116,7 @@ export function SearchBar({
   const iconNode = icon === false
     ? null
     : icon === true
-      ? <span className="cathode-searchbar-glyph" aria-hidden>⌕</span>
+      ? <span className="cathode-searchbar-iconslot" aria-hidden><MagnifyingGlass size={14} weight="bold" /></span>
       : <span className="cathode-searchbar-iconslot" aria-hidden>{icon}</span>;
 
   return (

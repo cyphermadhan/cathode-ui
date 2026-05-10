@@ -14,6 +14,8 @@ export interface TextAreaProps {
   maxLength?: number;
   /** Opt out of the default `resize: none`. */
   resizable?: boolean;
+  /** Font weight of the typed text. Default 'regular'. */
+  weight?: 'regular' | 'bold';
   className?: string;
   'aria-label'?: string;
   'aria-labelledby'?: string;
@@ -28,13 +30,14 @@ export function TextArea({
   rows = 4,
   maxLength,
   resizable,
+  weight = 'regular',
   className,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   'aria-describedby': ariaDescribedBy,
 }: TextAreaProps) {
   return (
-    <div className={['cathode-textarea', className].filter(Boolean).join(' ')}>
+    <div className={['cathode-textarea', className].filter(Boolean).join(' ')} data-weight={weight}>
       <textarea
         className="cathode-textarea-native"
         value={value}

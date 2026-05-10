@@ -38,7 +38,7 @@ import {
   Tooltip,
   Drawer,
   ProgressBar,
-  Spinner,
+  Loader,
   Skeleton,
   SignalBars,
   ScanLine,
@@ -123,7 +123,7 @@ function Demos({ name }: { name: string }) {
     case 'Tooltip':         return <TooltipDemo />;
     case 'Drawer':          return <DrawerDemo />;
     case 'ProgressBar':     return <ProgressBarDemo />;
-    case 'Spinner':         return <SpinnerDemo />;
+    case 'Loader':          return <LoaderDemo />;
     case 'Skeleton':        return <SkeletonDemo />;
     case 'SignalBars':      return <SignalBarsDemo />;
     case 'ScanLine':        return <ScanLineDemo />;
@@ -388,10 +388,8 @@ function SearchBarDemo() {
   ], []);
   return (
     <div style={{ display: 'grid', gap: 12, width: '100%', maxWidth: 420 }}>
-      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>DEFAULT (glyph icon)</div>
+      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>DEFAULT (Phosphor MagnifyingGlass)</div>
       <SearchBar items={items} onSelect={(it) => setPicked(it.label)} placeholder="SEARCH COMMANDS…" />
-      <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>PHOSPHOR ICON</div>
-      <SearchBar items={items} onSelect={(it) => setPicked(it.label)} placeholder="SEARCH COMMANDS…" icon={<IconSearch size={14} weight="bold" />} />
       <div style={{ fontSize: 10, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>NO ICON</div>
       <SearchBar items={items} onSelect={(it) => setPicked(it.label)} placeholder="SEARCH COMMANDS…" icon={false} />
       {picked ? (
@@ -782,12 +780,12 @@ function ProgressBarDemo() {
   );
 }
 
-function SpinnerDemo() {
+function LoaderDemo() {
   return (
     <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
-      <Spinner size="sm" />
-      <Spinner size="md" accent="success" />
-      <Spinner size="lg" accent="warning" />
+      <Loader size="sm" />
+      <Loader size="md" accent="success" />
+      <Loader size="lg" accent="warning" />
       <span style={{ fontSize: 11, color: 'var(--cathode-color-text-dim)', letterSpacing: 1.4 }}>CONNECTING…</span>
     </div>
   );
@@ -831,12 +829,23 @@ function ScanLineDemo() {
 function TypewriterTextDemo() {
   const [key, setKey] = useState(0);
   return (
-    <div style={{ display: 'grid', gap: 12 }}>
-      <div style={{ fontSize: 14, color: 'var(--cathode-color-success)' }}>
+    <div style={{ display: 'grid', gap: 14 }}>
+      <div style={{ fontSize: 14 }}>
         <TypewriterText
-          key={key}
+          key={`a-${key}`}
           text="SYSTEM INITIALIZED. AWAITING INPUT…"
           speed={30}
+          color="var(--cathode-color-success)"
+        />
+      </div>
+      <div style={{ fontSize: 14 }}>
+        <TypewriterText
+          key={`b-${key}`}
+          text="ERROR: SIGNAL LOST. RETRYING…"
+          speed={45}
+          delay={500}
+          color="var(--cathode-color-danger)"
+          cursorColor="var(--cathode-color-danger)"
         />
       </div>
       <Button onClick={() => setKey((k) => k + 1)}>REPLAY</Button>

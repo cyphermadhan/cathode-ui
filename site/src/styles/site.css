@@ -167,10 +167,14 @@ hr {
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
-  /* Keep the demo surface inside its column no matter what a child tries. */
+  /* Keep width contained, but allow vertical overflow: Menu and
+   * Popover panels portal to body, yet some demos (tooltips on
+   * legacy paths, absolute-positioned children) still need to show
+   * outside the card. */
   max-width: 100%;
   min-width: 0;
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
   box-sizing: border-box;
 }
 

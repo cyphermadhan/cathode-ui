@@ -1,4 +1,5 @@
-import { Children, cloneElement, isValidElement, useEffect, useRef, useState } from 'react';
+import { Children, cloneElement, isValidElement, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { ReactElement, ReactNode } from 'react';
 
 /**
@@ -35,12 +36,42 @@ export function Menu({ trigger, items, align = 'start', className, 'aria-label':
   const [open, setOpen] = useState(false);
   const [focus, setFocus] = useState<number>(-1);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const listRef = useRef<HTMLUListElement | null>(null);
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
 
-  // Close on outside click + Escape. Mount-time listeners; cheap.
+  // Position the portaled list below the trigger. Recomputes on
+  // window resize + scroll so the panel tracks its anchor. Using
+  // viewport coordinates (getBoundingClientRect) + position: fixed
+  // so ancestor overflow/transform doesn't affect placement.
+  useLayoutEffect(() => {
+    if (!open || !rootRef.current) return;
+    const place = () => {
+      const r = rootRef.current!.getBoundingClientRect();
+      const listW = listRef.current?.offsetWidth ?? 180;
+      setPos({
+        top: r.bottom + 4,
+        left: align === 'end' ? r.right - listW : r.left,
+      });
+    };
+    place();
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, true);
+    return () => {
+      window.removeEventListener('resize', place);
+      window.removeEventListener('scroll', place, true);
+    };
+  }, [open, align]);
+
+  // Close on outside click + Escape. Because the list is portaled,
+  // check against BOTH the trigger root and the list ref — a click
+  // inside the portaled list would otherwise close it immediately.
   useEffect(() => {
     if (!open) return;
     const onDoc = (e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false);
+      const t = e.target as Node;
+      if (rootRef.current?.contains(t)) return;
+      if (listRef.current?.contains(t)) return;
+      setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { setOpen(false); return; }
@@ -84,31 +115,39 @@ export function Menu({ trigger, items, align = 'start', className, 'aria-label':
       })
     : trigger;
 
+  const listNode = open && pos ? (
+    <ul
+      ref={listRef}
+      className="cathode-menu-list"
+      role="menu"
+      data-align={align}
+      style={{ position: 'fixed', top: pos.top, left: pos.left }}
+    >
+      {items.map((it, i) => (
+        <li key={i} role="none">
+          {it.divider && i > 0 ? <div className="cathode-menu-divider" role="separator" /> : null}
+          <button
+            type="button"
+            role="menuitem"
+            className="cathode-menu-item"
+            data-focus={i === focus ? 'true' : 'false'}
+            data-kind={it.kind ?? 'default'}
+            disabled={it.disabled}
+            onMouseEnter={() => setFocus(i)}
+            onClick={() => { it.onSelect(); setOpen(false); }}
+          >
+            <span className="cathode-menu-label">{it.label}</span>
+            {it.shortcut ? <span className="cathode-menu-shortcut">{it.shortcut}</span> : null}
+          </button>
+        </li>
+      ))}
+    </ul>
+  ) : null;
+
   return (
     <div ref={rootRef} className={['cathode-menu', className].filter(Boolean).join(' ')}>
       {triggerEl}
-      {open ? (
-        <ul className="cathode-menu-list" role="menu" data-align={align}>
-          {items.map((it, i) => (
-            <li key={i} role="none">
-              {it.divider && i > 0 ? <div className="cathode-menu-divider" role="separator" /> : null}
-              <button
-                type="button"
-                role="menuitem"
-                className="cathode-menu-item"
-                data-focus={i === focus ? 'true' : 'false'}
-                data-kind={it.kind ?? 'default'}
-                disabled={it.disabled}
-                onMouseEnter={() => setFocus(i)}
-                onClick={() => { it.onSelect(); setOpen(false); }}
-              >
-                <span className="cathode-menu-label">{it.label}</span>
-                {it.shortcut ? <span className="cathode-menu-shortcut">{it.shortcut}</span> : null}
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : null}
+      {typeof document !== 'undefined' && listNode ? createPortal(listNode, document.body) : null}
     </div>
   );
 }

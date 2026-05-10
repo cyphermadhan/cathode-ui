@@ -1,4 +1,5 @@
-import { Children, cloneElement, isValidElement, useEffect, useRef, useState } from 'react';
+import { Children, cloneElement, isValidElement, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { ReactElement, ReactNode } from 'react';
 
 /**
@@ -7,9 +8,10 @@ import type { ReactElement, ReactNode } from 'react';
  * Tooltip (which is hover-triggered, text-only) and lighter than
  * Dialog (which is modal and portaled).
  *
- * Positioning is simple: the panel sits directly below the trigger
- * in document flow. If you need viewport-aware flip/shift behavior,
- * wrap a dedicated positioning lib (floating-ui, popperjs).
+ * The panel is rendered via `createPortal(document.body)` and
+ * positioned with `position: fixed` using the trigger's viewport
+ * rect, so ancestor `overflow: hidden` / `transform` can't clip it.
+ * Recomputes position on window resize + scroll.
  */
 export interface PopoverProps {
   trigger: ReactNode;
@@ -35,16 +37,40 @@ export function Popover({
   const [internal, setInternal] = useState(defaultOpen);
   const open = controlledOpen ?? internal;
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
 
   const setOpen = (v: boolean) => {
     if (controlledOpen === undefined) setInternal(v);
     onOpenChange?.(v);
   };
 
+  useLayoutEffect(() => {
+    if (!open || !rootRef.current) return;
+    const place = () => {
+      const r = rootRef.current!.getBoundingClientRect();
+      const panelW = panelRef.current?.offsetWidth ?? 200;
+      setPos({
+        top: r.bottom + 6,
+        left: align === 'end' ? r.right - panelW : r.left,
+      });
+    };
+    place();
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, true);
+    return () => {
+      window.removeEventListener('resize', place);
+      window.removeEventListener('scroll', place, true);
+    };
+  }, [open, align]);
+
   useEffect(() => {
     if (!open) return;
     const onDoc = (e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false);
+      const t = e.target as Node;
+      if (rootRef.current?.contains(t)) return;
+      if (panelRef.current?.contains(t)) return;
+      setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
     document.addEventListener('mousedown', onDoc);
@@ -69,14 +95,22 @@ export function Popover({
       })
     : trigger;
 
+  const panel = open && pos ? (
+    <div
+      ref={panelRef}
+      className="cathode-popover-panel"
+      role="dialog"
+      data-align={align}
+      style={{ position: 'fixed', top: pos.top, left: pos.left }}
+    >
+      {children}
+    </div>
+  ) : null;
+
   return (
     <div ref={rootRef} className={['cathode-popover', className].filter(Boolean).join(' ')}>
       {triggerEl}
-      {open ? (
-        <div className="cathode-popover-panel" role="dialog" data-align={align}>
-          {children}
-        </div>
-      ) : null}
+      {typeof document !== 'undefined' && panel ? createPortal(panel, document.body) : null}
     </div>
   );
 }

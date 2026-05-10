@@ -419,6 +419,13 @@
           "name": "ai",
           "type": "TextFieldAIConfig",
           "required": false
+        },
+        {
+          "name": "weight",
+          "type": "'regular'|'bold'",
+          "required": false,
+          "default": "regular",
+          "description": "Font weight of the typed text."
         }
       ],
       "motionStates": [],
@@ -1186,6 +1193,13 @@
           "type": "boolean",
           "required": false,
           "default": false
+        },
+        {
+          "name": "weight",
+          "type": "'regular'|'bold'",
+          "required": false,
+          "default": "regular",
+          "description": "Font weight of the typed text."
         }
       ],
       "motionStates": [],
@@ -2004,9 +2018,9 @@
       ]
     },
     {
-      "name": "Spinner",
-      "import": "import { Spinner } from '@cathode-ui/react';",
-      "summary": "Indeterminate loading indicator — pixel-square segments cycling via CSS. Use when duration is unknown.",
+      "name": "Loader",
+      "import": "import { Loader } from '@cathode-ui/react';",
+      "summary": "Indeterminate loading indicator — four pixel-square cells that rise + brighten on a staggered 1s cycle. (Formerly named Spinner.)",
       "props": [
         {
           "name": "size",
@@ -2022,7 +2036,7 @@
         }
       ],
       "motionStates": [
-        "spin"
+        "pulse"
       ],
       "a11y": {
         "role": "status",
@@ -2037,7 +2051,7 @@
       "examples": [
         {
           "name": "loading",
-          "snippet": "<Spinner /> <span>CONNECTING…</span>"
+          "snippet": "<Loader /> <span>CONNECTING…</span>"
         }
       ]
     },
@@ -2219,6 +2233,18 @@
           "type": "number",
           "required": false,
           "default": 0
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": "CSS color for the typed text. Default inherits."
+        },
+        {
+          "name": "cursorColor",
+          "type": "string",
+          "required": false,
+          "description": "CSS color for the blinking cursor. Default info token."
         },
         {
           "name": "onDone",

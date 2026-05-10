@@ -137,8 +137,8 @@ export type { DrawerProps } from './components/Drawer';
 export { ProgressBar } from './components/ProgressBar';
 export type { ProgressBarProps } from './components/ProgressBar';
 
-export { Spinner } from './components/Spinner';
-export type { SpinnerProps } from './components/Spinner';
+export { Loader } from './components/Loader';
+export type { LoaderProps } from './components/Loader';
 
 export { Skeleton } from './components/Skeleton';
 export type { SkeletonProps } from './components/Skeleton';

@@ -1,4 +1,5 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { ReactElement } from 'react';
 import { cloneElement } from 'react';
 
@@ -7,9 +8,13 @@ import { cloneElement } from 'react';
  * rich content use Popover. Renders on hover/focus of the wrapped
  * child, hides on blur/mouseleave.
  *
- * Accessibility: the tooltip body is linked to the trigger via
- * aria-describedby so assistive tech reads it when the control
- * is focused.
+ * The tooltip body is portaled to `document.body` and positioned with
+ * `position: fixed` relative to the trigger's viewport rect, so
+ * ancestor `overflow: hidden` / `transform` can't clip it.
+ *
+ * Accessibility: the body is linked to the trigger via
+ * aria-describedby so assistive tech reads it when the control is
+ * focused.
  */
 export interface TooltipProps {
   /** The element the tooltip describes. Must accept a ref + aria-describedby. */
@@ -24,16 +29,58 @@ export interface TooltipProps {
 
 export function Tooltip({ children, label, side = 'top', delay = 200, className }: TooltipProps) {
   const [show, setShow] = useState(false);
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
   const id = useId();
-  const timer = useTimer();
+  const anchorRef = useRef<HTMLElement | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const openAfter = () => timer.set(() => setShow(true), delay);
-  const close = () => { timer.clear(); setShow(false); };
+  const openAfter = () => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setShow(true), delay);
+  };
+  const close = () => {
+    if (timer.current) clearTimeout(timer.current);
+    setShow(false);
+  };
 
-  // Attach handlers + describedby to the trigger child. We clone the
-  // element so consumers can pass any focusable primitive (Button,
-  // Pill, etc.) and the tooltip decorates without wrapping markup.
+  useEffect(() => {
+    if (!show || !anchorRef.current) return;
+    const place = () => {
+      const r = anchorRef.current!.getBoundingClientRect();
+      const offset = 6;
+      // Approximate tooltip dims — real measurement would require a
+      // two-pass render; for a small hint bubble that's overkill.
+      const est = { w: Math.max(60, label.length * 7 + 16), h: 22 };
+      let top = 0, left = 0;
+      switch (side) {
+        case 'top':    top = r.top - est.h - offset; left = r.left + r.width / 2 - est.w / 2; break;
+        case 'bottom': top = r.bottom + offset;      left = r.left + r.width / 2 - est.w / 2; break;
+        case 'left':   top = r.top + r.height / 2 - est.h / 2; left = r.left - est.w - offset; break;
+        case 'right':  top = r.top + r.height / 2 - est.h / 2; left = r.right + offset;        break;
+      }
+      setPos({ top, left });
+    };
+    place();
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, true);
+    return () => {
+      window.removeEventListener('resize', place);
+      window.removeEventListener('scroll', place, true);
+    };
+  }, [show, side, label]);
+
+  // Attach handlers + describedby + ref to the trigger child. We
+  // clone the element so consumers can pass any focusable primitive
+  // (Button, Pill, etc.) and the tooltip decorates without wrapping
+  // markup.
   const trigger = cloneElement(children, {
+    ref: (el: HTMLElement | null) => {
+      anchorRef.current = el;
+      // Preserve any existing ref on the child.
+      const prev = (children as any).ref;
+      if (typeof prev === 'function') prev(el);
+      else if (prev && typeof prev === 'object') prev.current = el;
+    },
     'aria-describedby': show ? id : undefined,
     onMouseEnter: (...args: unknown[]) => { openAfter(); children.props.onMouseEnter?.(...args); },
     onMouseLeave: (...args: unknown[]) => { close(); children.props.onMouseLeave?.(...args); },
@@ -41,28 +88,20 @@ export function Tooltip({ children, label, side = 'top', delay = 200, className 
     onBlur:       (...args: unknown[]) => { close(); children.props.onBlur?.(...args); },
   });
 
-  return (
-    <span className={['cathode-tooltip', className].filter(Boolean).join(' ')}>
-      {trigger}
-      {show ? (
-        <span id={id} role="tooltip" className="cathode-tooltip-body" data-side={side}>
+  const body = show && pos && typeof document !== 'undefined'
+    ? createPortal(
+        <span
+          id={id}
+          role="tooltip"
+          className={['cathode-tooltip-body', className].filter(Boolean).join(' ')}
+          data-side={side}
+          style={{ position: 'fixed', top: pos.top, left: pos.left }}
+        >
           {label}
-        </span>
-      ) : null}
-    </span>
-  );
-}
+        </span>,
+        document.body,
+      )
+    : null;
 
-function useTimer() {
-  const state = { t: undefined as ReturnType<typeof setTimeout> | undefined };
-  return {
-    set(fn: () => void, ms: number) {
-      if (state.t) clearTimeout(state.t);
-      state.t = setTimeout(fn, ms);
-    },
-    clear() {
-      if (state.t) clearTimeout(state.t);
-      state.t = undefined;
-    },
-  };
+  return <>{trigger}{body}</>;
 }

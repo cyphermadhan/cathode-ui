@@ -31,6 +31,8 @@ export interface TextFieldProps {
   placeholder?: string;
   disabled?: boolean;
   ai?: TextFieldAIConfig;
+  /** Font weight of the typed text. Default 'regular'. */
+  weight?: 'regular' | 'bold';
   className?: string;
   'aria-label'?: string;
   'aria-labelledby'?: string;
@@ -43,6 +45,7 @@ export function TextField({
   placeholder,
   disabled,
   ai,
+  weight = 'regular',
   className,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
@@ -93,7 +96,7 @@ export function TextField({
   };
 
   return (
-    <div className={['cathode-textfield', className].filter(Boolean).join(' ')}>
+    <div className={['cathode-textfield', className].filter(Boolean).join(' ')} data-weight={weight}>
       <input
         type="text"
         className="cathode-textfield-input"

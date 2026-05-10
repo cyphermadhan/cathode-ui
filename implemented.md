@@ -133,7 +133,7 @@ Context with `theme` (auto/dark/light), `motion` (none/subtle/strong), `haptic` 
 | 34 | `Tooltip` | Hover/focus hint; injects `aria-describedby` into the wrapped child. |
 | 35 | `Drawer` | Portaled slide-in panel from any of four edges; non-modal by default. |
 | 36 | `ProgressBar` | Continuous determinate bar; omit `value` for indeterminate shimmer. |
-| 37 | `Spinner` | Indeterminate loader; four pixel-square cells cycling. |
+| 37 | `Loader` | Indeterminate loader; four pixel-square cells cycling. (Renamed from `Spinner` in 0.3.1.) |
 | 38 | `Skeleton` | Loading-state placeholder box with a shimmer sweep. |
 | 39 | `SignalBars` | Cellular-style ascending bars for strength/battery/reception readings. |
 | 40 | `ScanLine` | Decorative CRT overlay — translucent grid + sweeping beam. |
