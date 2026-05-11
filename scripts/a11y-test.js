@@ -40,6 +40,7 @@ const PAGES = [
   { path: '/mcp',              name: 'MCP server' },
   { path: '/figma',            name: 'Figma library' },
   { path: '/patterns',         name: 'Patterns' },
+  { path: '/nextjs',           name: 'Next.js' },
   ...manifest.components.map((c) => ({
     path: `/components/${c.name.toLowerCase()}`,
     name: c.name,

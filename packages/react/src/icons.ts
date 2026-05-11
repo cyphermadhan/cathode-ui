@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Curated Cathode icon set — a subset of Phosphor Icons re-exported
  * under names that match the app-layer vocabulary (Walkie-style).

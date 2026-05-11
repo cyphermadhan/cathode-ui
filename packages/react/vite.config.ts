@@ -25,6 +25,17 @@ export default defineConfig({
       // These are provided by the consumer app. Don't bundle them —
       // keeps @cathode-ui/react small and avoids React-dup warnings.
       external: ['react', 'react-dom', 'react/jsx-runtime', 'framer-motion', '@phosphor-icons/react'],
+      output: {
+        // Prepend the React Server Components `"use client"` directive
+        // to every output chunk. Rollup strips top-level directives
+        // from source files during bundling, so we reassert it here to
+        // guarantee the built package is a client boundary for
+        // Next.js App Router / Remix / React Router 7 RSC compilers.
+        // Source files still carry the directive for IDE + linter
+        // awareness; duplicates are harmless (directives dedupe at
+        // parse time).
+        banner: `'use client';`,
+      },
     },
     sourcemap: true,
     target: 'es2022',

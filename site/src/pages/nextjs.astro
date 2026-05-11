@@ -1,0 +1,154 @@
+---
+import Main from '../layouts/Main.astro';
+import { withBase } from '../lib/href';
+---
+
+<Main title="Next.js · Cathode UI" description="How to use Cathode UI inside Next.js — App Router client boundaries, Pages Router setup, and React Server Components caveats.">
+  <h1>NEXT.JS</h1>
+  <div class="page-lead">
+    Cathode UI works out of the box in Next.js — App Router, Pages Router,
+    Remix, and React Router 7. Every primitive ships with a
+    <code>"use client"</code> directive baked in, so you do not need to
+    wrap <code>CathodeProvider</code> or individual components to satisfy
+    React Server Components.
+  </div>
+
+  <h2>TL;DR</h2>
+  <p>
+    Cathode primitives are <strong>client components</strong>. They use
+    hooks (<code>useState</code>, <code>useEffect</code>), portals,
+    motion, and browser-only APIs (<code>navigator.vibrate</code>,
+    Web Audio), so they cannot execute on the server. The package
+    declares itself as a client boundary for you.
+  </p>
+  <pre><code>npm install @cathode-ui/react</code></pre>
+
+  <h2>App Router setup</h2>
+  <p>
+    Put the CSS imports in your root <code>layout.tsx</code>. Wrap the
+    tree in <code>CathodeProvider</code> from a small client component
+    — the layout itself stays a Server Component (good for streaming
+    and metadata).
+  </p>
+
+  <p><strong>1. Client wrapper</strong> (<code>app/providers.tsx</code>):</p>
+  <pre><code>{`'use client';
+
+import type { ReactNode } from 'react';
+import { CathodeProvider } from '@cathode-ui/react';
+
+export function Providers({ children }: { children: ReactNode }) {
+  return <CathodeProvider>{children}</CathodeProvider>;
+}`}</code></pre>
+
+  <p><strong>2. Root layout</strong> (<code>app/layout.tsx</code>):</p>
+  <pre><code>{`import '@cathode-ui/react/tokens.css';
+import '@cathode-ui/react/fonts.css';
+import '@cathode-ui/react/styles.css';
+
+import { Providers } from './providers';
+
+export const metadata = { title: 'My app' };
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+}`}</code></pre>
+
+  <p><strong>3. Use primitives anywhere</strong> (Server or Client pages):</p>
+  <pre><code>{`// app/page.tsx — can stay a Server Component.
+import { Button, TerminalFrame, PulsingDot } from '@cathode-ui/react';
+
+export default function Home() {
+  return (
+    <TerminalFrame title="STATUS">
+      <PulsingDot color="var(--cathode-color-success)" />
+      <Button variant="primary">SUBMIT</Button>
+    </TerminalFrame>
+  );
+}`}</code></pre>
+
+  <p>
+    That works because every Cathode export is a client component — Next
+    crosses the client boundary at the <code>@cathode-ui/react</code>
+    import site, not at your page. You can render Cathode primitives
+    directly from Server Components without <code>'use client'</code>
+    on the page file.
+  </p>
+
+  <h2>Pages Router setup</h2>
+  <p>
+    The Pages Router has no RSC boundary, so the setup is identical to a
+    standard React app. Mount the provider in <code>pages/_app.tsx</code>:
+  </p>
+  <pre><code>{`import type { AppProps } from 'next/app';
+import '@cathode-ui/react/tokens.css';
+import '@cathode-ui/react/fonts.css';
+import '@cathode-ui/react/styles.css';
+import { CathodeProvider } from '@cathode-ui/react';
+
+export default function App({ Component, pageProps }: AppProps) {
+  return (
+    <CathodeProvider>
+      <Component {...pageProps} />
+    </CathodeProvider>
+  );
+}`}</code></pre>
+
+  <h2>Using with RSC</h2>
+  <p>
+    You can import a Cathode primitive inside a Server Component — Next's
+    compiler sees the <code>"use client"</code> directive on the Cathode
+    module and crosses the boundary automatically. The props you pass
+    must be serializable (strings, numbers, plain objects) because they
+    cross the server → client boundary.
+  </p>
+  <p>
+    Do not pass server-only values — functions from Server Actions are
+    fine, but raw file handles, DB clients, etc. will fail serialization.
+    This is a general RSC rule, not Cathode-specific.
+  </p>
+
+  <h2>Remix + React Router 7</h2>
+  <p>
+    Both frameworks adopt the same client-boundary model as Next App
+    Router. The root <code>app/root.tsx</code> stays a Server Component;
+    wrap the outlet in a client-side <code>Providers</code> component as
+    shown above. No Cathode-specific configuration required.
+  </p>
+
+  <h2>Troubleshooting</h2>
+  <p><strong>Error: "You're importing a component that needs useState / useEffect …"</strong></p>
+  <p>
+    If you see this when using Cathode inside an App Router page,
+    upgrade <code>@cathode-ui/react</code> to <strong>0.4.0</strong> or
+    later — earlier versions did not ship the <code>"use client"</code>
+    directive in the bundle.
+  </p>
+  <pre><code>npm install @cathode-ui/react@latest</code></pre>
+
+  <p><strong>Error: "Functions cannot be passed directly to Client Components"</strong></p>
+  <p>
+    You're passing a non-serializable prop (a closure, class instance,
+    or Date/Map/Set) from a Server Component into a Cathode primitive.
+    Move the prop into a local client component, or serialize it before
+    the boundary.
+  </p>
+
+  <p><strong>Fonts not loading</strong></p>
+  <p>
+    <code>@cathode-ui/react/fonts.css</code> ships JetBrains Mono via
+    <code>@font-face</code> — Next will tree-shake it if you don't
+    import it from a client module. Keep the import in
+    <code>app/layout.tsx</code> (as shown above) so it lands in the
+    global CSS stream.
+  </p>
+
+  <hr />
+  <p>See also: <a href={withBase('/getting-started')}>Getting Started</a>, <a href={withBase('/components')}>all components</a>.</p>
+</Main>

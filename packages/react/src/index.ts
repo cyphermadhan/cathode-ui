@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @cathode-ui/react — public entry point.
  *
@@ -7,6 +9,12 @@
  *   import { CathodeProvider, Pill, TerminalFrame } from '@cathode-ui/react';
  *
  * Icons live at `@cathode-ui/react/icons` (Phosphor re-exports).
+ *
+ * The `'use client';` directive above marks every Cathode primitive as a
+ * React Client Component — required for Next.js App Router, Remix, and
+ * React Router 7. Cathode primitives use hooks, portals, and motion, so
+ * they cannot run on the server. Consumers don't need to add their own
+ * "use client" wrapper when importing from @cathode-ui/react.
  */
 
 // Provider + hooks
