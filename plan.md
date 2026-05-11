@@ -296,8 +296,103 @@ Cathode UI will re-export a curated subset of Phosphor via `@cathode-ui/react/ic
 
 **Verification:** `swift test` passes, preview target renders primitives in both appearance modes, bridged iOS app can import and use.
 
-### Phase 4 — Other frameworks (later)
-React Native, Vue, Svelte wrappers. Out of scope for initial plan but architecture supports (tokens.json is framework-agnostic).
+### Phase 4 — Other frameworks (Vue / Svelte / Solid / React Native)
+
+Port Cathode to the top non-React web frameworks. Tokens are already
+framework-agnostic, so this is mostly (a) re-implementing primitives
+against each framework's idioms and (b) evolving the manifest + MCP to
+hand back framework-correct imports and snippets.
+
+**New packages (one per framework):**
+
+- `@cathode-ui/vue`       — Vue 3 + `<script setup>` components
+- `@cathode-ui/svelte`    — Svelte 5 runes
+- `@cathode-ui/solid`     — Solid JS
+- `@cathode-ui/react-native` — React Native (later — non-trivial because
+  CSS custom properties don't exist natively; requires a StyleSheet shim)
+
+Each package ships its own `tokens.css` / equivalent, `styles.css`,
+component implementations, and a small provider (`<CathodeProvider>`
+equivalent). Motion + haptics + sound adapters are per-framework (e.g.
+Svelte uses the `motion` primitive, Vue uses `@vueuse/motion`).
+
+**Manifest + MCP — multi-framework architecture**
+
+Today's `cathode.manifest.json` hard-codes React in every component's
+`import` field and `examples[].snippet`. The MCP server itself is
+framework-agnostic (just reads the manifest), so the evolution is in
+the manifest schema, not the server.
+
+*Option A (chosen): single MCP, multi-adapter manifest.* Extend the
+per-component schema so framework-specific bits live under `adapters`:
+
+```json
+{
+  "name": "Button",
+  "whenToUse": "…",
+  "props": [ … ],
+  "a11y": { … },
+  "adapters": {
+    "react":  { "import": "import { Button } from '@cathode-ui/react';",
+                "examples": [{ "name": "primary", "snippet": "<Button variant=\"primary\">SAVE</Button>" }] },
+    "vue":    { "import": "import { Button } from '@cathode-ui/vue';",
+                "examples": [{ "name": "primary", "snippet": "<Button variant=\"primary\">SAVE</Button>" }] },
+    "svelte": { "import": "import { Button } from '@cathode-ui/svelte';",
+                "examples": [{ "name": "primary", "snippet": "<Button variant=\"primary\">SAVE</Button>" }] },
+    "solid":  { "import": "import { Button } from '@cathode-ui/solid';",
+                "examples": [{ "name": "primary", "snippet": "<Button variant=\"primary\">SAVE</Button>" }] }
+  }
+}
+```
+
+Add a `framework?: 'react' | 'vue' | 'svelte' | 'solid' | 'react-native'`
+arg to every MCP tool, defaulting to `react` so existing users keep
+working without migration:
+
+```
+cathode_get_component({ name: "Button", framework: "vue" })
+cathode_suggest_component({ intent: "show a confirmation", framework: "svelte" })
+```
+
+`cathode_get_tokens` is framework-independent — no changes.
+
+*Option B (rejected): separate MCP package per framework*
+(`@cathode-ui/mcp-react`, `@cathode-ui/mcp-vue`, …). Simpler per-package
+but forces users to pick the right one, duplicates the substring search
++ scorer across N packages, and N× the maintenance. Only reconsider if
+one framework's adapter shape diverges so radically that shared schema
+hurts clarity.
+
+**Versioning / compatibility**
+
+- Manifest schema bump: current single-adapter shape → `adapters`
+  object. Emit both during transition (`import` and `examples` still
+  populated from `adapters.react` so old tool consumers still work).
+- `@cathode-ui/mcp` 0.3.x → 0.4.0 when the `framework` param ships.
+- Each framework package versions independently but shares the monorepo
+  version for major releases (all go to 0.4.0 when Phase 4 ships).
+
+**Sequencing within Phase 4**
+
+1. Schema extension: migrate `cathode.manifest.json` to the `adapters`
+   shape (React adapter only, no behavior change). Ship `@cathode-ui/mcp`
+   0.4.0 with the `framework` param.
+2. `@cathode-ui/vue` — the highest-demand non-React framework. Full
+   primitive parity, AI hooks ported.
+3. `@cathode-ui/svelte` — Svelte 5 runes idioms.
+4. `@cathode-ui/solid` — small, close to React mentally, cheap to port.
+5. `@cathode-ui/react-native` — deferred within Phase 4; needs a
+   StyleSheet tokens shim (tokens.json → RN `StyleSheet.create`) because
+   RN doesn't support CSS custom properties natively.
+
+**Verification (per framework added):**
+
+- Same 45 primitives render in both themes.
+- Manifest `adapters.<framework>` block populated; MCP's
+  `cathode_get_component(name, { framework })` returns the right
+  imports and snippets.
+- axe-core a11y gate passes on a framework-specific demo site.
+- Bundle size parity with React (<40 KB gzip).
 
 ---
 
