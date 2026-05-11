@@ -4,8 +4,9 @@ Retro-future React design system. 45 primitives with pure-black / paper-white
 base, monospace typography, pixel shapes, tight saturated accents, motion +
 haptics + sound baked in, AI-native surfaces on four primitives.
 
-**[Docs →](https://github.com/cyphermadhan/cathode-ui)** ·
-**[Figma →](https://www.figma.com/design/yudyQFCPwX1FSLcXBXuVvY/Cathode-UI)**
+By [Madhan Raj](https://www.linkedin.com/in/cyphermadhan/).
+
+**[Docs →](https://cyphermadhan.github.io/cathode-ui/)**
 
 ## Install
 
@@ -14,6 +15,41 @@ npm install @cathode-ui/react
 ```
 
 Peer deps: `react >= 18`, `react-dom >= 18`.
+
+## AI-native
+
+Cathode is designed to be read by AI coding agents first. A machine-readable
+`cathode.manifest.json` describes every component — props, `whenToUse`, `vs`
+disambiguation, accessibility, feedback patterns, usage examples — validated
+against a published JSON Schema.
+
+A companion [`@cathode-ui/mcp`](https://www.npmjs.com/package/@cathode-ui/mcp)
+Model Context Protocol server exposes the manifest as tools so Claude Code,
+Cursor, etc. can discover and suggest components by intent.
+
+## What's inside
+
+**45 primitives** across 8 clusters:
+
+- **Layout** — TerminalFrame, Card, Stack, Accordion, HazardStripes
+- **Forms** — Button, TextField, TextArea, Select, Checkbox, RadioGroup,
+  Toggle, Counter, SearchBar, FormField, Chips
+- **Data** — Badge, Tag, Avatar, Kbd, CodeBlock, Table, StatusTile,
+  DotLeader, Pill
+- **Navigation** — Tabs, Breadcrumbs, Menu, Pagination
+- **Feedback** — ProgressBar, Loader, Skeleton, PixelBar, ActivityBar,
+  SignalBars, PulsingDot, Toast
+- **Overlays** — Dialog, Drawer, Popover, Tooltip
+- **AI** — Chat (first-class AI conversation component)
+- **Retro** — ScanLine, TypewriterText, Countdown
+
+Plus opt-in AI hooks on `TextField` (ghost-text suggest), `SearchBar`
+(semantic search), `Button` (AI action routing).
+
+## Accessibility
+
+Every primitive is tested against `@axe-core/playwright` with WCAG 2.0/2.1
+A+AA tags. The docs site runs the full gate on every build.
 
 ## Setup
 
@@ -59,40 +95,9 @@ import {
 <Button variant="primary">SAVE</Button>
 ```
 
-## What's inside
+## Author
 
-**45 primitives** across 8 clusters:
-
-- **Layout** — TerminalFrame, Card, Stack, Accordion, HazardStripes
-- **Forms** — Button, TextField, TextArea, Select, Checkbox, RadioGroup,
-  Toggle, Counter, SearchBar, FormField, Chips
-- **Data** — Badge, Tag, Avatar, Kbd, CodeBlock, Table, StatusTile,
-  DotLeader, Pill
-- **Navigation** — Tabs, Breadcrumbs, Menu, Pagination
-- **Feedback** — ProgressBar, Loader, Skeleton, PixelBar, ActivityBar,
-  SignalBars, PulsingDot, Toast
-- **Overlays** — Dialog, Drawer, Popover, Tooltip
-- **AI** — Chat (first-class AI conversation component)
-- **Retro** — ScanLine, TypewriterText, Countdown
-
-Plus opt-in AI hooks on `TextField` (ghost-text suggest), `SearchBar`
-(semantic search), `Button` (AI action routing).
-
-## AI-native
-
-Cathode is designed to be read by AI coding agents first. A machine-readable
-`cathode.manifest.json` describes every component — props, `whenToUse`, `vs`
-disambiguation, accessibility, feedback patterns, usage examples — validated
-against a published JSON Schema.
-
-A companion [`@cathode-ui/mcp`](https://www.npmjs.com/package/@cathode-ui/mcp)
-Model Context Protocol server exposes the manifest as tools so Claude Code,
-Cursor, etc. can discover and suggest components by intent.
-
-## Accessibility
-
-Every primitive is tested against `@axe-core/playwright` with WCAG 2.0/2.1
-A+AA tags. The docs site runs the full gate on every build.
+Built by **[Madhan Raj](https://www.linkedin.com/in/cyphermadhan/)**.
 
 ## License
 

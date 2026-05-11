@@ -1,6 +1,6 @@
 {
   "name": "@cathode-ui/react",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Cathode UI — retro-future React design system with motion, haptics, sound, and AI-native surfaces. 45 primitives, machine-readable manifest, MCP server for AI agents.",
   "type": "module",
   "main": "./dist/index.cjs",
