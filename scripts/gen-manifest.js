@@ -16,6 +16,10 @@ import { dirname, resolve } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const TOKENS = JSON.parse(readFileSync(resolve(ROOT, 'tokens/tokens.json'), 'utf8'));
+// Per-component decision guidance kept in a companion file so the
+// component definitions below stay focused on structural metadata.
+// See scripts/component-guidance.json for the editable prose.
+const GUIDANCE = JSON.parse(readFileSync(resolve(__dirname, 'component-guidance.json'), 'utf8'));
 
 /** @type {Array<Object>} */
 const components = [
@@ -817,8 +821,23 @@ const components = [
   },
 ];
 
+// Merge the decision-guidance companion into each component entry.
+// Every component must have guidance — fail loud if one's missing so
+// new primitives don't silently ship without "when to use" help.
+const missing = [];
+const enrichedComponents = components.map((c) => {
+  const g = GUIDANCE[c.name];
+  if (!g) { missing.push(c.name); return c; }
+  return { ...c, whenToUse: g.whenToUse, vs: g.vs ?? [] };
+});
+if (missing.length > 0) {
+  console.error(`\nERROR: components missing from component-guidance.json: ${missing.join(', ')}`);
+  console.error('Add entries with `whenToUse` + `vs` before regenerating.\n');
+  process.exit(1);
+}
+
 const manifest = {
-  $schema: 'https://cathode-ui.dev/manifest.schema.json',
+  $schema: './scripts/manifest.schema.json',
   name: 'Cathode UI',
   version: TOKENS.version,
   description:
@@ -829,14 +848,34 @@ const manifest = {
   imports: {
     tokens: "import '@cathode-ui/react/tokens.css';",
     fonts:  "import '@cathode-ui/react/fonts.css';",
+    styles: "import '@cathode-ui/react/styles.css';",
     icons:  "import { IconBroadcast, IconChat /* ... */ } from '@cathode-ui/react/icons';",
   },
   tokens: { $ref: 'tokens/tokens.json' },
-  components,
+  components: enrichedComponents,
 };
+
+// Validate the assembled manifest against the JSON Schema. Fails loud
+// if any component entry is missing a required key — catches drift
+// between scripts/gen-manifest.js and scripts/manifest.schema.json
+// before either ships.
+// Ajv v8's default export is draft-07; our schema targets draft 2020-12
+// (the current standard). Import the 2020 entry point so our `$schema`
+// reference resolves.
+const { default: Ajv2020 } = await import('ajv/dist/2020.js');
+const schema = JSON.parse(readFileSync(resolve(__dirname, 'manifest.schema.json'), 'utf8'));
+const ajv = new Ajv2020({ strict: false, allErrors: true });
+const validate = ajv.compile(schema);
+if (!validate(manifest)) {
+  console.error('\nERROR: generated manifest fails its own JSON Schema:');
+  for (const err of validate.errors) {
+    console.error(`  ${err.instancePath} ${err.message} ${JSON.stringify(err.params)}`);
+  }
+  process.exit(1);
+}
 
 writeFileSync(
   resolve(ROOT, 'cathode.manifest.json'),
   JSON.stringify(manifest, null, 2) + '\n'
 );
-console.log(`Wrote cathode.manifest.json with ${components.length} components.`);
+console.log(`Wrote cathode.manifest.json with ${components.length} components. Schema-valid.`);

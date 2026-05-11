@@ -1,0 +1,90 @@
+---
+import Main from '../layouts/Main.astro';
+import manifest from '../../../cathode.manifest.json';
+
+const totalComponents = manifest.components.length;
+const FIGMA_URL = 'https://www.figma.com/design/yudyQFCPwX1FSLcXBXuVvY/Cathode-UI';
+---
+
+<Main title="Figma" description="Cathode UI's companion Figma library — 45 component sets with tokens bound to Figma Variables.">
+  <h1>FIGMA</h1>
+  <div class="page-lead">
+    Cathode ships a companion <strong>Figma library</strong> —
+    {totalComponents} React primitives mirrored as Figma component sets,
+    every stroke/fill/text color bound to Figma Variables so toggling
+    a page's Light ↔ Dark mode re-colors every instance live.
+  </div>
+
+  <p>
+    <a href={FIGMA_URL} target="_blank" rel="noopener">{FIGMA_URL}</a>
+  </p>
+
+  <h2>What's inside</h2>
+  <table>
+    <thead>
+      <tr><th>Page</th><th>Contents</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>Tokens</code></td>      <td>5 Variable collections (Color with Dark + Light modes, Spacing, Size, Type, Motion) — 54 variables. Plus a visual swatch grid.</td></tr>
+      <tr><td><code>Layout</code></td>      <td>TerminalFrame (5 variants), Card (10), HazardStripes (1).</td></tr>
+      <tr><td><code>Forms</code></td>       <td>Button, TextField, TextArea, Select, Counter, Checkbox, Radio, Toggle, SearchBar, FormField, Chip — 39 variants across 11 sets.</td></tr>
+      <tr><td><code>Data</code></td>        <td>Badge, Tag, Avatar, Kbd, DotLeader, Pill, CodeBlock, Table, StatusTile — 71 variants.</td></tr>
+      <tr><td><code>Navigation</code></td>  <td>Tabs, Breadcrumbs, Menu, Pagination — 11 variants.</td></tr>
+      <tr><td><code>Feedback</code></td>    <td>ProgressBar, Loader, Skeleton, PixelBar, ActivityBar, SignalBars, PulsingDot, Toast — 41 variants.</td></tr>
+      <tr><td><code>Overlays</code></td>    <td>Dialog, Drawer, Popover, Tooltip — 11 variants.</td></tr>
+      <tr><td><code>Misc</code></td>        <td>Stack, Accordion, Chat, ScanLine, TypewriterText, Countdown — 21 variants.</td></tr>
+    </tbody>
+  </table>
+  <p>
+    Total: <strong>8 pages · 45 component sets · 210 components/variants</strong>.
+  </p>
+
+  <h2>How it was built</h2>
+  <p>
+    The library was authored programmatically via the
+    <a href="https://help.figma.com/hc/en-us/articles/28208552379287" target="_blank" rel="noopener">Figma MCP server</a>'s
+    <code>use_figma</code> tool — which runs JavaScript against Figma's
+    Plugin API. No hand-crafting, no designer bottleneck. The same
+    <code>tokens.json</code> that drives the React CSS also drives the
+    Figma Variables, so the two stay in lockstep.
+  </p>
+  <p>
+    Scripts / process notes live in the <a href="https://github.com/cyphermadhan/cathode-ui/blob/main/implemented.md#figma-library"><code>Figma library</code></a> section of <code>implemented.md</code>.
+  </p>
+
+  <h2>How to use it</h2>
+  <ol style="color: var(--cathode-color-text-dim); line-height: 1.7;">
+    <li>Open the library file in Figma and accept the "Enable variables" prompt.</li>
+    <li>In your own Figma file, <strong>Libraries</strong> → enable "Cathode UI".</li>
+    <li>Drag any component from the asset panel. Cathode Variables (color / spacing / type / motion) are available in variable pickers.</li>
+    <li>To switch your mockup between Dark and Light, select the top-level page/frame and change <strong>Color</strong> mode in the right sidebar. Everything recolors because fills/strokes are bound to Variables, not hex values.</li>
+  </ol>
+
+  <h2>Static-Figma caveats</h2>
+  <p>
+    Figma is a static design tool; some Cathode behavior only exists in
+    code. The library ships accurate <em>at-rest</em> representations of
+    these, with notes on each component description:
+  </p>
+  <ul style="color: var(--cathode-color-text-dim); line-height: 1.7;">
+    <li><strong>Animation-heavy primitives</strong> — <code>Loader</code>, <code>PulsingDot</code>, <code>TypewriterText</code>, <code>ScanLine</code>, <code>Countdown</code>, <code>Chat</code> (streaming). Figma shows a single frame; the React version animates.</li>
+    <li><strong>Composite overlays</strong> — <code>Menu</code>, <code>Popover</code>, <code>Tooltip</code>, <code>Drawer</code> — ship as separate variants per open/closed state. Interaction in real use is handled by <code>createPortal</code> + keyboard listeners in code.</li>
+    <li><strong>ScanLine's repeating grid</strong> — Figma gradients can't truly tile like CSS <code>repeating-linear-gradient</code>, so the grid layer is omitted. The sweeping beam is shown stationary.</li>
+  </ul>
+
+  <h2>Keeping it in sync</h2>
+  <p>
+    The library was built in one pass. Future primitive additions (or
+    token changes) don't auto-propagate — we regenerate the affected
+    components via <code>use_figma</code> when the React side changes.
+    Token renames are cheap because Variables are centrally updated;
+    geometry changes require editing the component.
+  </p>
+
+  <hr />
+
+  <p style="color: var(--cathode-color-text-dim); font-size: 11px;">
+    Questions or feedback? The library lives at
+    <a href={FIGMA_URL} target="_blank" rel="noopener">figma.com/design/yudyQFCPwX1FSLcXBXuVvY</a>.
+  </p>
+</Main>

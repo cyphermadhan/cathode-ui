@@ -1,0 +1,26 @@
+# Cathode UI
+
+> Retro-future React design system with motion, haptics, sound, and AI-native surfaces. 45 primitives, monospace typography, Dark + Light themes, machine-readable manifest.
+
+Cathode UI is designed to be read by AI coding agents first. The manifest at `cathode.manifest.json` is the canonical description of every component — props, examples, decision guidance, accessibility. Start there. `CATHODE.md` at repo root is the onboarding doc; read that second.
+
+## Canonical for agents
+- [cathode.manifest.json](./cathode.manifest.json): Every component, prop, example, `whenToUse`, `vs` disambiguation. JSON Schema at [scripts/manifest.schema.json](./scripts/manifest.schema.json).
+- [CATHODE.md](./CATHODE.md): Agent onboarding doc — install, provider setup, picking the right primitive, top-level API.
+
+## Human-facing docs
+- [plan.md](./plan.md): Design goals + sequencing.
+- [implemented.md](./implemented.md): Current shipped state (primitives, docs site, Figma library, a11y gate).
+- [README.md](./README.md): Short intro.
+
+## Live
+- [/components](https://cathode-ui.dev/components): Component index + live demos.
+- [/tokens](https://cathode-ui.dev/tokens): Color / type / spacing / motion tokens.
+- [/ai](https://cathode-ui.dev/ai): `CathodeAIProvider` interface + adapter examples.
+- [/mcp](https://cathode-ui.dev/mcp): MCP server setup.
+
+## Design reference
+- [Figma library](https://www.figma.com/design/yudyQFCPwX1FSLcXBXuVvY/Cathode-UI): 45 component sets, tokens bound to Figma Variables.
+
+## MCP
+- [@cathode-ui/mcp](./packages/mcp-server): Model Context Protocol server exposing the manifest as `cathode_list_components`, `cathode_get_component`, `cathode_get_tokens`, `cathode_search`, `cathode_suggest_component`.

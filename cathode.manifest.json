@@ -1,5 +1,5 @@
 {
-  "$schema": "https://cathode-ui.dev/manifest.schema.json",
+  "$schema": "./scripts/manifest.schema.json",
   "name": "Cathode UI",
   "version": "0.3.0",
   "description": "Retro-future design system — monospace, pixel shapes, motion + haptics + sound + AI-native surfaces. Read this manifest to understand how to compose Cathode primitives without scraping React source.",
@@ -12,6 +12,7 @@
   "imports": {
     "tokens": "import '@cathode-ui/react/tokens.css';",
     "fonts": "import '@cathode-ui/react/fonts.css';",
+    "styles": "import '@cathode-ui/react/styles.css';",
     "icons": "import { IconBroadcast, IconChat /* ... */ } from '@cathode-ui/react/icons';"
   },
   "tokens": {
@@ -62,6 +63,13 @@
         {
           "name": "accented",
           "snippet": "<TerminalFrame title=\"ERROR\" accent=\"tx\">…</TerminalFrame>"
+        }
+      ],
+      "whenToUse": "Group a named section of readouts or controls with a visible label — the \"┌─ PEERS ─\" terminal section.",
+      "vs": [
+        {
+          "component": "Card",
+          "picker": "TerminalFrame when the section needs a visible name; Card when content speaks for itself."
         }
       ]
     },
@@ -121,6 +129,17 @@
           "name": "clickable",
           "snippet": "<Card onClick={open} aria-label=\"Show details\">…</Card>"
         }
+      ],
+      "whenToUse": "Wrap any content in a bordered panel without a label — info blocks, grouped form fields, composable widgets.",
+      "vs": [
+        {
+          "component": "TerminalFrame",
+          "picker": "Card when you don't need an inset title; TerminalFrame when you do."
+        },
+        {
+          "component": "StatusTile",
+          "picker": "Card for freeform content; StatusTile for the standard icon + title + subtitle pattern."
+        }
       ]
     },
     {
@@ -169,6 +188,17 @@
           "name": "vu",
           "snippet": "<PixelBar level={0.6} cells={24} />"
         }
+      ],
+      "whenToUse": "Show a real-time VU-meter-style level (volume, signal intensity) as discrete pixel cells.",
+      "vs": [
+        {
+          "component": "ProgressBar",
+          "picker": "PixelBar for discrete level meters; ProgressBar for continuous determinate progress (e.g. download %)."
+        },
+        {
+          "component": "ActivityBar",
+          "picker": "PixelBar for a known level 0–1; ActivityBar for pseudo-random \"something is happening\" animation."
+        }
       ]
     },
     {
@@ -204,6 +234,17 @@
         {
           "name": "default",
           "snippet": "<PulsingDot color=\"var(--cathode-color-ok)\" />"
+        }
+      ],
+      "whenToUse": "Attach a small live-status signal to a label or row — LIVE / SCANNING / ONLINE.",
+      "vs": [
+        {
+          "component": "Avatar",
+          "picker": "PulsingDot for an abstract status indicator; Avatar's status dot when it's tied to a specific person."
+        },
+        {
+          "component": "Badge",
+          "picker": "PulsingDot for live animated state; Badge for static labels (NEW / BETA)."
         }
       ]
     },
@@ -246,6 +287,13 @@
         {
           "name": "error",
           "snippet": "<DotLeader label=\"STATUS\" value=\"DOWN\" valueColor=\"var(--cathode-color-tx)\" />"
+        }
+      ],
+      "whenToUse": "Render a single LABEL ……… VALUE row inside a TerminalFrame, Card, or stack of readouts.",
+      "vs": [
+        {
+          "component": "Table",
+          "picker": "DotLeader for 1–8 rows of key/value pairs; Table for multi-column tabular data."
         }
       ]
     },
@@ -319,6 +367,21 @@
           "name": "with-icon",
           "snippet": "<Pill title=\"SAVE\" icon={<IconCheck weight=\"bold\" />} onClick={save} accent=\"success\" />"
         }
+      ],
+      "whenToUse": "A compact icon+text button used for navigation, filters, or tabs — anything with a persistent `active` state.",
+      "vs": [
+        {
+          "component": "Button",
+          "picker": "Pill when the button represents persistent state (current tab, selected filter); Button for one-shot actions (Save, Delete)."
+        },
+        {
+          "component": "Tag",
+          "picker": "Pill is tappable and can be active; Tag is a static label (optionally removable)."
+        },
+        {
+          "component": "Chips",
+          "picker": "Pill for nav; Chips for a scrolling row of preset phrases inserted once then cleared."
+        }
       ]
     },
     {
@@ -388,6 +451,17 @@
           "name": "ai",
           "snippet": "<Button ai={{ action: \"explain\", context: data }} onActionResult={setExplanation}>EXPLAIN</Button>"
         }
+      ],
+      "whenToUse": "Fire a one-shot action — submit, delete, cancel, run. Use `variant` for semantic weight and `ai={{ action }}` for AI-routed intents.",
+      "vs": [
+        {
+          "component": "Pill",
+          "picker": "Button for one-shot actions; Pill for nav/filter state."
+        },
+        {
+          "component": "Menu",
+          "picker": "Single Button for one action; Menu when the button reveals a list of actions."
+        }
       ]
     },
     {
@@ -447,6 +521,21 @@
         {
           "name": "ai-suggest",
           "snippet": "<TextField value={v} onChange={setV} ai={{ suggest: true }} />"
+        }
+      ],
+      "whenToUse": "Single-line free-text input. Add `ai={{ suggest: true }}` for inline ghost-text AI completion.",
+      "vs": [
+        {
+          "component": "TextArea",
+          "picker": "TextField for single-line; TextArea for multi-line."
+        },
+        {
+          "component": "Counter",
+          "picker": "TextField for free-form numbers you want the user to type; Counter for bounded values nudged with arrow buttons."
+        },
+        {
+          "component": "SearchBar",
+          "picker": "TextField for a free-form value; SearchBar when you want a results dropdown under the input."
         }
       ]
     },
@@ -510,6 +599,17 @@
           "name": "button",
           "snippet": "<StatusTile title=\"ACTION\" subtitle=\"TAP TO RUN\" icon={<IconSparkle />} onClick={handler} />"
         }
+      ],
+      "whenToUse": "Render an MPC-style icon + title + subtitle tile in a grid of statuses or shortcut entry points.",
+      "vs": [
+        {
+          "component": "Card",
+          "picker": "StatusTile for the fixed icon/title/subtitle pattern; Card for custom content."
+        },
+        {
+          "component": "Pill",
+          "picker": "StatusTile is a chunky tile in a grid; Pill is a compact inline button."
+        }
       ]
     },
     {
@@ -561,6 +661,17 @@
           "name": "tx",
           "snippet": "<ActivityBar intensity={0.6} seed={tick} cells={24} />"
         }
+      ],
+      "whenToUse": "Show a \"traffic / activity / thinking\" indicator where the exact level is meaningless — deterministic pseudo-random per seed.",
+      "vs": [
+        {
+          "component": "PixelBar",
+          "picker": "ActivityBar for decorative/indeterminate activity; PixelBar for a real quantitative level."
+        },
+        {
+          "component": "Loader",
+          "picker": "ActivityBar is part of a UI readout; Loader is a standalone \"please wait\" indicator."
+        }
       ]
     },
     {
@@ -611,6 +722,13 @@
         {
           "name": "caution",
           "snippet": "<HazardStripes><Button variant=\"danger\">ARM</Button></HazardStripes>"
+        }
+      ],
+      "whenToUse": "Wrap a destructive or high-stakes button/zone in a caution overlay — \"ARMED · HOLD TO FIRE\", emergency stop zones.",
+      "vs": [
+        {
+          "component": "Button variant=danger",
+          "picker": "Button danger for standard destructive buttons; HazardStripes adds the extra visual weight for irreversible / armed states."
         }
       ]
     },
@@ -665,6 +783,13 @@
         {
           "name": "basic",
           "snippet": "<Toggle value={on} onChange={setOn} label=\"ENABLED\" />"
+        }
+      ],
+      "whenToUse": "Flip a single setting on/off that takes effect immediately — notifications, dark mode, debug overlays.",
+      "vs": [
+        {
+          "component": "Checkbox",
+          "picker": "Toggle for immediate settings; Checkbox for form values in a list (multi-select, indeterminate)."
         }
       ]
     },
@@ -735,6 +860,17 @@
           "name": "wpm",
           "snippet": "<Counter value={wpm} onChange={setWpm} min={5} max={40} label=\"WPM\" />"
         }
+      ],
+      "whenToUse": "Let the user nudge a bounded numeric value up/down — WPM, volume, count. Discrete steps, welded label.",
+      "vs": [
+        {
+          "component": "TextField",
+          "picker": "Counter for bounded integer-ish values; TextField for free-form numbers."
+        },
+        {
+          "component": "Select",
+          "picker": "Counter for a range; Select for a finite enum."
+        }
       ]
     },
     {
@@ -773,6 +909,21 @@
         {
           "name": "grouped",
           "snippet": "<Chips groups={[[{label:\"SOS\"}], [{label:\"OK\"}, {label:\"YES\"}]]} onSelect={insert} />"
+        }
+      ],
+      "whenToUse": "Render a horizontally-scrolling row of preset phrases the user inserts once — quick-replies, preset commands, saved filters.",
+      "vs": [
+        {
+          "component": "Tabs",
+          "picker": "Chips for one-shot inserts that clear; Tabs for switching which view is active."
+        },
+        {
+          "component": "Pill",
+          "picker": "Chips for a scroll row of presets; Pill for a single nav/action button."
+        },
+        {
+          "component": "Tag",
+          "picker": "Chips are tappable actions; Tag is a display-only label (optionally removable)."
         }
       ]
     },
@@ -835,6 +986,17 @@
         {
           "name": "semantic",
           "snippet": "<SearchBar items={items} onSelect={pick} ai={{ semantic: true }} />"
+        }
+      ],
+      "whenToUse": "Search/filter across a known dataset with a results dropdown. Toggle `ai={{ semantic: true }}` for provider-ranked results.",
+      "vs": [
+        {
+          "component": "Select",
+          "picker": "SearchBar for fuzzy search over a large/unknown set; Select for a finite enum picker."
+        },
+        {
+          "component": "TextField",
+          "picker": "SearchBar when you need a results dropdown; TextField for free text with no suggestions."
         }
       ]
     },
@@ -903,6 +1065,17 @@
           "name": "confirm",
           "snippet": "<Dialog open={show} onClose={close} title=\"CONFIRM\" accent=\"danger\">…</Dialog>"
         }
+      ],
+      "whenToUse": "Block the UI until the user confirms, chooses, or dismisses — destructive confirmations, wizards, full-form panels.",
+      "vs": [
+        {
+          "component": "Drawer",
+          "picker": "Dialog for centered modal focus; Drawer for a side/top/bottom panel that doesn't fully cover the page."
+        },
+        {
+          "component": "Popover",
+          "picker": "Dialog is modal and portaled; Popover is anchored and non-modal."
+        }
       ]
     },
     {
@@ -958,6 +1131,13 @@
         {
           "name": "basic",
           "snippet": "<Chat systemPrompt=\"You are terse.\" />"
+        }
+      ],
+      "whenToUse": "Drop in a ready-made AI conversation UI — streaming assistant text, send/cancel, auto-scroll, hooked to a `CathodeAIProvider`.",
+      "vs": [
+        {
+          "component": "TextField",
+          "picker": "Chat for conversational back-and-forth; TextField for a single AI-suggested completion."
         }
       ]
     },
@@ -1023,6 +1203,17 @@
         {
           "name": "indeterminate",
           "snippet": "<Checkbox value={partial} onChange={selectAll} indeterminate label=\"ALL\" />"
+        }
+      ],
+      "whenToUse": "A boolean form value inside a list of related options — multi-select filters, agreement boxes, parent-of-children rows.",
+      "vs": [
+        {
+          "component": "Toggle",
+          "picker": "Checkbox for form values you submit; Toggle for immediate-effect settings."
+        },
+        {
+          "component": "RadioGroup",
+          "picker": "Checkbox for multi-select (any can be on); RadioGroup for single-select (exactly one)."
         }
       ]
     },
@@ -1094,6 +1285,21 @@
           "name": "stacked",
           "snippet": "<RadioGroup value={v} onChange={setV} options={opts} orientation=\"vertical\" />"
         }
+      ],
+      "whenToUse": "Pick exactly one option from 2–5 visible alternatives — mode, region, plan tier.",
+      "vs": [
+        {
+          "component": "Select",
+          "picker": "RadioGroup when all options should be visible at once; Select when the list is long or space is tight."
+        },
+        {
+          "component": "Checkbox",
+          "picker": "RadioGroup for single-select; Checkbox for multi-select."
+        },
+        {
+          "component": "Tabs",
+          "picker": "RadioGroup for form values you submit; Tabs for switching which view is shown."
+        }
       ]
     },
     {
@@ -1147,6 +1353,17 @@
         {
           "name": "placeholder",
           "snippet": "<Select value={v} onChange={setV} options={opts} placeholder=\"CHOOSE…\" />"
+        }
+      ],
+      "whenToUse": "Pick one value from a finite enum when options are many or space is tight — theme, region, unit.",
+      "vs": [
+        {
+          "component": "RadioGroup",
+          "picker": "Select for long/hidden lists; RadioGroup when showing all options helps the user compare."
+        },
+        {
+          "component": "SearchBar",
+          "picker": "Select for finite enums; SearchBar for fuzzy matching over an open set."
         }
       ]
     },
@@ -1222,6 +1439,13 @@
           "name": "counted",
           "snippet": "<TextArea value={bio} onChange={setBio} maxLength={160} />"
         }
+      ],
+      "whenToUse": "Multi-line free-text input — notes, descriptions, bios. Optional character counter when `maxLength` is set.",
+      "vs": [
+        {
+          "component": "TextField",
+          "picker": "TextArea for multi-line; TextField for single-line."
+        }
       ]
     },
     {
@@ -1279,6 +1503,13 @@
           "name": "error",
           "snippet": "<FormField label=\"EMAIL\" error=\"Invalid address.\"><TextField value={e} onChange={setE} /></FormField>"
         }
+      ],
+      "whenToUse": "Wrap any Cathode input (TextField, TextArea, Select, Checkbox, RadioGroup, Toggle, Counter) with a label, hint, and/or error message — auto-wires aria attributes.",
+      "vs": [
+        {
+          "component": "Toast",
+          "picker": "FormField error for inline validation beside the input; Toast for out-of-band global notices."
+        }
       ]
     },
     {
@@ -1327,6 +1558,17 @@
         {
           "name": "outline",
           "snippet": "<Badge kind=\"warning\" variant=\"outline\">BETA</Badge>"
+        }
+      ],
+      "whenToUse": "Attach a small inline status marker to text — NEW, BETA, v0.3.0, DEPRECATED. Display-only.",
+      "vs": [
+        {
+          "component": "Tag",
+          "picker": "Badge for status labels (solid fill by default, display-only); Tag for keywords/filters (outlined, optional remove)."
+        },
+        {
+          "component": "PulsingDot",
+          "picker": "Badge for static status text; PulsingDot for live animated state dot."
         }
       ]
     },
@@ -1379,6 +1621,17 @@
         {
           "name": "removable",
           "snippet": "<Tag accent=\"amber\" onRemove={() => drop(\"p1\")}>P1</Tag>"
+        }
+      ],
+      "whenToUse": "Classify or filter with an accent-colored keyword marker — categories, tech stack, people. Optional × to remove.",
+      "vs": [
+        {
+          "component": "Badge",
+          "picker": "Tag for keyword/filter labels (often removable); Badge for status markers (display-only)."
+        },
+        {
+          "component": "Chips",
+          "picker": "Tag represents a classification; Chips is an interactive row of preset phrases."
         }
       ]
     },
@@ -1447,6 +1700,13 @@
           "name": "status",
           "snippet": "<Avatar src=\"/u.jpg\" name=\"Madhan\" status=\"online\" size=\"lg\" />"
         }
+      ],
+      "whenToUse": "Identify a person or entity — image or initials fallback in a square, optional presence dot.",
+      "vs": [
+        {
+          "component": "StatusTile",
+          "picker": "Avatar represents a person; StatusTile represents a named system or app surface."
+        }
       ]
     },
     {
@@ -1490,6 +1750,13 @@
         {
           "name": "array",
           "snippet": "<Kbd keys={[\"Shift\",\"+\",\"Tab\"]} />"
+        }
+      ],
+      "whenToUse": "Display a keyboard shortcut alongside a menu item, tooltip, or docs reference — Cmd+K, Ctrl+Shift+S.",
+      "vs": [
+        {
+          "component": "CodeBlock",
+          "picker": "Kbd for keyboard keys; CodeBlock for code."
         }
       ]
     },
@@ -1542,6 +1809,13 @@
         {
           "name": "ts",
           "snippet": "<CodeBlock language=\"ts\" code={\"const x = 1;\"} />"
+        }
+      ],
+      "whenToUse": "Show a multi-line code sample in docs, prompt previews, or debug panels. Accepts plain text or pre-highlighted HTML (Shiki / Highlight.js).",
+      "vs": [
+        {
+          "component": "inline <code>",
+          "picker": "CodeBlock for multi-line; inline `<code>` for single terms in prose."
         }
       ]
     },
@@ -1622,6 +1896,13 @@
           "name": "sortable",
           "snippet": "<Table columns={cols} rows={sortedRows} sortBy=\"name\" sortDir=\"asc\" onSortChange={handleSort} />"
         }
+      ],
+      "whenToUse": "Show structured tabular data — columns, rows, optional sort, optional row-click. Consumer controls the sort state.",
+      "vs": [
+        {
+          "component": "DotLeader",
+          "picker": "Table for multi-column data; DotLeader for a handful of key/value rows."
+        }
       ]
     },
     {
@@ -1670,6 +1951,21 @@
           "name": "views",
           "snippet": "<Tabs value={v} onChange={setV} items={[{value:\"a\",label:\"Overview\"},{value:\"b\",label:\"Logs\"}]} aria-label=\"Views\" />"
         }
+      ],
+      "whenToUse": "Switch between related views without leaving the page — Overview / Logs / Settings. Persistent active state.",
+      "vs": [
+        {
+          "component": "RadioGroup",
+          "picker": "Tabs for switching which view is shown; RadioGroup for form values you submit."
+        },
+        {
+          "component": "Pill",
+          "picker": "Tabs for a compact tab row with underline; Pill for standalone nav buttons."
+        },
+        {
+          "component": "Chips",
+          "picker": "Tabs for persistent view state; Chips for one-shot preset phrases."
+        }
       ]
     },
     {
@@ -1704,6 +2000,13 @@
         {
           "name": "path",
           "snippet": "<Breadcrumbs items={[{label:\"Home\",href:\"/\"},{label:\"Docs\",href:\"/docs\"},{label:\"Tabs\"}]} />"
+        }
+      ],
+      "whenToUse": "Show the user's location inside a nested hierarchy — Home › Docs › Tabs. Last item is the current page.",
+      "vs": [
+        {
+          "component": "Tabs",
+          "picker": "Breadcrumbs shows *where you are* in a hierarchy; Tabs switches between *peer* views."
         }
       ]
     },
@@ -1746,6 +2049,17 @@
           "name": "actions",
           "snippet": "<Menu trigger={<Button>MORE</Button>} items={[{label:\"Edit\",onSelect:doEdit,shortcut:\"E\"},{label:\"Delete\",kind:\"danger\",onSelect:doDelete}]} />"
         }
+      ],
+      "whenToUse": "Reveal a list of actions from a click trigger — context menu, overflow menu, \"More actions\" dropdown. Keyboard-navigable.",
+      "vs": [
+        {
+          "component": "Select",
+          "picker": "Menu for a list of actions (each does something); Select for picking one value."
+        },
+        {
+          "component": "Popover",
+          "picker": "Menu for a canonical list of menu items; Popover for arbitrary panel content."
+        }
       ]
     },
     {
@@ -1787,6 +2101,13 @@
         {
           "name": "basic",
           "snippet": "<Pagination page={p} totalPages={12} onChange={setP} />"
+        }
+      ],
+      "whenToUse": "Let the user jump between pages of a long list — prev/next arrows + windowed page buttons with ellipses.",
+      "vs": [
+        {
+          "component": "Table with scroll",
+          "picker": "Pagination for discrete pages; unpaginated scroll when the list is short or infinite-scroll is natural."
         }
       ]
     },
@@ -1846,6 +2167,21 @@
           "name": "info",
           "snippet": "<Popover trigger={<Button>DETAILS</Button>}><p>Some info</p></Popover>"
         }
+      ],
+      "whenToUse": "Show rich anchored content from a click trigger — details cards, mini-forms, property editors. Portaled, non-modal.",
+      "vs": [
+        {
+          "component": "Tooltip",
+          "picker": "Popover for rich click-triggered content; Tooltip for short hover/focus-triggered text hints."
+        },
+        {
+          "component": "Menu",
+          "picker": "Popover for arbitrary content; Menu for a canonical list of actions."
+        },
+        {
+          "component": "Dialog",
+          "picker": "Popover is anchored + non-modal; Dialog is centered + modal."
+        }
       ]
     },
     {
@@ -1893,6 +2229,13 @@
         {
           "name": "shortcut",
           "snippet": "<Tooltip label=\"Save — Cmd+S\"><Button>SAVE</Button></Tooltip>"
+        }
+      ],
+      "whenToUse": "Attach a short hover/focus hint to a control — keyboard shortcut, terse explanation. Text-only.",
+      "vs": [
+        {
+          "component": "Popover",
+          "picker": "Tooltip for text-only hints on hover; Popover for rich click-triggered panels."
         }
       ]
     },
@@ -1961,6 +2304,17 @@
           "name": "filters",
           "snippet": "<Drawer open={show} onClose={close} title=\"FILTERS\" side=\"right\">...</Drawer>"
         }
+      ],
+      "whenToUse": "Slide in a side panel from the viewport edge — filters, inspector, settings — without covering the underlying page.",
+      "vs": [
+        {
+          "component": "Dialog",
+          "picker": "Drawer for edge-anchored panels (non-modal by default); Dialog for centered modal focus."
+        },
+        {
+          "component": "Popover",
+          "picker": "Drawer for full-height edge panels; Popover for small anchored floaters."
+        }
       ]
     },
     {
@@ -2016,6 +2370,17 @@
           "name": "indeterminate",
           "snippet": "<ProgressBar />"
         }
+      ],
+      "whenToUse": "Show determinate progress as a continuous bar — downloads, uploads, task %. Omit `value` for indeterminate shimmer.",
+      "vs": [
+        {
+          "component": "PixelBar",
+          "picker": "ProgressBar for completion %; PixelBar for real-time level meters."
+        },
+        {
+          "component": "Loader",
+          "picker": "ProgressBar when you know the %; Loader when duration is unknown."
+        }
       ]
     },
     {
@@ -2053,6 +2418,17 @@
         {
           "name": "loading",
           "snippet": "<Loader /> <span>CONNECTING…</span>"
+        }
+      ],
+      "whenToUse": "Indicate a general \"please wait, working on it\" state when duration is unknown.",
+      "vs": [
+        {
+          "component": "ProgressBar",
+          "picker": "Loader for unknown duration; ProgressBar for known %."
+        },
+        {
+          "component": "Skeleton",
+          "picker": "Loader in-place of a button/readout while it waits; Skeleton in-place of content layout before it arrives."
         }
       ]
     },
@@ -2099,6 +2475,13 @@
         {
           "name": "block",
           "snippet": "<Skeleton width=\"100%\" height={120} />"
+        }
+      ],
+      "whenToUse": "Hold the shape of content that's still loading — row heights, card footprints — so the page doesn't jump when data arrives.",
+      "vs": [
+        {
+          "component": "Loader",
+          "picker": "Skeleton mirrors the eventual layout; Loader is a small spinner-style indicator."
         }
       ]
     },
@@ -2154,6 +2537,17 @@
           "name": "strength",
           "snippet": "<SignalBars level={4} />"
         }
+      ],
+      "whenToUse": "Display a \"strength of N\" reading — cellular bars, battery, reception level.",
+      "vs": [
+        {
+          "component": "PixelBar",
+          "picker": "SignalBars for a 1-of-N strength indicator with ascending bar heights; PixelBar for a horizontal row of equal-height cells."
+        },
+        {
+          "component": "ProgressBar",
+          "picker": "SignalBars for a discrete 0–5 level; ProgressBar for continuous %."
+        }
       ]
     },
     {
@@ -2203,6 +2597,13 @@
         {
           "name": "overlay",
           "snippet": "<ScanLine><TerminalFrame title=\"CAM\">…</TerminalFrame></ScanLine>"
+        }
+      ],
+      "whenToUse": "Wrap a surface in a decorative CRT scan-line + sweep overlay — live camera feeds, retro dashboards.",
+      "vs": [
+        {
+          "component": "HazardStripes",
+          "picker": "ScanLine for CRT/retro styling; HazardStripes for \"caution/armed\" overlay on destructive zones."
         }
       ]
     },
@@ -2272,6 +2673,13 @@
           "name": "boot",
           "snippet": "<TypewriterText text=\"SYSTEM INITIALIZED.\" speed={30} />"
         }
+      ],
+      "whenToUse": "Reveal short text character-by-character for dramatic effect — boot-up messages, AI turn-in-progress, intro hooks.",
+      "vs": [
+        {
+          "component": "Chat streaming",
+          "picker": "TypewriterText for static pre-known text; Chat's streaming handles real AI-generated tokens."
+        }
       ]
     },
     {
@@ -2317,6 +2725,13 @@
         {
           "name": "launch",
           "snippet": "<Countdown target={launchAt} prefix=\"T-\" onComplete={fire} />"
+        }
+      ],
+      "whenToUse": "Count down to a specific Date in real time — launch timers, expiry countdowns, game rounds.",
+      "vs": [
+        {
+          "component": "Counter",
+          "picker": "Countdown auto-ticks toward a target Date; Counter is a manual numeric rocker."
         }
       ]
     },
@@ -2398,6 +2813,13 @@
           "name": "vertical",
           "snippet": "<Stack gap={12}><DotLeader label=\"LAT\" value=\"42 MS\" /><DotLeader label=\"LOSS\" value=\"0%\" /></Stack>"
         }
+      ],
+      "whenToUse": "Replace inline `style={{ display: 'flex', gap: ... }}` scaffolding — a utility wrapper for direction + gap + align + justify + wrap.",
+      "vs": [
+        {
+          "component": "Card",
+          "picker": "Stack is structural (no chrome); Card is visual (border + optional fill)."
+        }
       ]
     },
     {
@@ -2459,6 +2881,13 @@
           "name": "exclusive",
           "snippet": "<Accordion items={items} allowMultiple={false} defaultExpandedIds={[\"a\"]} />"
         }
+      ],
+      "whenToUse": "Stack several expand/collapse sections — settings groups, FAQ, long-form details panels.",
+      "vs": [
+        {
+          "component": "Tabs",
+          "picker": "Accordion shows multiple sections simultaneously (or none); Tabs shows exactly one at a time."
+        }
       ]
     },
     {
@@ -2501,6 +2930,17 @@
         {
           "name": "error",
           "snippet": "<Toast visible={hasError} kind=\"error\">CONNECTION LOST</Toast>"
+        }
+      ],
+      "whenToUse": "Surface a short transient status — session resumed, copied to clipboard, connection lost. App controls timing.",
+      "vs": [
+        {
+          "component": "Dialog",
+          "picker": "Toast for transient confirmations; Dialog when the user must acknowledge or choose."
+        },
+        {
+          "component": "FormField error",
+          "picker": "Toast for global notices; FormField `error` for inline validation."
         }
       ]
     }

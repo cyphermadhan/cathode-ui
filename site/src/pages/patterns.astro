@@ -1,0 +1,126 @@
+---
+import Main from '../layouts/Main.astro';
+import { PatternsGallery } from '../components/PatternsGallery';
+---
+
+<Main title="Patterns" description="Canonical Cathode UI compositions — real screens built from the shipped primitives.">
+  <h1>PATTERNS</h1>
+  <div class="page-lead">
+    Four canonical screens built from Cathode primitives. Each one
+    composes 4–8 components into a shape you'd actually ship. Copy
+    the code, swap the props, done. These patterns also feed the
+    MCP server's <code>cathode_suggest_component</code> tool so AI
+    agents can route from intent to composition.
+  </div>
+
+  <div class="patterns-live">
+    <PatternsGallery client:only="react" />
+  </div>
+
+  <hr />
+
+  <h2>1. Dashboard readout</h2>
+  <p>
+    Use when you need to surface a snapshot of live system state at a
+    glance — a <code>TerminalFrame</code> groups the values, <code>DotLeader</code> renders
+    each labelled row, <code>PulsingDot</code> marks live status, and
+    <code>PixelBar</code> / <code>ActivityBar</code> animate rolling metrics.
+  </p>
+  <pre tabindex="0"><code>{`<TerminalFrame title="TELEMETRY" accent="info">
+  <Stack gap={6}>
+    <Stack direction="row" gap={8} align="center">
+      <PulsingDot color="var(--cathode-color-success)" />
+      <span>LIVE</span>
+    </Stack>
+    <DotLeader label="LATENCY" value="42 MS" />
+    <DotLeader label="STATE"   value="HEALTHY" valueColor="var(--cathode-color-success)" />
+    <PixelBar level={0.68} cells={28} fill="var(--cathode-color-info)" />
+    <ActivityBar intensity={0.55} seed={tick} cells={28} />
+  </Stack>
+</TerminalFrame>`}</code></pre>
+
+  <h2>2. Settings panel</h2>
+  <p>
+    Each input gets wrapped in a <code>FormField</code> so labels, hints,
+    and errors stay consistent. The inputs themselves are all
+    controlled (<code>value</code>/<code>onChange</code>), which keeps
+    validation and submission logic simple.
+  </p>
+  <pre tabindex="0"><code>{`<Stack gap={16} fullWidth>
+  <FormField label="CALLSIGN" hint="4 chars, alphanumeric." required>
+    <TextField value={callsign} onChange={setCallsign} />
+  </FormField>
+
+  <FormField label="TRANSMIT SPEED">
+    <Counter value={wpm} onChange={setWpm} min={5} max={40} label="WPM" />
+  </FormField>
+
+  <FormField label="THEME">
+    <Select value={theme} onChange={setTheme} options={themeOptions} />
+  </FormField>
+
+  <Stack direction="row" gap={24} wrap>
+    <Toggle value={notify} onChange={setNotify} label="NOTIFICATIONS" />
+    <Toggle value={danger} onChange={setDanger} label="DANGER MODE" accent="danger" />
+  </Stack>
+
+  <Button variant="primary" onClick={save}>SAVE</Button>
+</Stack>`}</code></pre>
+
+  <h2>3. Destructive flow</h2>
+  <p>
+    Button <code>variant="danger"</code> opens a Dialog with matching
+    accent. A Toggle arms the destructive action; only then does
+    <code>HazardStripes</code> reveal the real confirm button. The user
+    has to cross three deliberate gates, so accidents don't happen.
+  </p>
+  <pre tabindex="0"><code>{`<Button variant="danger" onClick={() => setOpen(true)}>
+  DELETE ACCOUNT
+</Button>
+
+<Dialog open={open} onClose={close} title="DELETE ACCOUNT?" accent="danger">
+  <p>Permanently removes callsign, history, presets. No undo.</p>
+
+  <Toggle value={armed} onChange={setArmed} label="I UNDERSTAND" accent="danger" />
+
+  {armed ? (
+    <HazardStripes intensity={0.16}>
+      <Button variant="danger" onClick={confirmDelete}>CONFIRM DELETE</Button>
+    </HazardStripes>
+  ) : (
+    <Button variant="danger" disabled>CONFIRM DELETE</Button>
+  )}
+</Dialog>`}</code></pre>
+
+  <h2>4. Loading states</h2>
+  <p>
+    Three flavours of "waiting" — each has a specific fit:
+  </p>
+  <ul style="color: var(--cathode-color-text-dim); line-height: 1.7;">
+    <li><strong><code>Skeleton</code></strong> when you know the <em>shape</em> of the content that's coming and want the page to stop jumping.</li>
+    <li><strong><code>Loader</code></strong> when you're waiting on something with unknown duration — a connection, a retry, a handshake.</li>
+    <li><strong><code>ProgressBar</code></strong> when you know the percentage — downloads, uploads, multi-step tasks.</li>
+  </ul>
+  <pre tabindex="0"><code>{`<Skeleton variant="text" width={180} />
+<Skeleton variant="block" height={60} />
+
+<Loader size="md" /> <span>CONNECTING…</span>
+
+<ProgressBar value={uploadPct} showValue />`}</code></pre>
+
+  <hr />
+
+  <h2>How patterns support AI agents</h2>
+  <p>
+    Agents using Cathode via the MCP server can call
+    <code>cathode_suggest_component(intent)</code> with natural-language
+    intents (<em>"I need to show a confirmation before deleting"</em>),
+    and the ranked results lead them straight to the right primitives.
+    The patterns here then show how to compose those primitives into a
+    real screen — canonical call sites with full props.
+  </p>
+  <p>
+    Long-form guidance for agents lives in
+    <a href="https://github.com/cyphermadhan/cathode-ui/blob/main/CATHODE.md"><code>CATHODE.md</code></a> at repo root, which is auto-generated from <code>cathode.manifest.json</code> and regenerated on every <code>npm run gen</code>.
+  </p>
+</Main>

@@ -33,6 +33,8 @@ const PAGES = [
   { path: '/components',       name: 'Components index' },
   { path: '/ai',               name: 'AI providers' },
   { path: '/mcp',              name: 'MCP server' },
+  { path: '/figma',            name: 'Figma library' },
+  { path: '/patterns',         name: 'Patterns' },
   ...manifest.components.map((c) => ({
     path: `/components/${c.name.toLowerCase()}`,
     name: c.name,

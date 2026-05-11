@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cathode-ui.dev/manifest.schema.json",
+  "title": "Cathode UI manifest",
+  "description": "Machine-readable registry of every Cathode primitive. Consumed by AI coding agents + the @cathode-ui/mcp server. Regenerate via `npm run gen:manifest` after component changes.",
+  "type": "object",
+  "required": ["name", "version", "description", "themes", "components"],
+  "properties": {
+    "$schema":         { "type": "string" },
+    "name":            { "type": "string" },
+    "version":         { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+" },
+    "description":     { "type": "string" },
+    "fontStack":       { "type": "string" },
+    "themes":          { "type": "array", "items": { "enum": ["light", "dark"] } },
+    "themeSelection":  { "type": "string" },
+    "imports": {
+      "type": "object",
+      "description": "Copy-pastable import lines for common setup tasks.",
+      "additionalProperties": { "type": "string" }
+    },
+    "tokens": {
+      "type": "object",
+      "description": "Reference to the full token source of truth.",
+      "required": ["$ref"],
+      "properties": { "$ref": { "type": "string" } }
+    },
+    "components": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Component" },
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "Component": {
+      "type": "object",
+      "required": ["name", "import", "summary", "whenToUse", "vs", "props", "motionStates", "a11y", "feedback", "examples"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Za-z0-9]*$",
+          "description": "PascalCase component name as exported from @cathode-ui/react."
+        },
+        "import": {
+          "type": "string",
+          "description": "Single-line copy-pastable import statement."
+        },
+        "summary": {
+          "type": "string",
+          "description": "One-paragraph description of what the component is."
+        },
+        "whenToUse": {
+          "type": "string",
+          "description": "One imperative sentence — when should an author reach for this component?"
+        },
+        "vs": {
+          "type": "array",
+          "description": "Disambiguation against commonly-confused sibling components.",
+          "items": { "$ref": "#/$defs/Disambiguation" }
+        },
+        "props": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Prop" }
+        },
+        "motionStates": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Named animation states the component drives (e.g. 'idle', 'press', 'enter', 'exit')."
+        },
+        "a11y": { "$ref": "#/$defs/A11y" },
+        "feedback": { "$ref": "#/$defs/Feedback" },
+        "examples": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Example" },
+          "minItems": 1
+        }
+      }
+    },
+    "Prop": {
+      "type": "object",
+      "required": ["name", "type", "required"],
+      "additionalProperties": false,
+      "properties": {
+        "name":        { "type": "string" },
+        "type":        { "type": "string", "description": "Prose type description — not strict TypeScript." },
+        "required":    { "type": "boolean" },
+        "default":     { "description": "Default value when omitted. May be undefined, string, number, boolean, array, or JSON-stringified." },
+        "description": { "type": "string" }
+      }
+    },
+    "Disambiguation": {
+      "type": "object",
+      "required": ["component", "picker"],
+      "additionalProperties": false,
+      "properties": {
+        "component": {
+          "type": "string",
+          "description": "The confusable sibling component name, or a descriptive phrase (e.g. 'Button variant=danger', 'inline <code>')."
+        },
+        "picker": {
+          "type": "string",
+          "description": "One-sentence rule for choosing between this component and the named sibling."
+        }
+      }
+    },
+    "A11y": {
+      "type": "object",
+      "required": ["role", "requires"],
+      "additionalProperties": false,
+      "properties": {
+        "role":     { "type": "string" },
+        "requires": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "Feedback": {
+      "type": "object",
+      "required": ["haptic", "sound"],
+      "additionalProperties": false,
+      "properties": {
+        "haptic": { "type": ["string", "null"] },
+        "sound":  { "type": ["string", "null"] }
+      }
+    },
+    "Example": {
+      "type": "object",
+      "required": ["name", "snippet"],
+      "additionalProperties": false,
+      "properties": {
+        "name":    { "type": "string" },
+        "snippet": { "type": "string" }
+      }
+    }
+  }
+}

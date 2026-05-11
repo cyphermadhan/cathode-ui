@@ -14,11 +14,15 @@
  *     }
  *   }
  *
- * Four tools:
- *   - cathode_list_components()     → name + summary for every component
- *   - cathode_get_component(name)   → full spec (props, a11y, examples, …)
- *   - cathode_get_tokens(theme?)    → resolved color set + type/spacing/etc
- *   - cathode_search(query)         → fuzzy match against descriptions
+ * Five tools:
+ *   - cathode_list_components()        → name + summary for every component
+ *   - cathode_get_component(name)      → full spec (props, a11y, examples, …)
+ *   - cathode_get_tokens(theme?)       → resolved color set + type/spacing/etc
+ *   - cathode_search(query)            → substring match across names+summaries
+ *   - cathode_suggest_component(intent)→ ranked list of primitives matching a
+ *                                        free-form "what should I use for X?"
+ *                                        question, leveraging each component's
+ *                                        `whenToUse` + `vs` fields
  */
 
 import { readFileSync } from 'node:fs';
@@ -81,13 +85,26 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: 'cathode_search',
       description:
-        'Fuzzy match a query against component names and summaries. Use when you have intent ("something that shows status", "level meter") but not a component name.',
+        'Substring match a query against component names and summaries. Use when you recognize keywords from a component ("level meter", "dialog", "avatar"). For natural-language intent ("I want to show a confirmation before deleting"), prefer cathode_suggest_component.',
       inputSchema: {
         type: 'object',
         properties: {
           query: { type: 'string', description: 'Free-text query, e.g. "level meter" or "notification".' },
         },
         required: ['query'],
+      },
+    },
+    {
+      name: 'cathode_suggest_component',
+      description:
+        'Given free-form intent ("I need to show a confirmation before deleting", "let the user pick one of three options"), return a ranked list of Cathode primitives with reasons. Uses each component\'s `whenToUse` + `vs` fields for matching. Call this when you know WHAT the user wants to do but not which component to use.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          intent: { type: 'string', description: 'One-sentence description of what the UI needs to accomplish.' },
+          limit:  { type: 'number', description: 'Max number of suggestions to return. Default 5.' },
+        },
+        required: ['intent'],
       },
     },
   ],
@@ -142,7 +159,7 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
         const manifest = loadManifest();
         const q = String(args.query ?? '').toLowerCase();
         // Cheap substring match across name + summary. The corpus is
-        // small enough (<20 components) that real fuzzy matching is
+        // small enough (<50 components) that real fuzzy matching is
         // overkill; substring covers 95% of the intent.
         const hits = manifest.components
           .map((c: any) => {
@@ -154,6 +171,113 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
           .map((c: any) => ({ name: c.name, summary: c.summary }));
         return {
           content: [{ type: 'text', text: JSON.stringify({ query: q, hits }, null, 2) }],
+        };
+      }
+
+      case 'cathode_suggest_component': {
+        const manifest = loadManifest();
+        const intent = String(args.intent ?? '').toLowerCase().trim();
+        const limit = typeof args.limit === 'number' ? Math.max(1, Math.min(20, args.limit)) : 5;
+        if (!intent) {
+          return {
+            isError: true,
+            content: [{ type: 'text', text: '`intent` must be a non-empty string.' }],
+          };
+        }
+
+        // Tokenize the intent, drop stopwords, then score each
+        // component by where the intent tokens land. Weighted so
+        // curated `whenToUse` text and the component name outrank
+        // generic summary boilerplate. The corpus is small (<50
+        // components), so a cheap weighted bag-of-words scorer beats
+        // a real embedding pipeline on latency + deployability.
+        const STOP = new Set([
+          // Articles, conjunctions, prepositions.
+          'the','a','an','and','or','but','if','then','of','to','for','with','in','on','at','by','from','as','so',
+          // Pronouns + possessives.
+          'i','you','we','they','it','this','that','these','those',
+          'my','your','our','their','its',
+          // Auxiliary + modal verbs.
+          'is','are','be','been','being','have','has','had','do','does','did','can','could','should','would','will',
+          // Intent-phrasing words that carry no component signal.
+          'want','wants','need','needs','use','uses','using','let','lets','when','how','what','where','which',
+          'show','shows','showing','display','displays','displaying','render','renders','rendering',
+          // Generic noun wrappers.
+          'user','users','ui','component','components','thing','things','one','some','any','many',
+          'someone','something','somebody',
+        ]);
+        const tokenize = (s: string) =>
+          s.toLowerCase()
+            .replace(/[^a-z0-9\s]/g, ' ')
+            .split(/\s+/)
+            .filter((t) => t.length > 2 && !STOP.has(t));
+
+        const intentTokens = tokenize(intent);
+        if (intentTokens.length === 0) {
+          return {
+            content: [{ type: 'text', text: JSON.stringify({
+              intent,
+              warning: 'Intent resolved to zero meaningful tokens after stopword removal. Try a more specific phrase.',
+              suggestions: [],
+            }, null, 2) }],
+          };
+        }
+
+        const scored = manifest.components.map((c: any) => {
+          // Separate the searchable text into tiers — the weight
+          // reflects how curated the source is. `whenToUse` is the
+          // canonical "should I use this?" phrase and outweighs the
+          // prose `summary` or ambient mentions in `vs.*.picker`.
+          const nameL      = c.name.toLowerCase();
+          const whenToUseL = (c.whenToUse ?? '').toLowerCase();
+          const summaryL   = (c.summary ?? '').toLowerCase();
+          const vsL        = (c.vs ?? [])
+            .map((d: any) => `${d.component} ${d.picker}`)
+            .join(' ')
+            .toLowerCase();
+
+          let score = 0;
+          const matchedTokens: string[] = [];
+          for (const t of intentTokens) {
+            let hit = false;
+            if (nameL.includes(t))      { score += 4; hit = true; }
+            if (whenToUseL.includes(t)) { score += 3; hit = true; }
+            if (summaryL.includes(t))   { score += 1; hit = true; }
+            if (vsL.includes(t))        { score += 1; hit = true; }
+            if (hit) matchedTokens.push(t);
+          }
+
+          // Bonus: the intent names the component directly (decisive).
+          if (intent.includes(nameL)) score += 10;
+
+          return { component: c, score, matchedTokens };
+        });
+
+        const hits = scored
+          .filter((s: any) => s.score > 0)
+          .sort((a: any, b: any) => b.score - a.score)
+          .slice(0, limit)
+          .map((s: any) => ({
+            name: s.component.name,
+            score: s.score,
+            matchedTokens: s.matchedTokens,
+            whenToUse: s.component.whenToUse,
+            summary: s.component.summary,
+            import: s.component.import,
+            // Include vs entries so the agent sees the disambiguation
+            // context without a follow-up cathode_get_component call.
+            vs: s.component.vs ?? [],
+          }));
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify({
+            intent,
+            intentTokens,
+            suggestions: hits,
+            note: hits.length === 0
+              ? 'No component matched any intent token. Call cathode_list_components to browse the full set.'
+              : 'Results ranked by keyword overlap against name/summary/whenToUse/vs. Check each `vs` entry to disambiguate near matches.',
+          }, null, 2) }],
         };
       }
 
