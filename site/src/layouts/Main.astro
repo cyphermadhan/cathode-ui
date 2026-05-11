@@ -10,6 +10,7 @@ import '@cathode-ui/react/styles.css';
 import '../styles/site.css';
 import { SiteControls } from '../components/SiteControls';
 import manifest from '../../../cathode.manifest.json';
+import { withBase, isActiveHref } from '../lib/href';
 
 interface Props {
   title: string;
@@ -62,8 +63,7 @@ const nav = [
 ];
 
 function isActive(href: string): boolean {
-  if (href === '/') return path === '/';
-  return path === href || path.startsWith(href + '/');
+  return isActiveHref(href, path);
 }
 ---
 
@@ -120,7 +120,7 @@ function isActive(href: string): boolean {
             <>
               <div class="site-nav-group-label">{group.label}</div>
               {group.items.map((item) => (
-                <a href={item.href} class={isActive(item.href) ? 'is-active' : ''}>
+                <a href={withBase(item.href)} class={isActive(item.href) ? 'is-active' : ''}>
                   {item.label}
                 </a>
               ))}

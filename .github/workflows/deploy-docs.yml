@@ -1,0 +1,78 @@
+name: Deploy docs to GitHub Pages
+
+# Runs on every push to main; can also be triggered manually from the
+# Actions tab. Skips if only the Figma library or unrelated files
+# changed (no path filter yet — add one if build cost becomes a
+# concern).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# GitHub Pages needs these permissions. `id-token: write` is for the
+# OIDC handshake between actions/deploy-pages and Pages itself.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deploy per branch; don't cancel in-flight runs
+# so a partial deploy never leaves the site in an inconsistent state.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build docs site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The docs site imports @cathode-ui/react from the workspace;
+      # the workspace link resolves to packages/react/dist/, so we
+      # build that first. Manifest + ai-docs need to regenerate too
+      # so /components and CATHODE.md reflect the latest source.
+      - name: Regenerate tokens + manifest + AI docs
+        run: npm run gen
+
+      - name: Build @cathode-ui/react
+        run: npm run build -w @cathode-ui/react
+
+      - name: Build docs site
+        env:
+          # Override base path here if you wire up a custom domain
+          # later (e.g. set CATHODE_SITE_BASE="/" for root hosting).
+          CATHODE_SITE_BASE: /cathode-ui
+          CATHODE_SITE: https://cyphermadhan.github.io
+        run: npm run build -w @cathode-ui/site
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload build artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

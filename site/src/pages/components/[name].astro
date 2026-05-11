@@ -2,6 +2,7 @@
 import Main from '../../layouts/Main.astro';
 import { ComponentDemo } from '../../components/ComponentDemo';
 import manifest from '../../../../cathode.manifest.json';
+import { withBase } from '../../lib/href';
 
 /**
  * Dynamic component detail route. Renders a page per entry in
@@ -108,6 +109,6 @@ const c = component;
 
   <hr />
   <p>
-    <a href="/components">← All components</a>
+    <a href={withBase('/components')}>← All components</a>
   </p>
 </Main>

@@ -238,7 +238,7 @@ Astro + MDX + React islands. **53 static pages** at build time. Dogfoods `@catho
 
 **a11y gate**: `npm run test:a11y` (root) builds the docs site, serves it via `astro preview`, and runs `@axe-core/playwright` against every page with WCAG 2.0/2.1 A+AA tags. All 53 pages pass cleanly.
 
-**Deploy target**: any static host (Vercel / Netlify / Cloudflare Pages / GitHub Pages).
+**Deploy target**: GitHub Pages via `.github/workflows/deploy-docs.yml`. Every push to `main` triggers a build + deploy to `https://cyphermadhan.github.io/cathode-ui/`. The workflow regenerates tokens + manifest + AI docs, builds `@cathode-ui/react` from source, then builds the Astro site with `CATHODE_SITE_BASE=/cathode-ui` so every internal href resolves under the project-pages path. Internal hrefs go through `withBase()` in `site/src/lib/href.ts` so dev server (base `/`) and Pages (base `/cathode-ui/`) both work from the same source.
 
 ---
 

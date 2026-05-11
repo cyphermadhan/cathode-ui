@@ -4,6 +4,13 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
+  // Deploy target is GitHub Pages project path:
+  //   https://cyphermadhan.github.io/cathode-ui/
+  // `site` is the canonical origin (used for sitemap URLs + absolute
+  // href resolution); `base` is the path prefix every page sits under.
+  // Override CATHODE_SITE_BASE at build time for a custom domain.
+  site: process.env.CATHODE_SITE ?? 'https://cyphermadhan.github.io',
+  base: process.env.CATHODE_SITE_BASE ?? '/cathode-ui',
   integrations: [react(), mdx()],
   // Vite tweaks: `@cathode-ui/react` publishes ESM only. We keep
   // framer-motion as a non-external dep so Vite bundles it into the

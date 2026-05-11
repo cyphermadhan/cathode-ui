@@ -1,5 +1,6 @@
 ---
 import Main from '../layouts/Main.astro';
+import { withBase } from '../lib/href';
 ---
 
 <Main title="Getting Started">
@@ -75,9 +76,9 @@ export function App() {
     Components like <code>TextField</code>, <code>SearchBar</code>,
     <code>Chat</code>, and <code>Button</code> light up additional behavior
     when you hand the provider a <code>CathodeAIProvider</code>. See
-    the <a href="/ai">AI providers</a> page for the interface.
+    the <a href={withBase('/ai')}>AI providers</a> page for the interface.
   </p>
 
   <hr />
-  <p>Next: <a href="/tokens">browse the token palette</a>, or jump to the <a href="/components">component index</a>.</p>
+  <p>Next: <a href={withBase('/tokens')}>browse the token palette</a>, or jump to the <a href={withBase('/components')}>component index</a>.</p>
 </Main>

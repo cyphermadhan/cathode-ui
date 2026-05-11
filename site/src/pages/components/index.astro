@@ -1,6 +1,7 @@
 ---
 import Main from '../../layouts/Main.astro';
 import manifest from '../../../../cathode.manifest.json';
+import { withBase } from '../../lib/href';
 
 /* Sort by name for predictable browsing. The manifest preserves
  * author order (roughly: initial primitives first, later clusters
@@ -21,7 +22,7 @@ const components = [...manifest.components].sort((a: any, b: any) =>
 
   <div class="component-grid">
     {components.map((c: any) => (
-      <a class="component-card" href={`/components/${c.name.toLowerCase()}`}>
+      <a class="component-card" href={withBase(`/components/${c.name.toLowerCase()}`)}>
         <div class="component-card-name">{c.name}</div>
         <div class="component-card-summary">{c.summary}</div>
       </a>

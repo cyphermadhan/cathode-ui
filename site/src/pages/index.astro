@@ -1,5 +1,6 @@
 ---
 import Main from '../layouts/Main.astro';
+import { withBase } from '../lib/href';
 ---
 
 <Main title="Home" description="Cathode UI — a retro-future design system for React, with motion, haptics, sound, and AI-native surfaces.">
@@ -19,7 +20,7 @@ import Main from '../layouts/Main.astro';
   <p>
     A machine-readable <code>cathode.manifest.json</code> describes every
     component so AI coding agents can discover + compose Cathode primitives
-    without scraping source. A companion <a href="/mcp">MCP server</a> exposes
+    without scraping source. A companion <a href={withBase('/mcp')}>MCP server</a> exposes
     those same facts as tool calls.
   </p>
 
