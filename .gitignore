@@ -6,6 +6,7 @@ build/
 .env
 .env.local
 .vite/
+vite.config.ts.timestamp-*.mjs
 storybook-static/
 coverage/
 .turbo/
