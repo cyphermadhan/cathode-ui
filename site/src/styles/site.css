@@ -5,6 +5,11 @@
 
 * { box-sizing: border-box; }
 
+/* Astro wraps every hydrated island in an `<astro-island>` custom
+ * element; unknown elements default to `display: inline` which breaks
+ * ancestor overflow clipping. Force block so the layout behaves. */
+astro-island { display: block; }
+
 html, body {
   margin: 0;
   padding: 0;
@@ -326,6 +331,38 @@ td code { font-size: 11px; }
   background: var(--cathode-color-success);
   border-color: var(--cathode-color-success);
   color: var(--cathode-color-bg);
+}
+
+/* Patterns page — compositions live inside an Astro `client:only`
+ * React island. Astro wraps islands in `<astro-island>` which is
+ * a custom HTML element that browsers default to `display: inline`
+ * — so `.site-main`'s overflow clip doesn't contain what's inside
+ * the island. Force display: block + width containment so the recipes
+ * can't spill past the content column on narrow viewports.
+ */
+.patterns-live {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+.patterns-live astro-island,
+.patterns-live > * {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* The SettingsPanel recipe passes `className="patterns-card"` on its
+ * Card so we can pin its width without affecting every Card usage.
+ * Same containment pattern. */
+.patterns-card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* Dogfood reduced-motion — the Cathode base CSS already slashes

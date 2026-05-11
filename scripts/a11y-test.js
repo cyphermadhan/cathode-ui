@@ -25,7 +25,12 @@ const manifest = JSON.parse(
   readFileSync(resolve(repoRoot, 'cathode.manifest.json'), 'utf8'),
 );
 
-const BASE = 'http://127.0.0.1:4321';
+// Astro's `preview` server honors the `base` config from
+// astro.config.mjs, so pages live at /cathode-ui/... not the root.
+// Override BASE_PATH to test a custom-domain configuration.
+const BASE_ORIGIN = 'http://127.0.0.1:4321';
+const BASE_PATH   = process.env.CATHODE_SITE_BASE ?? '/cathode-ui';
+const BASE = BASE_ORIGIN + BASE_PATH.replace(/\/$/, '');
 const PAGES = [
   { path: '/',                 name: 'Home' },
   { path: '/getting-started',  name: 'Getting Started' },
