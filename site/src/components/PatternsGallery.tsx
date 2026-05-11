@@ -46,7 +46,12 @@ export function PatternsGallery() {
 
   return (
     <CathodeProvider theme={s.theme} motion={s.motion} haptic={s.haptic} sound={s.sound}>
-      <div style={{ display: 'grid', gap: 48 }}>
+      {/* width:100% is required because the outer CathodeProvider wraps
+       * children in `.cathode-root` (width:auto), which inherits sizing
+       * from astro-island — and astro-island uses `display: contents`
+       * so it has no box of its own. Pinning width here guarantees the
+       * grid (and every recipe below) fills the content column. */}
+      <div style={{ display: 'grid', gap: 48, width: '100%' }}>
         <DashboardReadout />
         <SettingsPanel />
         <DestructiveFlow />

@@ -8,9 +8,11 @@
   font-family: var(--cathode-type-font-stack);
   color: var(--cathode-color-text);
   background: var(--cathode-color-bg);
-  /* Width containment only — no overflow:hidden here, because the
-   * provider wraps portaled Dialogs and frame titles that render
-   * slightly outside their box. */
+  /* Fill the parent but don't overflow it. Width is explicit (not
+   * auto) because some consumer contexts — notably Astro islands
+   * with `display: contents` — have no box to inherit width from;
+   * an explicit width:100% forces the root to the parent-of-parent. */
+  width: 100%;
   min-width: 0;
   max-width: 100%;
 }
