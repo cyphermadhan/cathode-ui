@@ -50,8 +50,14 @@ export function PatternsGallery() {
        * children in `.cathode-root` (width:auto), which inherits sizing
        * from astro-island — and astro-island uses `display: contents`
        * so it has no box of its own. Pinning width here guarantees the
-       * grid (and every recipe below) fills the content column. */}
-      <div style={{ display: 'grid', gap: 48, width: '100%' }}>
+       * grid (and every recipe below) fills the content column.
+       *
+       * `gridTemplateColumns: minmax(0, 1fr)` caps the implicit track at
+       * the container width. Without it, the default `auto` track sizes
+       * to its max-content — and wide children (long dot-leader rows,
+       * long tables) blow the column open past `.site-main`'s max-width,
+       * causing every recipe to overflow the content column sideways. */}
+      <div style={{ display: 'grid', gap: 48, width: '100%', gridTemplateColumns: 'minmax(0, 1fr)' }}>
         <DashboardReadout />
         <SettingsPanel />
         <DestructiveFlow />
