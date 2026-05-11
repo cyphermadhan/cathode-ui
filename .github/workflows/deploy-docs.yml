@@ -59,6 +59,11 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
+        with:
+          # Auto-enables Pages + sets source=workflow if the repo
+          # hasn't had Pages configured yet. Avoids the "Not Found"
+          # error from configure-pages on first deploy.
+          enablement: true
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
