@@ -1,15 +1,19 @@
 {
   "name": "@cathode-ui/mcp",
-  "version": "0.1.0",
-  "description": "Model Context Protocol server for Cathode UI — lets AI agents discover and query components without reading source.",
+  "version": "0.3.0",
+  "description": "Model Context Protocol server for Cathode UI. Lets AI coding agents (Claude Code, Cursor, Copilot) discover and query the 45-primitive Cathode design system without scraping source. Exposes cathode_list_components, cathode_get_component, cathode_get_tokens, cathode_search, cathode_suggest_component.",
   "type": "module",
   "bin": {
     "cathode-mcp": "./dist/server.js"
   },
   "main": "./dist/server.js",
-  "files": ["dist"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node scripts/bundle-data.js",
+    "prepublishOnly": "npm run build",
     "start": "node dist/server.js"
   },
   "dependencies": {
@@ -19,5 +23,30 @@
     "typescript": "^5.5.0",
     "@types/node": "^22.0.0"
   },
-  "license": "MIT"
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "design-system",
+    "ai",
+    "claude",
+    "cursor",
+    "cathode",
+    "react"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyphermadhan/cathode-ui.git",
+    "directory": "packages/mcp-server"
+  },
+  "homepage": "https://github.com/cyphermadhan/cathode-ui#readme",
+  "bugs": {
+    "url": "https://github.com/cyphermadhan/cathode-ui/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  }
 }

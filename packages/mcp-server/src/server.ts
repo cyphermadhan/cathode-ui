@@ -36,15 +36,35 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// `dist/` is two levels down from repo root (packages/mcp-server/dist/).
-const ROOT = resolve(__dirname, '../../..');
 
-function readJSON(rel: string): any {
-  return JSON.parse(readFileSync(resolve(ROOT, rel), 'utf8'));
+// Manifest + tokens need to be readable when the package is installed
+// from npm (node_modules/@cathode-ui/mcp/…), NOT just from the monorepo.
+// We ship both files alongside the compiled server in dist/ via the
+// build script. Fall back to the monorepo paths when running from
+// source so `npm start` in the workspace still works.
+const LOCAL_MANIFEST = resolve(__dirname, 'cathode.manifest.json');
+const LOCAL_TOKENS   = resolve(__dirname, 'tokens.json');
+const MONOREPO_ROOT  = resolve(__dirname, '../../..');
+
+function readJSONIfExists(path: string): any | null {
+  try { return JSON.parse(readFileSync(path, 'utf8')); }
+  catch { return null; }
 }
 
-function loadManifest() { return readJSON('cathode.manifest.json'); }
-function loadTokens()   { return readJSON('tokens/tokens.json');    }
+function loadManifest(): any {
+  return (
+    readJSONIfExists(LOCAL_MANIFEST) ??
+    readJSONIfExists(resolve(MONOREPO_ROOT, 'cathode.manifest.json')) ??
+    (() => { throw new Error('cathode.manifest.json not found — is the package properly installed?'); })()
+  );
+}
+function loadTokens(): any {
+  return (
+    readJSONIfExists(LOCAL_TOKENS) ??
+    readJSONIfExists(resolve(MONOREPO_ROOT, 'tokens/tokens.json')) ??
+    (() => { throw new Error('tokens.json not found — is the package properly installed?'); })()
+  );
+}
 
 const server = new Server(
   { name: 'cathode-ui', version: '0.1.0' },

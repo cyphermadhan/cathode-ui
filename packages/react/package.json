@@ -1,7 +1,7 @@
 {
   "name": "@cathode-ui/react",
-  "version": "0.1.0",
-  "description": "Cathode UI — React primitives with motion, haptics, sound, and AI hooks.",
+  "version": "0.3.0",
+  "description": "Cathode UI — retro-future React design system with motion, haptics, sound, and AI-native surfaces. 45 primitives, machine-readable manifest, MCP server for AI agents.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -23,13 +23,13 @@
   "files": [
     "dist",
     "src/tokens.css",
-    "src/fonts.css"
+    "src/fonts.css",
+    "README.md"
   ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "prepublishOnly": "npm run build",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
@@ -58,7 +58,25 @@
     "monospace",
     "ai",
     "haptics",
-    "motion"
+    "sound",
+    "motion",
+    "mcp",
+    "cathode"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyphermadhan/cathode-ui.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://github.com/cyphermadhan/cathode-ui#readme",
+  "bugs": {
+    "url": "https://github.com/cyphermadhan/cathode-ui/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  }
 }
