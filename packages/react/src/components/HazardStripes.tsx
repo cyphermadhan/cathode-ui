@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 
 /**
- * Decorative diagonal-stripe overlay — the "erase" / "caution" look
- * lifted from Klick's PTT button (Sources/UI/PTTButton.swift:107).
+ * Decorative diagonal-stripe overlay — the "armed" / "caution" look.
  *
  * Wraps children and paints the stripes over the top edge as a
  * non-interactive overlay. Pairs well with a solid accent background

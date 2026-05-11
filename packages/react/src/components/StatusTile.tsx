@@ -7,7 +7,6 @@ import type { PillAccent } from './Pill';
 
 /**
  * MPC-style status tile: centered icon, bold label, tiny subtitle.
- * Lifted from Klick's StatusTile (Sources/UI/TerminalPrimitives.swift:121).
  *
  * When `onClick` is provided, the whole tile becomes a press target
  * with motion + haptic + sound feedback. Otherwise it's a pure

@@ -52,8 +52,8 @@ writeFileSync(resolve(ROOT, 'llms.txt'), llms);
 // ── CATHODE.md (agent onboarding) ──────────────────────────────
 
 // Group components by the cluster they conceptually belong to. The
-// manifest preserves author order (roughly Klick ports → new primitives
-// → later clusters); we re-group here for quicker scannability.
+// manifest preserves author order (roughly initial primitives first,
+// later clusters after); we re-group here for quicker scannability.
 const CLUSTER = {
   'Layout':     ['TerminalFrame', 'Card', 'HazardStripes', 'Stack', 'Accordion'],
   'Forms':      ['Button', 'TextField', 'TextArea', 'Select', 'Checkbox', 'RadioGroup', 'Toggle', 'Counter', 'SearchBar', 'FormField', 'Chips'],

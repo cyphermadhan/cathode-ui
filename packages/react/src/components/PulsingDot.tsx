@@ -3,8 +3,6 @@
  * without a full progress indicator. Animation is pure CSS
  * (@keyframes cathode-pulse) — no framer-motion overhead for this
  * simple a case. Respects `prefers-reduced-motion` automatically.
- *
- * Lifted from Klick's PulsingDot (Sources/UI/PeerListView.swift:128).
  */
 export interface PulsingDotProps {
   /** CSS color — defaults to current text color via `currentColor`. */

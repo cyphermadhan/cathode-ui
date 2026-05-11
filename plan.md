@@ -2,18 +2,17 @@
 
 ## Context
 
-Klick has a distinctive retro-future UI — pure-black base, SF Mono, pixel
-shapes, dot-leaders, tight saturated accents, composed from ~5 primitives.
-Nothing open source ships this exact flavor. The aesthetic is worth lifting
-into a standalone, multi-platform design system.
+A distinctive retro-future UI — pure-black base, monospace type, pixel
+shapes, dot-leaders, tight saturated accents, composed from a small core
+set of primitives. Nothing open source ships this exact flavor. The
+aesthetic is worth packaging as a standalone, multi-platform design
+system.
 
-**Cathode UI** is that system. It stands up independently of Klick (Klick
-stays untouched; it's a read-only *reference*, not a consumer). The system
-adds motion, haptics, sound, and an AI-driven surface to every primitive —
-a design system aimed at agentic workflows as much as human ones.
+**Cathode UI** is that system. It adds motion, haptics, sound, and an
+AI-driven surface to every primitive — a design system aimed at agentic
+workflows as much as human ones.
 
-**Repo location:** `~/Documents/GitHub/cathode-ui/` (sibling to Klick).
-User to confirm — or tell me when to proceed and I'll note the path.
+**Repo location:** `~/Documents/GitHub/cathode-ui/`.
 
 **Output scope (user-confirmed, phase-ordered):**
 1. Web (React + CSS custom properties) — **Phase 1**
@@ -33,7 +32,7 @@ User to confirm — or tell me when to proceed and I'll note the path.
 4. **Motion, haptics, sound** first-class. Every component has a motion profile and optional haptic/sound feedback. Global + per-component overrides.
 5. **AI-friendly.** Machine-readable component manifest + MCP server + structured docs so AI agents can discover, query, and compose Cathode primitives without reading source.
 6. **AI-enabled components.** A specific subset (`TextField`, `SearchBar`, `Chat`, `Button`) ship with built-in AI hooks.
-7. **Self-contained.** Klick is read-only reference, not a consumer. No changes to Klick.
+7. **Self-contained.** Standalone repo; no cross-project dependencies or implicit consumers.
 
 ---
 
@@ -208,20 +207,20 @@ Providers abstracted behind a `CathodeAIProvider` interface — app supplies an 
 
 ## Primitives inventory (Phase 1, React)
 
-Direct ports from Klick reference code:
+Core primitives that define the aesthetic:
 
-| Primitive         | Reference in Klick                                  |
-|-------------------|------------------------------------------------------|
-| **TerminalFrame** | `Sources/UI/TerminalPrimitives.swift:5`              |
-| **PixelBar**      | `Sources/UI/TerminalPrimitives.swift:40`             |
-| **ActivityBar**   | `Sources/UI/TerminalPrimitives.swift:62`             |
-| **DotLeader**     | `Sources/UI/TerminalPrimitives.swift:91`             |
-| **StatusTile**    | `Sources/UI/TerminalPrimitives.swift:121`            |
-| **PulsingDot**    | `Sources/UI/PeerListView.swift:128`                  |
-| **Pill**          | `Sources/UI/ContentView.swift:138` + `ChatView.swift:120` |
-| **HazardStripes** | `Sources/UI/PTTButton.swift:107` (as a wrapper)      |
+| Primitive         | Purpose |
+|-------------------|---------|
+| **TerminalFrame** | Bordered box with inset title — the `┌─ PEERS ─` look. |
+| **PixelBar**      | Discrete-cell level meter. |
+| **ActivityBar**   | Pseudo-random VU meter, deterministic per seed. |
+| **DotLeader**     | `LABEL ……… VALUE` terminal readout. |
+| **StatusTile**    | MPC-style icon + title + subtitle tile. |
+| **PulsingDot**    | Small square that pulses for live / active state. |
+| **Pill**          | Icon + text nav / action button with persistent `active` state. |
+| **HazardStripes** | Decorative diagonal-stripe overlay for armed / caution states. |
 
-**New primitives added for Cathode UI (not in Klick):**
+**New primitives for Cathode UI:**
 
 | Primitive        | Purpose |
 |------------------|---------|
@@ -231,8 +230,8 @@ Direct ports from Klick reference code:
 | **Chat**         | Conversation component for AI/messaging. |
 | **Toast**        | Terminal-style status notification. |
 | **Dialog**       | Modal with TerminalFrame chrome. |
-| **Chips**        | Tappable preset chips (generalized from Klick's preset-phrase row). |
-| **Stepper**      | `−  value  +` rocker (generalized from Klick's WPM control). |
+| **Chips**        | Tappable preset chips — a scrolling row of one-shot phrase inserts. |
+| **Counter**      | `−  value  +` rocker for bounded numeric values. |
 | **Toggle**       | On/off switch in the Cathode language. |
 
 ---
@@ -258,7 +257,7 @@ Cathode UI will re-export a curated subset of Phosphor via `@cathode-ui/react/ic
 
 ### Phase 1 — React package + AI infrastructure (~5–7 days)
 1. Init `cathode-ui/` monorepo (pnpm workspaces). `packages/react/` Vite + TypeScript scaffold.
-2. `tokens/tokens.json` built from Klick's current DT values + new motion/haptic/sound token groups.
+2. `tokens/tokens.json` built with color / type / spacing / size tokens plus new motion / haptic / sound token groups.
 3. `scripts/gen-css.js` runs, emits `tokens.css`.
 4. Implement `CathodeProvider` (theme context + motion intensity + haptic/sound globals).
 5. Port primitives one at a time with matching motion/haptic/sound hooks:
@@ -299,20 +298,6 @@ Cathode UI will re-export a curated subset of Phosphor via `@cathode-ui/react/ic
 
 ### Phase 4 — Other frameworks (later)
 React Native, Vue, Svelte wrappers. Out of scope for initial plan but architecture supports (tokens.json is framework-agnostic).
-
----
-
-## Critical files to reference (read-only, from Klick)
-
-- `Sources/UI/DesignTokens.swift` — token values.
-- `Sources/UI/TerminalPrimitives.swift` — five core primitives.
-- `Sources/UI/PeerListView.swift:128` — `PulsingDot`.
-- `Sources/UI/ContentView.swift:138` + `ChatView.swift:120` — pill variants.
-- `Sources/UI/PTTButton.swift:107` — hazard-stripes overlay.
-- `Sources/UI/ChatView.swift` — preset chips pattern.
-- `Sources/UI/SettingsView.swift:63` — Menu-styled-as-Picker pattern.
-
-**Klick itself is not modified anywhere in this plan.**
 
 ---
 

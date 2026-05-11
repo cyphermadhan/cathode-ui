@@ -5,8 +5,6 @@
  * middle span with `overflow: hidden` + a long string of periods. No
  * font/letter-spacing math at render time — the browser clips what
  * doesn't fit.
- *
- * Lifted from Klick's DotLeader (Sources/UI/TerminalPrimitives.swift:91).
  */
 export interface DotLeaderProps {
   label: string;

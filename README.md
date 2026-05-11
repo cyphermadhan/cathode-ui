@@ -3,30 +3,25 @@
 Retro-future design system. Terminal aesthetics, pixel shapes, mono type,
 with motion, haptics, sound, and AI-native surfaces baked in.
 
-Lifted from [Klick](https://github.com/cyphermadhan/Klick)'s UI layer, now
-standalone and multi-platform.
-
 ## Status
 
-**Phase 1: in progress.** React package + AI infrastructure.
+**v0.3.0** — 45 React primitives, docs site, companion Figma library,
+MCP server for AI agents, full a11y gate.
 
-Phases 2–4 (Figma kit, docs site, Swift package, other frameworks) land
-after Phase 1 ships.
+Not yet shipped: npm publish, Swift package.
 
-See `/Users/mraj/.claude/plans/lucky-riding-valley.md` for the full plan
-(local reference; not yet published).
+See [`plan.md`](./plan.md) for the design brief and
+[`implemented.md`](./implemented.md) for the running shipped state.
 
 ## Repo layout
 
 ```
 tokens/           — single source of truth (tokens.json)
-scripts/          — code generators (CSS, Swift, manifest)
+scripts/          — code generators (CSS, manifest, AI docs)
 packages/
-  react/          — @cathode-ui/react (Phase 1)
+  react/          — @cathode-ui/react
   mcp-server/     — @cathode-ui/mcp (AI-agent tool surface)
-  swift/          — Phase 3
-figma/            — Phase 2
-site/             — docs (Astro, Phase 2)
+site/             — docs (Astro)
 ```
 
 ## License

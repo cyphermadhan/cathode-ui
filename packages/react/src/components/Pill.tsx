@@ -5,8 +5,8 @@ import { haptic } from '../feedback/haptic';
 import { sound } from '../feedback/sound';
 
 /**
- * Icon + text navigation / action button. Consolidated from Klick's
- * two variants (navPill in ContentView + headerPill in ChatView).
+ * Icon + text navigation / action button. One component covers both
+ * nav-tab usage (with `active`) and header/action usage.
  *
  * State model:
  *   - `idle`   — default

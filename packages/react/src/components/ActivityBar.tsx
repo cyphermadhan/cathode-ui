@@ -10,8 +10,6 @@ import { useCathode } from '../CathodeProvider';
  * cell being lit. `0` = all cells dim; `1` = all cells lit. The
  * sequence is deterministic per-seed so parent components can drive
  * animation by bumping a seed value on a tick.
- *
- * Lifted from Klick's ActivityBar (Sources/UI/TerminalPrimitives.swift:62).
  */
 export interface ActivityBarProps {
   /** Probability a given cell is lit. Clamped to [0, 1]. */
@@ -53,8 +51,8 @@ export function ActivityBar({
   );
 }
 
-/** Deterministic pseudo-random bit for (cell, seed) pair. Same algorithm
- * as the Klick original so visuals match across platforms. */
+/** Deterministic pseudo-random bit for (cell, seed) pair. The shared
+ * algorithm keeps visuals consistent across platforms + frameworks. */
 function isLit(cell: number, seed: number, intensity: number): boolean {
   // Knuth multiplicative hash for cheap, decent scatter.
   const h = (Math.imul(seed, 2654435761) ^ Math.imul(cell, 11)) >>> 0;
