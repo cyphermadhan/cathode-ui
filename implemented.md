@@ -17,7 +17,7 @@ Run `git log --oneline` in the repo for the exact commit history.
 - **a11y**: 54/54 docs pages pass `@axe-core/playwright` cleanly (WCAG 2.0/2.1 A+AA).
 - **GitHub**: pushed to `github.com/cyphermadhan/cathode-ui`, default branch `main`.
 - **Agent-facing docs**: `llms.txt` (per llmstxt.org convention) + `CATHODE.md` (long-form onboarding) at repo root, both generated from the manifest. Five MCP tools including `cathode_suggest_component(intent)` for natural-language component selection. Manifest has `whenToUse` + `vs` disambiguation per component, validated against a JSON Schema.
-- **npm published**: `@cathode-ui/react@0.4.0` + `@cathode-ui/mcp@0.4.0` live on the public registry.
+- **npm published**: `@cathode-ui/react@0.4.1`, `@cathode-ui/mcp@0.4.0`, and `@cathode-ui/vue@0.1.0` live on the public registry.
 - **Next.js / App Router compatible** (Phase 2.5). Every JS entry ships a `"use client"` directive so Cathode primitives import cleanly into Server Components with no consumer-side wrapping. Verified end-to-end against `next@16` App Router.
 - **Multi-framework manifest schema** (Phase 4a). Each component has an `adapters.<framework>` block (currently `react` + partial `vue`); the flat `import` + `examples` fields mirror `adapters.react` for backwards compat. MCP tools take an optional `framework` arg (default `"react"`) and fall back with a warning when an adapter isn't shipped — lays the groundwork for Svelte / Solid / Compose.
 - **Vue 3 package complete** (Phase 4b). `@cathode-ui/vue@0.1.0` ships all 45 primitives in full API parity with `@cathode-ui/react`:
@@ -32,7 +32,7 @@ Run `git log --oneline` in the repo for the exact commit history.
   - `/vue` docs page on the Astro site with setup (Vite + Nuxt), API deltas vs React, and AI composable examples. 55/55 a11y pages pass.
 - **MCP framework routing proven end-to-end** — the manifest now carries `adapters.vue` for all 45 components; `cathode_get_component(name, { framework: "vue" })` returns Vue imports + Vue template snippets for every primitive.
 
-Not yet shipped: `@cathode-ui/vue` npm publish (package is local/git-only at 0.1.0), Swift package (Phase 3), Svelte / Solid (Phase 4c–d), Jetpack Compose (Phase 5).
+Not yet shipped: Swift package (Phase 3), Svelte / Solid (Phase 4c–d), Jetpack Compose (Phase 5).
 
 ---
 
