@@ -1,0 +1,68 @@
+{
+  "name": "@cathode-ui/vue",
+  "version": "0.1.0",
+  "description": "Cathode UI — retro-future Vue 3 design system with motion, haptics, sound, and AI-native surfaces. Sibling of @cathode-ui/react. Pulls the same manifest + tokens; framework-idiomatic Vue components. Phase 4b in progress — component coverage expands over time.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./tokens.css": "./src/tokens.css",
+    "./fonts.css": "./src/fonts.css",
+    "./styles.css": "./dist/style.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src/tokens.css",
+    "src/fonts.css",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "vite build && vue-tsc -p tsconfig.build.json",
+    "typecheck": "vue-tsc --noEmit",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.0",
+    "typescript": "^5.5.0",
+    "vite": "^5.4.0",
+    "vite-plugin-dts": "^4.0.0",
+    "vue": "^3.4.0",
+    "vue-tsc": "^2.1.0"
+  },
+  "keywords": [
+    "design-system",
+    "vue",
+    "vue3",
+    "retro",
+    "terminal",
+    "monospace",
+    "ai",
+    "cathode"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyphermadhan/cathode-ui.git",
+    "directory": "packages/vue"
+  },
+  "homepage": "https://cyphermadhan.github.io/cathode-ui/",
+  "bugs": {
+    "url": "https://github.com/cyphermadhan/cathode-ui/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

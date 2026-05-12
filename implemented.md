@@ -19,9 +19,10 @@ Run `git log --oneline` in the repo for the exact commit history.
 - **Agent-facing docs**: `llms.txt` (per llmstxt.org convention) + `CATHODE.md` (long-form onboarding) at repo root, both generated from the manifest. Five MCP tools including `cathode_suggest_component(intent)` for natural-language component selection. Manifest has `whenToUse` + `vs` disambiguation per component, validated against a JSON Schema.
 - **npm published**: `@cathode-ui/react@0.4.0` + `@cathode-ui/mcp@0.4.0` live on the public registry.
 - **Next.js / App Router compatible** (Phase 2.5). Every JS entry ships a `"use client"` directive so Cathode primitives import cleanly into Server Components with no consumer-side wrapping. Verified end-to-end against `next@16` App Router.
-- **Multi-framework manifest schema** (Phase 4a). Each component has an `adapters.<framework>` block (currently only `react`); the flat `import` + `examples` fields mirror `adapters.react` for backwards compat. MCP tools take an optional `framework` arg (default `"react"`) and fall back with a warning when an adapter isn't shipped — lays the groundwork for Vue / Svelte / Solid / Compose.
+- **Multi-framework manifest schema** (Phase 4a). Each component has an `adapters.<framework>` block (currently `react` + partial `vue`); the flat `import` + `examples` fields mirror `adapters.react` for backwards compat. MCP tools take an optional `framework` arg (default `"react"`) and fall back with a warning when an adapter isn't shipped — lays the groundwork for Svelte / Solid / Compose.
+- **Vue 3 package started** (Phase 4b, session 1). `@cathode-ui/vue` scaffolded — `CathodeProvider` + `useCathode` composable + 3 primitives (`Button`, `Stack`, `TerminalFrame`). Top-level manifest `adapters: ['react', 'vue']`; MCP serves Vue-specific imports + examples for the 3 ported components and falls back to React with a per-component `note` for the other 42. Framework adapter plumbing validated end-to-end.
 
-Not yet shipped: Swift package (Phase 3), Vue / Svelte / Solid (Phase 4b+), Jetpack Compose (Phase 5).
+Not yet shipped: Swift package (Phase 3), rest of Vue primitives + feedback/AI plumbing (Phase 4b sessions 2+), Svelte / Solid (Phase 4c–d), Jetpack Compose (Phase 5).
 
 ---
 
@@ -313,6 +314,11 @@ sound (`AVAudioEngine`) replace the web shims. Adds `adapters.swift`
 Vue 3 → Svelte 5 → Solid. Each ships a sibling package
 (`@cathode-ui/vue` etc.) and populates its own `adapters.<name>` block
 per component. Manifest schema + MCP already support this (Phase 4a).
+
+**Phase 4b (Vue) in progress:**
+- Session 1 (shipped): scaffold + `Button`, `Stack`, `TerminalFrame` + minimal `CathodeProvider` (theme + motion).
+- Session 2 (planned): feedback shims (haptic, sound) + AI provider types in the Vue package + Button feedback props + 5–10 more primitives across layout/forms/data.
+- Sessions 3+: remaining 35+ primitives batched by cluster.
 
 ### Phase 5: Jetpack Compose (Android native)
 Kotlin + Compose counterpart of SwiftUI. `scripts/gen-kotlin.js`

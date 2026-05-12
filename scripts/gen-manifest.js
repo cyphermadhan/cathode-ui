@@ -824,6 +824,36 @@ const components = [
 // Merge the decision-guidance companion into each component entry.
 // Every component must have guidance — fail loud if one's missing so
 // new primitives don't silently ship without "when to use" help.
+// Vue adapter entries for the components `@cathode-ui/vue` ships
+// today. Phase 4b session 1 ports Button + Stack + TerminalFrame;
+// subsequent sessions add more entries here as each Vue component
+// lands. Components NOT listed here omit `adapters.vue` — the MCP
+// server's `resolveAdapter` falls back to the React adapter with a
+// `fallbackFrom: 'react'` note so agents know the Vue port is pending.
+const VUE_ADAPTERS = {
+  TerminalFrame: {
+    import: "import { TerminalFrame } from '@cathode-ui/vue';",
+    examples: [
+      { name: 'titled',   snippet: '<TerminalFrame title="PEERS">\n  <!-- children -->\n</TerminalFrame>' },
+      { name: 'accented', snippet: '<TerminalFrame title="ERROR" accent="danger">…</TerminalFrame>' },
+    ],
+  },
+  Button: {
+    import: "import { Button } from '@cathode-ui/vue';",
+    examples: [
+      { name: 'primary', snippet: '<Button variant="primary" @click="save">SAVE</Button>' },
+      { name: 'danger',  snippet: '<Button variant="danger"  @click="remove">DELETE</Button>' },
+    ],
+  },
+  Stack: {
+    import: "import { Stack } from '@cathode-ui/vue';",
+    examples: [
+      { name: 'row',    snippet: '<Stack direction="row" :gap="8" align="center">\n  <Pill />\n  <Pill />\n</Stack>' },
+      { name: 'column', snippet: '<Stack :gap="16" fullWidth>\n  <FormField />\n  <FormField />\n</Stack>' },
+    ],
+  },
+};
+
 const missing = [];
 const enrichedComponents = components.map((c) => {
   const g = GUIDANCE[c.name];
@@ -831,14 +861,16 @@ const enrichedComponents = components.map((c) => {
 
   // Component entries in this file are authored React-first: `import`
   // and `examples` are the React adapter. Fold them into an `adapters`
-  // object (keyed by framework name) so Phases 4–5 can drop Vue /
-  // Svelte / Solid / Compose adapters in as sibling keys without
-  // touching the per-component source. The top-level `import` and
-  // `examples` fields remain populated as a backwards-compat mirror
-  // of `adapters.react` — older MCP clients (<0.4.0) keep working.
+  // object (keyed by framework name) and merge in any other framework
+  // adapters shipped today. The top-level `import` and `examples`
+  // fields remain populated as a backwards-compat mirror of
+  // `adapters.react` — older MCP clients (<0.4.0) keep working.
   const adapters = {
     react: { import: c.import, examples: c.examples },
   };
+  if (VUE_ADAPTERS[c.name]) {
+    adapters.vue = VUE_ADAPTERS[c.name];
+  }
   return {
     ...c,
     whenToUse: g.whenToUse,
@@ -866,7 +898,7 @@ const manifest = {
   // adds 'compose'. MCP clients should read `adapters[framework]` on
   // each component; if the key is missing, the flat `import` +
   // `examples` on the component are the React fallback.
-  adapters: ['react'],
+  adapters: ['react', 'vue'],
   imports: {
     tokens: "import '@cathode-ui/react/tokens.css';",
     fonts:  "import '@cathode-ui/react/fonts.css';",

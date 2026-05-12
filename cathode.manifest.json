@@ -10,7 +10,8 @@
   ],
   "themeSelection": "CSS `prefers-color-scheme`, overridable via <html data-theme='dark|light'> or <CathodeProvider theme='dark|light'>.",
   "adapters": [
-    "react"
+    "react",
+    "vue"
   ],
   "imports": {
     "tokens": "import '@cathode-ui/react/tokens.css';",
@@ -86,6 +87,19 @@
             {
               "name": "accented",
               "snippet": "<TerminalFrame title=\"ERROR\" accent=\"tx\">…</TerminalFrame>"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { TerminalFrame } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "titled",
+              "snippet": "<TerminalFrame title=\"PEERS\">\n  <!-- children -->\n</TerminalFrame>"
+            },
+            {
+              "name": "accented",
+              "snippet": "<TerminalFrame title=\"ERROR\" accent=\"danger\">…</TerminalFrame>"
             }
           ]
         }
@@ -559,6 +573,19 @@
             {
               "name": "ai",
               "snippet": "<Button ai={{ action: \"explain\", context: data }} onActionResult={setExplanation}>EXPLAIN</Button>"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Button } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "primary",
+              "snippet": "<Button variant=\"primary\" @click=\"save\">SAVE</Button>"
+            },
+            {
+              "name": "danger",
+              "snippet": "<Button variant=\"danger\"  @click=\"remove\">DELETE</Button>"
             }
           ]
         }
@@ -3381,6 +3408,19 @@
             {
               "name": "vertical",
               "snippet": "<Stack gap={12}><DotLeader label=\"LAT\" value=\"42 MS\" /><DotLeader label=\"LOSS\" value=\"0%\" /></Stack>"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Stack } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "row",
+              "snippet": "<Stack direction=\"row\" :gap=\"8\" align=\"center\">\n  <Pill />\n  <Pill />\n</Stack>"
+            },
+            {
+              "name": "column",
+              "snippet": "<Stack :gap=\"16\" fullWidth>\n  <FormField />\n  <FormField />\n</Stack>"
             }
           ]
         }
