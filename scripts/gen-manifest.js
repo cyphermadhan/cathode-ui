@@ -828,7 +828,23 @@ const missing = [];
 const enrichedComponents = components.map((c) => {
   const g = GUIDANCE[c.name];
   if (!g) { missing.push(c.name); return c; }
-  return { ...c, whenToUse: g.whenToUse, vs: g.vs ?? [] };
+
+  // Component entries in this file are authored React-first: `import`
+  // and `examples` are the React adapter. Fold them into an `adapters`
+  // object (keyed by framework name) so Phases 4–5 can drop Vue /
+  // Svelte / Solid / Compose adapters in as sibling keys without
+  // touching the per-component source. The top-level `import` and
+  // `examples` fields remain populated as a backwards-compat mirror
+  // of `adapters.react` — older MCP clients (<0.4.0) keep working.
+  const adapters = {
+    react: { import: c.import, examples: c.examples },
+  };
+  return {
+    ...c,
+    whenToUse: g.whenToUse,
+    vs: g.vs ?? [],
+    adapters,
+  };
 });
 if (missing.length > 0) {
   console.error(`\nERROR: components missing from component-guidance.json: ${missing.join(', ')}`);
@@ -845,6 +861,12 @@ const manifest = {
   fontStack: TOKENS.type.fontStack,
   themes: ['light', 'dark'],
   themeSelection: "CSS `prefers-color-scheme`, overridable via <html data-theme='dark|light'> or <CathodeProvider theme='dark|light'>.",
+  // Framework adapters currently populated in every component's
+  // `adapters` field. Phase 4 adds 'vue', 'svelte', 'solid'; Phase 5
+  // adds 'compose'. MCP clients should read `adapters[framework]` on
+  // each component; if the key is missing, the flat `import` +
+  // `examples` on the component are the React fallback.
+  adapters: ['react'],
   imports: {
     tokens: "import '@cathode-ui/react/tokens.css';",
     fonts:  "import '@cathode-ui/react/fonts.css';",

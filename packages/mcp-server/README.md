@@ -110,32 +110,50 @@ Five tools over stdio:
 
 | Tool | Use |
 |---|---|
-| `cathode_list_components()` | Every component with a one-line summary. Discovery. |
-| `cathode_get_component(name)` | Full spec for a named component — props, `whenToUse`, `vs` disambiguation, examples, a11y, feedback. |
-| `cathode_get_tokens(theme?)` | Resolved color set for a theme + theme-independent tokens. |
-| `cathode_search(query)` | Substring keyword match across names + summaries. |
-| `cathode_suggest_component(intent)` | Natural-language intent → ranked components. Uses the manifest's `whenToUse` + `vs` fields with a weighted bag-of-words scorer. Call this when you know WHAT the user wants to do but not which component to use. |
+| `cathode_list_components({ framework? })` | Every component with a one-line summary + its framework-specific import. Discovery. |
+| `cathode_get_component({ name, framework? })` | Full spec for a named component — props, `whenToUse`, `vs` disambiguation, framework-specific examples, a11y, feedback. |
+| `cathode_get_tokens({ theme? })` | Resolved color set for a theme + theme-independent tokens. Framework-agnostic. |
+| `cathode_search({ query, framework? })` | Substring keyword match across names + summaries. |
+| `cathode_suggest_component({ intent, framework? })` | Natural-language intent → ranked components. Uses the manifest's `whenToUse` + `vs` fields with a weighted bag-of-words scorer. Call this when you know WHAT the user wants to do but not which component to use. |
+
+### The `framework` parameter
+
+Every tool that returns component shape (all except `cathode_get_tokens`) accepts an optional `framework` argument. Valid values come from the manifest's top-level `adapters` array — currently `"react"`; Phase 4 adds `"vue"`, `"svelte"`, `"solid"`; Phase 5 adds `"compose"`.
+
+- Default is `"react"` — omitting the arg gives you the React adapter.
+- Unsupported adapters fall back to React and include a `warning` field in the response, so agents can surface it to the user.
+- `cathode_get_tokens` is framework-independent — tokens are identical across every adapter.
 
 ## Example session
 
 ```
-> cathode_suggest_component("show a confirmation before deleting")
+> cathode_suggest_component({ intent: "show a confirmation before deleting" })
 
-suggestions: [
-  { name: "Dialog", score: 3, whenToUse: "Block the UI until the user confirms…" },
-  { name: "Toast",  score: 1, whenToUse: "Surface a short transient status…" },
-  { name: "Loader", score: 1, whenToUse: "…"  }
-]
+{
+  framework: "react",
+  suggestions: [
+    { name: "Dialog", score: 3, import: "import { Dialog } from '@cathode-ui/react';",
+      whenToUse: "Block the UI until the user confirms…" },
+    { name: "Toast",  score: 1, import: "import { Toast } from '@cathode-ui/react';",
+      whenToUse: "Surface a short transient status…" },
+    …
+  ]
+}
 
-> cathode_get_component("Dialog")
+> cathode_get_component({ name: "Dialog" })
 
-{ name: "Dialog",
-  import: "import { Dialog } from '@cathode-ui/react';",
-  whenToUse: "Block the UI until the user confirms, chooses, or dismisses…",
-  vs: [{ component: "Drawer", picker: "Dialog for centered modal focus; Drawer for edge panel…" }, …],
-  props: [{ name: "open", type: "boolean", required: true }, …],
-  examples: [{ name: "confirm", snippet: "<Dialog open={…}>…" }, …],
-  … }
+{
+  framework: "react",
+  component: {
+    name: "Dialog",
+    import: "import { Dialog } from '@cathode-ui/react';",
+    whenToUse: "Block the UI until the user confirms, chooses, or dismisses…",
+    vs: [{ component: "Drawer", picker: "Dialog for centered modal focus; Drawer for edge panel…" }, …],
+    props: [{ name: "open", type: "boolean", required: true }, …],
+    examples: [{ name: "confirm", snippet: "<Dialog open={…}>…" }, …],
+    …
+  }
+}
 ```
 
 ## Author

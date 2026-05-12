@@ -2,7 +2,7 @@
 /**
  * Cathode UI — Model Context Protocol server.
  *
- * Exposes four tools over stdio so AI coding agents (Claude Code,
+ * Exposes five tools over stdio so AI coding agents (Claude Code,
  * Cursor, etc.) can discover and query the Cathode design system
  * without scraping source. The server reads `cathode.manifest.json`
  * and `tokens/tokens.json` from the repo; no network calls, no state.
@@ -15,14 +15,21 @@
  *   }
  *
  * Five tools:
- *   - cathode_list_components()        → name + summary for every component
- *   - cathode_get_component(name)      → full spec (props, a11y, examples, …)
- *   - cathode_get_tokens(theme?)       → resolved color set + type/spacing/etc
- *   - cathode_search(query)            → substring match across names+summaries
- *   - cathode_suggest_component(intent)→ ranked list of primitives matching a
- *                                        free-form "what should I use for X?"
- *                                        question, leveraging each component's
- *                                        `whenToUse` + `vs` fields
+ *   - cathode_list_components({framework?})         → name + summary + adapter import per component
+ *   - cathode_get_component({name, framework?})     → full spec for the target framework
+ *   - cathode_get_tokens({theme?})                  → resolved color set + type/spacing/etc
+ *   - cathode_search({query, framework?})           → substring match across names+summaries
+ *   - cathode_suggest_component({intent, framework?}) → ranked list of primitives matching a
+ *                                                      free-form "what should I use for X?"
+ *                                                      question, leveraging each component's
+ *                                                      `whenToUse` + `vs` fields
+ *
+ * `framework` defaults to `"react"`. Valid values come from the
+ * manifest's top-level `adapters` array; current ships include only
+ * `"react"`. Phase 4 adds `"vue" | "svelte" | "solid"`; Phase 5 adds
+ * `"compose"`. Old clients that don't pass `framework` see the same
+ * output as 0.3.x — the flat `import` + `examples` on each component
+ * are a React backwards-compat mirror.
  */
 
 import { readFileSync } from 'node:fs';
@@ -67,26 +74,76 @@ function loadTokens(): any {
 }
 
 const server = new Server(
-  { name: 'cathode-ui', version: '0.1.0' },
+  { name: 'cathode-ui', version: '0.4.0' },
   { capabilities: { tools: {} } }
 );
+
+/** Default adapter when the caller doesn't specify a `framework`. */
+const DEFAULT_FRAMEWORK = 'react';
+
+/**
+ * Resolve the adapter view for a component given the requested
+ * framework. Returns `{ import, examples }` from `component.adapters[framework]`
+ * if present, else from the flat `component.import` + `component.examples`
+ * (the React backwards-compat mirror). If the framework is listed in
+ * the manifest's top-level `adapters` but this specific component
+ * doesn't have an entry, still fall through to the flat fields — some
+ * adapters may document N-1 components.
+ */
+function resolveAdapter(component: any, framework: string) {
+  const adapter = component?.adapters?.[framework];
+  if (adapter && adapter.import && adapter.examples) {
+    return { import: adapter.import, examples: adapter.examples };
+  }
+  return {
+    import: component.import,
+    examples: component.examples,
+    fallbackFrom: framework === DEFAULT_FRAMEWORK ? undefined : 'react',
+  };
+}
+
+/** Normalize + validate the `framework` arg. Returns the default and a
+ *  warning note if the requested framework isn't shipped in this
+ *  manifest — the caller can surface it in the response. */
+function resolveFramework(manifest: any, raw: unknown): { framework: string; warning?: string } {
+  const requested = typeof raw === 'string' && raw.length > 0 ? raw.toLowerCase() : DEFAULT_FRAMEWORK;
+  const supported: string[] = Array.isArray(manifest.adapters) ? manifest.adapters : [DEFAULT_FRAMEWORK];
+  if (!supported.includes(requested)) {
+    return {
+      framework: DEFAULT_FRAMEWORK,
+      warning: `Framework "${requested}" is not shipped in this manifest (supported: ${supported.join(', ')}). Falling back to "${DEFAULT_FRAMEWORK}".`,
+    };
+  }
+  return { framework: requested };
+}
+
+const FRAMEWORK_PROP = {
+  type: 'string' as const,
+  description:
+    'Target framework adapter ("react" | "vue" | "svelte" | "solid" | "compose"). Determines which `import` and `examples` shape the response uses. Defaults to "react". If the manifest doesn\'t ship the requested adapter, the server falls back to the React adapter and includes a warning.',
+};
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: [
     {
       name: 'cathode_list_components',
       description:
-        'Returns every Cathode UI component with a one-line summary. Use this to discover what primitives exist before composing UI.',
-      inputSchema: { type: 'object', properties: {}, additionalProperties: false },
+        'Returns every Cathode UI component with a one-line summary and its framework-specific import line. Use this to discover what primitives exist before composing UI.',
+      inputSchema: {
+        type: 'object',
+        properties: { framework: FRAMEWORK_PROP },
+        additionalProperties: false,
+      },
     },
     {
       name: 'cathode_get_component',
       description:
-        'Returns the full spec for a named component: props, types, motion states, a11y notes, and usage examples. Call after cathode_list_components.',
+        'Returns the full spec for a named component — props, motion states, a11y notes, and framework-specific import + examples. Call after cathode_list_components.',
       inputSchema: {
         type: 'object',
         properties: {
-          name: { type: 'string', description: 'Component name (case-sensitive, e.g. "Pill", "TerminalFrame").' },
+          name:      { type: 'string', description: 'Component name (case-sensitive, e.g. "Pill", "TerminalFrame").' },
+          framework: FRAMEWORK_PROP,
         },
         required: ['name'],
       },
@@ -94,7 +151,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: 'cathode_get_tokens',
       description:
-        'Returns the resolved color set for a theme plus the theme-independent type/spacing/size/motion/sound/haptic tokens.',
+        'Returns the resolved color set for a theme plus the theme-independent type/spacing/size/motion/sound/haptic tokens. Framework-independent — tokens are the same across every adapter.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -109,7 +166,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       inputSchema: {
         type: 'object',
         properties: {
-          query: { type: 'string', description: 'Free-text query, e.g. "level meter" or "notification".' },
+          query:     { type: 'string', description: 'Free-text query, e.g. "level meter" or "notification".' },
+          framework: FRAMEWORK_PROP,
         },
         required: ['query'],
       },
@@ -121,8 +179,9 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       inputSchema: {
         type: 'object',
         properties: {
-          intent: { type: 'string', description: 'One-sentence description of what the UI needs to accomplish.' },
-          limit:  { type: 'number', description: 'Max number of suggestions to return. Default 5.' },
+          intent:    { type: 'string', description: 'One-sentence description of what the UI needs to accomplish.' },
+          limit:     { type: 'number', description: 'Max number of suggestions to return. Default 5.' },
+          framework: FRAMEWORK_PROP,
         },
         required: ['intent'],
       },
@@ -138,11 +197,18 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
     switch (name) {
       case 'cathode_list_components': {
         const manifest = loadManifest();
-        const items = manifest.components.map((c: any) => ({
-          name: c.name,
-          summary: c.summary,
-        }));
-        return { content: [{ type: 'text', text: JSON.stringify(items, null, 2) }] };
+        const { framework, warning } = resolveFramework(manifest, args.framework);
+        const items = manifest.components.map((c: any) => {
+          const a = resolveAdapter(c, framework);
+          return {
+            name: c.name,
+            summary: c.summary,
+            import: a.import,
+          };
+        });
+        const payload: Record<string, unknown> = { framework, components: items };
+        if (warning) payload.warning = warning;
+        return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
       }
 
       case 'cathode_get_component': {
@@ -155,7 +221,21 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
             content: [{ type: 'text', text: `No component named "${target}". Call cathode_list_components for the full list.` }],
           };
         }
-        return { content: [{ type: 'text', text: JSON.stringify(match, null, 2) }] };
+        const { framework, warning } = resolveFramework(manifest, args.framework);
+        const a = resolveAdapter(match, framework);
+        // Shape the response so `import` + `examples` reflect the
+        // requested framework. Keep every framework-agnostic field
+        // (props, whenToUse, vs, a11y, feedback, motionStates) intact.
+        const { adapters: _a, import: _i, examples: _e, ...agnostic } = match;
+        const payload: Record<string, unknown> = {
+          framework,
+          component: { ...agnostic, import: a.import, examples: a.examples },
+        };
+        if (a.fallbackFrom) {
+          payload.note = `Component "${match.name}" doesn't define an adapter for "${framework}"; returning the "${a.fallbackFrom}" adapter instead.`;
+        }
+        if (warning) payload.warning = warning;
+        return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
       }
 
       case 'cathode_get_tokens': {
@@ -178,20 +258,19 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
       case 'cathode_search': {
         const manifest = loadManifest();
         const q = String(args.query ?? '').toLowerCase();
+        const { framework, warning } = resolveFramework(manifest, args.framework);
         // Cheap substring match across name + summary. The corpus is
         // small enough (<50 components) that real fuzzy matching is
         // overkill; substring covers 95% of the intent.
         const hits = manifest.components
+          .filter((c: any) => (c.name + ' ' + c.summary).toLowerCase().includes(q))
           .map((c: any) => {
-            const hay = (c.name + ' ' + c.summary).toLowerCase();
-            const score = hay.includes(q) ? 1 : 0;
-            return { ...c, __score: score };
-          })
-          .filter((c: any) => c.__score > 0)
-          .map((c: any) => ({ name: c.name, summary: c.summary }));
-        return {
-          content: [{ type: 'text', text: JSON.stringify({ query: q, hits }, null, 2) }],
-        };
+            const a = resolveAdapter(c, framework);
+            return { name: c.name, summary: c.summary, import: a.import };
+          });
+        const payload: Record<string, unknown> = { framework, query: q, hits };
+        if (warning) payload.warning = warning;
+        return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
       }
 
       case 'cathode_suggest_component': {
@@ -273,32 +352,37 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
           return { component: c, score, matchedTokens };
         });
 
+        const { framework, warning } = resolveFramework(manifest, args.framework);
         const hits = scored
           .filter((s: any) => s.score > 0)
           .sort((a: any, b: any) => b.score - a.score)
           .slice(0, limit)
-          .map((s: any) => ({
-            name: s.component.name,
-            score: s.score,
-            matchedTokens: s.matchedTokens,
-            whenToUse: s.component.whenToUse,
-            summary: s.component.summary,
-            import: s.component.import,
-            // Include vs entries so the agent sees the disambiguation
-            // context without a follow-up cathode_get_component call.
-            vs: s.component.vs ?? [],
-          }));
+          .map((s: any) => {
+            const a = resolveAdapter(s.component, framework);
+            return {
+              name: s.component.name,
+              score: s.score,
+              matchedTokens: s.matchedTokens,
+              whenToUse: s.component.whenToUse,
+              summary: s.component.summary,
+              import: a.import,
+              // Include vs entries so the agent sees the disambiguation
+              // context without a follow-up cathode_get_component call.
+              vs: s.component.vs ?? [],
+            };
+          });
 
-        return {
-          content: [{ type: 'text', text: JSON.stringify({
-            intent,
-            intentTokens,
-            suggestions: hits,
-            note: hits.length === 0
-              ? 'No component matched any intent token. Call cathode_list_components to browse the full set.'
-              : 'Results ranked by keyword overlap against name/summary/whenToUse/vs. Check each `vs` entry to disambiguate near matches.',
-          }, null, 2) }],
+        const payload: Record<string, unknown> = {
+          framework,
+          intent,
+          intentTokens,
+          suggestions: hits,
+          note: hits.length === 0
+            ? 'No component matched any intent token. Call cathode_list_components to browse the full set.'
+            : 'Results ranked by keyword overlap against name/summary/whenToUse/vs. Check each `vs` entry to disambiguate near matches.',
         };
+        if (warning) payload.warning = warning;
+        return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
       }
 
       default:

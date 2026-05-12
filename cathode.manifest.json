@@ -9,6 +9,9 @@
     "dark"
   ],
   "themeSelection": "CSS `prefers-color-scheme`, overridable via <html data-theme='dark|light'> or <CathodeProvider theme='dark|light'>.",
+  "adapters": [
+    "react"
+  ],
   "imports": {
     "tokens": "import '@cathode-ui/react/tokens.css';",
     "fonts": "import '@cathode-ui/react/fonts.css';",
@@ -71,7 +74,22 @@
           "component": "Card",
           "picker": "TerminalFrame when the section needs a visible name; Card when content speaks for itself."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { TerminalFrame } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "titled",
+              "snippet": "<TerminalFrame title=\"PEERS\">{/* children */}</TerminalFrame>"
+            },
+            {
+              "name": "accented",
+              "snippet": "<TerminalFrame title=\"ERROR\" accent=\"tx\">…</TerminalFrame>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Card",
@@ -140,7 +158,22 @@
           "component": "StatusTile",
           "picker": "Card for freeform content; StatusTile for the standard icon + title + subtitle pattern."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Card } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "info",
+              "snippet": "<Card accent=\"info\" surface=\"elevated\"><DotLeader label=\"LAT\" value=\"42 MS\" /></Card>"
+            },
+            {
+              "name": "clickable",
+              "snippet": "<Card onClick={open} aria-label=\"Show details\">…</Card>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "PixelBar",
@@ -199,7 +232,18 @@
           "component": "ActivityBar",
           "picker": "PixelBar for a known level 0–1; ActivityBar for pseudo-random \"something is happening\" animation."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { PixelBar } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "vu",
+              "snippet": "<PixelBar level={0.6} cells={24} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "PulsingDot",
@@ -246,7 +290,18 @@
           "component": "Badge",
           "picker": "PulsingDot for live animated state; Badge for static labels (NEW / BETA)."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { PulsingDot } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "default",
+              "snippet": "<PulsingDot color=\"var(--cathode-color-ok)\" />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "DotLeader",
@@ -295,7 +350,22 @@
           "component": "Table",
           "picker": "DotLeader for 1–8 rows of key/value pairs; Table for multi-column tabular data."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { DotLeader } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "plain",
+              "snippet": "<DotLeader label=\"LATENCY\" value=\"42 MS\" />"
+            },
+            {
+              "name": "error",
+              "snippet": "<DotLeader label=\"STATUS\" value=\"DOWN\" valueColor=\"var(--cathode-color-tx)\" />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Pill",
@@ -382,7 +452,22 @@
           "component": "Chips",
           "picker": "Pill for nav; Chips for a scrolling row of preset phrases inserted once then cleared."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Pill } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "nav-active",
+              "snippet": "<Pill title=\"HOME\" active accent=\"amber\" />"
+            },
+            {
+              "name": "with-icon",
+              "snippet": "<Pill title=\"SAVE\" icon={<IconCheck weight=\"bold\" />} onClick={save} accent=\"success\" />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Button",
@@ -462,7 +547,22 @@
           "component": "Menu",
           "picker": "Single Button for one action; Menu when the button reveals a list of actions."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Button } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "primary",
+              "snippet": "<Button variant=\"primary\" onClick={save}>SAVE</Button>"
+            },
+            {
+              "name": "ai",
+              "snippet": "<Button ai={{ action: \"explain\", context: data }} onActionResult={setExplanation}>EXPLAIN</Button>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "TextField",
@@ -537,7 +637,22 @@
           "component": "SearchBar",
           "picker": "TextField for a free-form value; SearchBar when you want a results dropdown under the input."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { TextField } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<TextField value={v} onChange={setV} placeholder=\"TYPE HERE\" />"
+            },
+            {
+              "name": "ai-suggest",
+              "snippet": "<TextField value={v} onChange={setV} ai={{ suggest: true }} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "StatusTile",
@@ -610,7 +725,22 @@
           "component": "Pill",
           "picker": "StatusTile is a chunky tile in a grid; Pill is a compact inline button."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { StatusTile } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "display",
+              "snippet": "<StatusTile title=\"STATUS\" subtitle=\"HEALTHY\" icon={<IconCheck weight=\"bold\" />} active accent=\"success\" />"
+            },
+            {
+              "name": "button",
+              "snippet": "<StatusTile title=\"ACTION\" subtitle=\"TAP TO RUN\" icon={<IconSparkle />} onClick={handler} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "ActivityBar",
@@ -672,7 +802,18 @@
           "component": "Loader",
           "picker": "ActivityBar is part of a UI readout; Loader is a standalone \"please wait\" indicator."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { ActivityBar } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "tx",
+              "snippet": "<ActivityBar intensity={0.6} seed={tick} cells={24} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "HazardStripes",
@@ -730,7 +871,18 @@
           "component": "Button variant=danger",
           "picker": "Button danger for standard destructive buttons; HazardStripes adds the extra visual weight for irreversible / armed states."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { HazardStripes } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "caution",
+              "snippet": "<HazardStripes><Button variant=\"danger\">ARM</Button></HazardStripes>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Toggle",
@@ -791,7 +943,18 @@
           "component": "Checkbox",
           "picker": "Toggle for immediate settings; Checkbox for form values in a list (multi-select, indeterminate)."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Toggle } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Toggle value={on} onChange={setOn} label=\"ENABLED\" />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Counter",
@@ -871,7 +1034,18 @@
           "component": "Select",
           "picker": "Counter for a range; Select for a finite enum."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Counter } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "wpm",
+              "snippet": "<Counter value={wpm} onChange={setWpm} min={5} max={40} label=\"WPM\" />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Chips",
@@ -925,7 +1099,22 @@
           "component": "Tag",
           "picker": "Chips are tappable actions; Tag is a display-only label (optionally removable)."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Chips } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "flat",
+              "snippet": "<Chips groups={[{ label: \"SOS\" }, { label: \"HELP\" }]} onSelect={insert} />"
+            },
+            {
+              "name": "grouped",
+              "snippet": "<Chips groups={[[{label:\"SOS\"}], [{label:\"OK\"}, {label:\"YES\"}]]} onSelect={insert} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "SearchBar",
@@ -998,7 +1187,22 @@
           "component": "TextField",
           "picker": "SearchBar when you need a results dropdown; TextField for free text with no suggestions."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { SearchBar } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "plain",
+              "snippet": "<SearchBar items={items} onSelect={pick} />"
+            },
+            {
+              "name": "semantic",
+              "snippet": "<SearchBar items={items} onSelect={pick} ai={{ semantic: true }} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Dialog",
@@ -1076,7 +1280,18 @@
           "component": "Popover",
           "picker": "Dialog is modal and portaled; Popover is anchored and non-modal."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Dialog } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "confirm",
+              "snippet": "<Dialog open={show} onClose={close} title=\"CONFIRM\" accent=\"danger\">…</Dialog>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Chat",
@@ -1139,7 +1354,18 @@
           "component": "TextField",
           "picker": "Chat for conversational back-and-forth; TextField for a single AI-suggested completion."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Chat } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Chat systemPrompt=\"You are terse.\" />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Checkbox",
@@ -1215,7 +1441,22 @@
           "component": "RadioGroup",
           "picker": "Checkbox for multi-select (any can be on); RadioGroup for single-select (exactly one)."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Checkbox } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Checkbox value={on} onChange={setOn} label=\"NOTIFY ME\" />"
+            },
+            {
+              "name": "indeterminate",
+              "snippet": "<Checkbox value={partial} onChange={selectAll} indeterminate label=\"ALL\" />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "RadioGroup",
@@ -1300,7 +1541,22 @@
           "component": "Tabs",
           "picker": "RadioGroup for form values you submit; Tabs for switching which view is shown."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { RadioGroup } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "modes",
+              "snippet": "<RadioGroup value={mode} onChange={setMode} options={[{value:\"a\",label:\"Alpha\"},{value:\"b\",label:\"Beta\"}]} aria-label=\"Mode\" />"
+            },
+            {
+              "name": "stacked",
+              "snippet": "<RadioGroup value={v} onChange={setV} options={opts} orientation=\"vertical\" />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Select",
@@ -1365,7 +1621,22 @@
           "component": "SearchBar",
           "picker": "Select for finite enums; SearchBar for fuzzy matching over an open set."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Select } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "modes",
+              "snippet": "<Select value={mode} onChange={setMode} options={[{value:\"dark\",label:\"Dark\"},{value:\"light\",label:\"Light\"}]} aria-label=\"Theme\" />"
+            },
+            {
+              "name": "placeholder",
+              "snippet": "<Select value={v} onChange={setV} options={opts} placeholder=\"CHOOSE…\" />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "TextArea",
@@ -1446,7 +1717,22 @@
           "component": "TextField",
           "picker": "TextArea for multi-line; TextField for single-line."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { TextArea } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<TextArea value={notes} onChange={setNotes} placeholder=\"ADD NOTES…\" />"
+            },
+            {
+              "name": "counted",
+              "snippet": "<TextArea value={bio} onChange={setBio} maxLength={160} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "FormField",
@@ -1510,7 +1796,22 @@
           "component": "Toast",
           "picker": "FormField error for inline validation beside the input; Toast for out-of-band global notices."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { FormField } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<FormField label=\"CALLSIGN\" hint=\"4 characters.\"><TextField value={c} onChange={setC} /></FormField>"
+            },
+            {
+              "name": "error",
+              "snippet": "<FormField label=\"EMAIL\" error=\"Invalid address.\"><TextField value={e} onChange={setE} /></FormField>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Badge",
@@ -1570,7 +1871,22 @@
           "component": "PulsingDot",
           "picker": "Badge for static status text; PulsingDot for live animated state dot."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Badge } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "new",
+              "snippet": "<Badge kind=\"success\">NEW</Badge>"
+            },
+            {
+              "name": "outline",
+              "snippet": "<Badge kind=\"warning\" variant=\"outline\">BETA</Badge>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Tag",
@@ -1633,7 +1949,22 @@
           "component": "Chips",
           "picker": "Tag represents a classification; Chips is an interactive row of preset phrases."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Tag } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "filter",
+              "snippet": "<Tag accent=\"info\">ENGINEERING</Tag>"
+            },
+            {
+              "name": "removable",
+              "snippet": "<Tag accent=\"amber\" onRemove={() => drop(\"p1\")}>P1</Tag>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Avatar",
@@ -1707,7 +2038,22 @@
           "component": "StatusTile",
           "picker": "Avatar represents a person; StatusTile represents a named system or app surface."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Avatar } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "initials",
+              "snippet": "<Avatar name=\"Madhan Raj\" accent=\"teal\" />"
+            },
+            {
+              "name": "status",
+              "snippet": "<Avatar src=\"/u.jpg\" name=\"Madhan\" status=\"online\" size=\"lg\" />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Kbd",
@@ -1758,7 +2104,22 @@
           "component": "CodeBlock",
           "picker": "Kbd for keyboard keys; CodeBlock for code."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Kbd } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "pair",
+              "snippet": "<Kbd keys=\"Ctrl+K\" />"
+            },
+            {
+              "name": "array",
+              "snippet": "<Kbd keys={[\"Shift\",\"+\",\"Tab\"]} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "CodeBlock",
@@ -1817,7 +2178,18 @@
           "component": "inline <code>",
           "picker": "CodeBlock for multi-line; inline `<code>` for single terms in prose."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { CodeBlock } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "ts",
+              "snippet": "<CodeBlock language=\"ts\" code={\"const x = 1;\"} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Table",
@@ -1903,7 +2275,22 @@
           "component": "DotLeader",
           "picker": "Table for multi-column data; DotLeader for a handful of key/value rows."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Table } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Table columns={cols} rows={rows} />"
+            },
+            {
+              "name": "sortable",
+              "snippet": "<Table columns={cols} rows={sortedRows} sortBy=\"name\" sortDir=\"asc\" onSortChange={handleSort} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Tabs",
@@ -1966,7 +2353,18 @@
           "component": "Chips",
           "picker": "Tabs for persistent view state; Chips for one-shot preset phrases."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Tabs } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "views",
+              "snippet": "<Tabs value={v} onChange={setV} items={[{value:\"a\",label:\"Overview\"},{value:\"b\",label:\"Logs\"}]} aria-label=\"Views\" />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Breadcrumbs",
@@ -2008,7 +2406,18 @@
           "component": "Tabs",
           "picker": "Breadcrumbs shows *where you are* in a hierarchy; Tabs switches between *peer* views."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Breadcrumbs } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "path",
+              "snippet": "<Breadcrumbs items={[{label:\"Home\",href:\"/\"},{label:\"Docs\",href:\"/docs\"},{label:\"Tabs\"}]} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Menu",
@@ -2060,7 +2469,18 @@
           "component": "Popover",
           "picker": "Menu for a canonical list of menu items; Popover for arbitrary panel content."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Menu } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "actions",
+              "snippet": "<Menu trigger={<Button>MORE</Button>} items={[{label:\"Edit\",onSelect:doEdit,shortcut:\"E\"},{label:\"Delete\",kind:\"danger\",onSelect:doDelete}]} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Pagination",
@@ -2109,7 +2529,18 @@
           "component": "Table with scroll",
           "picker": "Pagination for discrete pages; unpaginated scroll when the list is short or infinite-scroll is natural."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Pagination } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Pagination page={p} totalPages={12} onChange={setP} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Popover",
@@ -2182,7 +2613,18 @@
           "component": "Dialog",
           "picker": "Popover is anchored + non-modal; Dialog is centered + modal."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Popover } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "info",
+              "snippet": "<Popover trigger={<Button>DETAILS</Button>}><p>Some info</p></Popover>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Tooltip",
@@ -2237,7 +2679,18 @@
           "component": "Popover",
           "picker": "Tooltip for text-only hints on hover; Popover for rich click-triggered panels."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Tooltip } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "shortcut",
+              "snippet": "<Tooltip label=\"Save — Cmd+S\"><Button>SAVE</Button></Tooltip>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Drawer",
@@ -2315,7 +2768,18 @@
           "component": "Popover",
           "picker": "Drawer for full-height edge panels; Popover for small anchored floaters."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Drawer } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "filters",
+              "snippet": "<Drawer open={show} onClose={close} title=\"FILTERS\" side=\"right\">...</Drawer>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "ProgressBar",
@@ -2381,7 +2845,22 @@
           "component": "Loader",
           "picker": "ProgressBar when you know the %; Loader when duration is unknown."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { ProgressBar } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "value",
+              "snippet": "<ProgressBar value={0.42} showValue />"
+            },
+            {
+              "name": "indeterminate",
+              "snippet": "<ProgressBar />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Loader",
@@ -2430,7 +2909,18 @@
           "component": "Skeleton",
           "picker": "Loader in-place of a button/readout while it waits; Skeleton in-place of content layout before it arrives."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Loader } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "loading",
+              "snippet": "<Loader /> <span>CONNECTING…</span>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Skeleton",
@@ -2483,7 +2973,22 @@
           "component": "Loader",
           "picker": "Skeleton mirrors the eventual layout; Loader is a small spinner-style indicator."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Skeleton } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "text",
+              "snippet": "<Skeleton variant=\"text\" width={180} />"
+            },
+            {
+              "name": "block",
+              "snippet": "<Skeleton width=\"100%\" height={120} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "SignalBars",
@@ -2548,7 +3053,18 @@
           "component": "ProgressBar",
           "picker": "SignalBars for a discrete 0–5 level; ProgressBar for continuous %."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { SignalBars } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "strength",
+              "snippet": "<SignalBars level={4} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "ScanLine",
@@ -2605,7 +3121,18 @@
           "component": "HazardStripes",
           "picker": "ScanLine for CRT/retro styling; HazardStripes for \"caution/armed\" overlay on destructive zones."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { ScanLine } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "overlay",
+              "snippet": "<ScanLine><TerminalFrame title=\"CAM\">…</TerminalFrame></ScanLine>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "TypewriterText",
@@ -2680,7 +3207,18 @@
           "component": "Chat streaming",
           "picker": "TypewriterText for static pre-known text; Chat's streaming handles real AI-generated tokens."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { TypewriterText } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "boot",
+              "snippet": "<TypewriterText text=\"SYSTEM INITIALIZED.\" speed={30} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Countdown",
@@ -2733,7 +3271,18 @@
           "component": "Counter",
           "picker": "Countdown auto-ticks toward a target Date; Counter is a manual numeric rocker."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Countdown } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "launch",
+              "snippet": "<Countdown target={launchAt} prefix=\"T-\" onComplete={fire} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Stack",
@@ -2820,7 +3369,22 @@
           "component": "Card",
           "picker": "Stack is structural (no chrome); Card is visual (border + optional fill)."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Stack } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "horizontal",
+              "snippet": "<Stack direction=\"row\" gap={8} align=\"center\"><Pill title=\"A\" /><Pill title=\"B\" /></Stack>"
+            },
+            {
+              "name": "vertical",
+              "snippet": "<Stack gap={12}><DotLeader label=\"LAT\" value=\"42 MS\" /><DotLeader label=\"LOSS\" value=\"0%\" /></Stack>"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Accordion",
@@ -2888,7 +3452,22 @@
           "component": "Tabs",
           "picker": "Accordion shows multiple sections simultaneously (or none); Tabs shows exactly one at a time."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Accordion } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Accordion items={[{id:\"a\",title:\"DETAILS\",content:<p>hello</p>}]} />"
+            },
+            {
+              "name": "exclusive",
+              "snippet": "<Accordion items={items} allowMultiple={false} defaultExpandedIds={[\"a\"]} />"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Toast",
@@ -2942,7 +3521,18 @@
           "component": "FormField error",
           "picker": "Toast for global notices; FormField `error` for inline validation."
         }
-      ]
+      ],
+      "adapters": {
+        "react": {
+          "import": "import { Toast } from '@cathode-ui/react';",
+          "examples": [
+            {
+              "name": "error",
+              "snippet": "<Toast visible={hasError} kind=\"error\">CONNECTION LOST</Toast>"
+            }
+          ]
+        }
+      }
     }
   ]
 }

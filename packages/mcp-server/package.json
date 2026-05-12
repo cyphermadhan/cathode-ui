@@ -1,6 +1,6 @@
 {
   "name": "@cathode-ui/mcp",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Model Context Protocol server for Cathode UI. Lets AI coding agents (Claude Code, Cursor, Copilot) discover and query the 45-primitive Cathode design system without scraping source. Exposes cathode_list_components, cathode_get_component, cathode_get_tokens, cathode_search, cathode_suggest_component.",
   "type": "module",
   "bin": {

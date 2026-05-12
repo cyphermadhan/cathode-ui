@@ -14,11 +14,14 @@ Run `git log --oneline` in the repo for the exact commit history.
 - **AI-friendly**: machine-readable `cathode.manifest.json` + Model Context Protocol server at `@cathode-ui/mcp`.
 - **Docs site**: Astro, 51 pages, live React islands for interactive demos, global theme/motion/haptic/sound controls.
 - **Figma library**: 8 pages, 45 component sets, 210 components/variants at `figma.com/design/yudyQFCPwX1FSLcXBXuVvY`. All tokens bound to Figma Variables with Dark + Light modes.
-- **a11y**: 53/53 docs pages pass `@axe-core/playwright` cleanly (WCAG 2.0/2.1 A+AA).
+- **a11y**: 54/54 docs pages pass `@axe-core/playwright` cleanly (WCAG 2.0/2.1 A+AA).
 - **GitHub**: pushed to `github.com/cyphermadhan/cathode-ui`, default branch `main`.
 - **Agent-facing docs**: `llms.txt` (per llmstxt.org convention) + `CATHODE.md` (long-form onboarding) at repo root, both generated from the manifest. Five MCP tools including `cathode_suggest_component(intent)` for natural-language component selection. Manifest has `whenToUse` + `vs` disambiguation per component, validated against a JSON Schema.
+- **npm published**: `@cathode-ui/react@0.4.0` + `@cathode-ui/mcp@0.4.0` live on the public registry.
+- **Next.js / App Router compatible** (Phase 2.5). Every JS entry ships a `"use client"` directive so Cathode primitives import cleanly into Server Components with no consumer-side wrapping. Verified end-to-end against `next@16` App Router.
+- **Multi-framework manifest schema** (Phase 4a). Each component has an `adapters.<framework>` block (currently only `react`); the flat `import` + `examples` fields mirror `adapters.react` for backwards compat. MCP tools take an optional `framework` arg (default `"react"`) and fall back with a warning when an adapter isn't shipped — lays the groundwork for Vue / Svelte / Solid / Compose.
 
-Not yet shipped: npm publish, Swift package.
+Not yet shipped: Swift package (Phase 3), Vue / Svelte / Solid (Phase 4b+), Jetpack Compose (Phase 5).
 
 ---
 
@@ -303,14 +306,24 @@ Cathode is designed to be read by AI coding agents first. Agents can discover, d
 Planned. `scripts/gen-swift.js` will emit `Sources/Cathode/Tokens.swift`
 from the same `tokens.json`. Components port to SwiftUI matching the
 React API names. iOS-native haptics (`UIImpactFeedbackGenerator`) and
-sound (`AVAudioEngine`) replace the web shims.
+sound (`AVAudioEngine`) replace the web shims. Adds `adapters.swift`
+(or `swiftui`) to every component's adapter block.
 
-### Phase 4: other frameworks
-React Native, Vue, Svelte wrappers — architecture supports it (tokens
-are framework-agnostic) but deferred.
+### Phase 4b–d: other web frameworks
+Vue 3 → Svelte 5 → Solid. Each ships a sibling package
+(`@cathode-ui/vue` etc.) and populates its own `adapters.<name>` block
+per component. Manifest schema + MCP already support this (Phase 4a).
+
+### Phase 5: Jetpack Compose (Android native)
+Kotlin + Compose counterpart of SwiftUI. `scripts/gen-kotlin.js`
+generates `Tokens.kt`. `HapticFeedback` + `SoundPool` replace the web
+shims. Adds `adapters.compose` to every component.
+
+### Phase 6: React Native (deferred)
+Non-trivial: no CSS variables, separate `StyleSheet` shim, Reanimated
+for motion, Expo Haptics + AV. Gated on concrete demand.
 
 ### Housekeeping
-- **npm publish pending.** `@cathode-ui/react` + `@cathode-ui/mcp` install via workspace path only. Need to register the `@cathode-ui` scope (or fall back to flat names), wire release scripts, cut 0.3.0.
 - No Storybook. The `dev.tsx` preview + docs site cover the same ground without the additional dependency weight.
 - No visual regression tests (Chromatic / Playwright) beyond axe-core a11y.
 - MCP server uses substring search for `cathode_search`; a vector-embedding mode would be a nice upgrade but the corpus is <50 components, so cost outweighs benefit right now.

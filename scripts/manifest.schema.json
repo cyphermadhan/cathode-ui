@@ -4,7 +4,7 @@
   "title": "Cathode UI manifest",
   "description": "Machine-readable registry of every Cathode primitive. Consumed by AI coding agents + the @cathode-ui/mcp server. Regenerate via `npm run gen:manifest` after component changes.",
   "type": "object",
-  "required": ["name", "version", "description", "themes", "components"],
+  "required": ["name", "version", "description", "themes", "components", "adapters"],
   "properties": {
     "$schema":         { "type": "string" },
     "name":            { "type": "string" },
@@ -13,6 +13,13 @@
     "fontStack":       { "type": "string" },
     "themes":          { "type": "array", "items": { "enum": ["light", "dark"] } },
     "themeSelection":  { "type": "string" },
+    "adapters": {
+      "type": "array",
+      "description": "Framework adapters this manifest ships — matches the keys under each component's `adapters` field. 'react' is the default; future phases add 'vue', 'svelte', 'solid', 'compose', etc.",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
     "imports": {
       "type": "object",
       "description": "Copy-pastable import lines for common setup tasks.",
@@ -33,7 +40,7 @@
   "$defs": {
     "Component": {
       "type": "object",
-      "required": ["name", "import", "summary", "whenToUse", "vs", "props", "motionStates", "a11y", "feedback", "examples"],
+      "required": ["name", "import", "summary", "whenToUse", "vs", "props", "motionStates", "a11y", "feedback", "examples", "adapters"],
       "additionalProperties": false,
       "properties": {
         "name": {
@@ -43,7 +50,20 @@
         },
         "import": {
           "type": "string",
-          "description": "Single-line copy-pastable import statement."
+          "description": "Single-line copy-pastable import statement. Backwards-compatibility alias for `adapters.react.import` — older MCP clients read this flat field. New clients should prefer `adapters[framework].import`."
+        },
+        "adapters": {
+          "type": "object",
+          "description": "Framework-specific import + examples. Each key is a framework adapter ('react', 'vue', 'svelte', 'solid', 'compose', …). The top-level `import` and `examples` fields mirror `adapters.react` for backwards compat; new adapters should only be looked up through this object.",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/Adapter" },
+          "properties": {
+            "react":   { "$ref": "#/$defs/Adapter" },
+            "vue":     { "$ref": "#/$defs/Adapter" },
+            "svelte":  { "$ref": "#/$defs/Adapter" },
+            "solid":   { "$ref": "#/$defs/Adapter" },
+            "compose": { "$ref": "#/$defs/Adapter" }
+          }
         },
         "summary": {
           "type": "string",
@@ -128,6 +148,23 @@
       "properties": {
         "name":    { "type": "string" },
         "snippet": { "type": "string" }
+      }
+    },
+    "Adapter": {
+      "type": "object",
+      "required": ["import", "examples"],
+      "additionalProperties": false,
+      "properties": {
+        "import": {
+          "type": "string",
+          "description": "Framework-specific single-line import statement, e.g. `import { Button } from '@cathode-ui/vue';`."
+        },
+        "examples": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Example" },
+          "minItems": 1,
+          "description": "Framework-idiomatic usage snippets — JSX for React, SFC-style for Vue, component markup for Svelte, etc."
+        }
       }
     }
   }
