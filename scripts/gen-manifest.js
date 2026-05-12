@@ -824,34 +824,190 @@ const components = [
 // Merge the decision-guidance companion into each component entry.
 // Every component must have guidance — fail loud if one's missing so
 // new primitives don't silently ship without "when to use" help.
-// Vue adapter entries for the components `@cathode-ui/vue` ships
-// today. Phase 4b session 1 ports Button + Stack + TerminalFrame;
-// subsequent sessions add more entries here as each Vue component
-// lands. Components NOT listed here omit `adapters.vue` — the MCP
-// server's `resolveAdapter` falls back to the React adapter with a
-// `fallbackFrom: 'react'` note so agents know the Vue port is pending.
+// Vue adapter entries for every Cathode component shipped in
+// `@cathode-ui/vue`. Derived from the React examples above, transposed
+// into Vue template idioms:
+//   - JSX `onX={fn}` → Vue `@x="fn"`
+//   - controlled inputs use `v-model` where the React version used
+//     `value` + `onChange`
+//   - numeric / boolean prop shortcuts use `:` prefix
+//   - slots replace `children` — named slots (`#icon`, etc.) where
+//     React accepted a ReactNode prop
+// Any component whose Vue adapter isn't listed here falls back to the
+// React adapter in MCP responses with a `fallbackFrom: 'react'` note.
+const vueImport = (name) => `import { ${name} } from '@cathode-ui/vue';`;
 const VUE_ADAPTERS = {
-  TerminalFrame: {
-    import: "import { TerminalFrame } from '@cathode-ui/vue';",
-    examples: [
-      { name: 'titled',   snippet: '<TerminalFrame title="PEERS">\n  <!-- children -->\n</TerminalFrame>' },
-      { name: 'accented', snippet: '<TerminalFrame title="ERROR" accent="danger">…</TerminalFrame>' },
-    ],
-  },
-  Button: {
-    import: "import { Button } from '@cathode-ui/vue';",
-    examples: [
-      { name: 'primary', snippet: '<Button variant="primary" @click="save">SAVE</Button>' },
-      { name: 'danger',  snippet: '<Button variant="danger"  @click="remove">DELETE</Button>' },
-    ],
-  },
-  Stack: {
-    import: "import { Stack } from '@cathode-ui/vue';",
-    examples: [
-      { name: 'row',    snippet: '<Stack direction="row" :gap="8" align="center">\n  <Pill />\n  <Pill />\n</Stack>' },
-      { name: 'column', snippet: '<Stack :gap="16" fullWidth>\n  <FormField />\n  <FormField />\n</Stack>' },
-    ],
-  },
+  // Layout
+  TerminalFrame: { import: vueImport('TerminalFrame'), examples: [
+    { name: 'titled',   snippet: '<TerminalFrame title="PEERS">\n  <!-- children -->\n</TerminalFrame>' },
+    { name: 'accented', snippet: '<TerminalFrame title="ERROR" accent="danger">…</TerminalFrame>' },
+  ]},
+  Card: { import: vueImport('Card'), examples: [
+    { name: 'info',      snippet: '<Card accent="info" surface="elevated">\n  <DotLeader label="LAT" value="42 MS" />\n</Card>' },
+    { name: 'clickable', snippet: '<Card clickable aria-label="Show details" @click="open">…</Card>' },
+  ]},
+  Stack: { import: vueImport('Stack'), examples: [
+    { name: 'row',    snippet: '<Stack direction="row" :gap="8" align="center">\n  <Pill />\n  <Pill />\n</Stack>' },
+    { name: 'column', snippet: '<Stack :gap="16" fullWidth>\n  <FormField />\n  <FormField />\n</Stack>' },
+  ]},
+  Accordion: { import: vueImport('Accordion'), examples: [
+    { name: 'basic', snippet: '<Accordion\n  :items="items"\n  v-model:expandedIds="expanded"\n/>' },
+    { name: 'exclusive', snippet: '<Accordion :items="items" :allowMultiple="false" />' },
+  ]},
+  HazardStripes: { import: vueImport('HazardStripes'), examples: [
+    { name: 'subtle', snippet: '<HazardStripes :intensity="0.12">\n  <Button variant="danger">DELETE</Button>\n</HazardStripes>' },
+  ]},
+
+  // Forms
+  Button: { import: vueImport('Button'), examples: [
+    { name: 'primary', snippet: '<Button variant="primary" @click="save">SAVE</Button>' },
+    { name: 'danger',  snippet: '<Button variant="danger"  @click="remove">DELETE</Button>' },
+  ]},
+  TextField: { import: vueImport('TextField'), examples: [
+    { name: 'basic',   snippet: '<TextField v-model="name" placeholder="CALLSIGN" />' },
+    { name: 'ai',      snippet: '<TextField v-model="draft" :ai="{ suggest: true }" />' },
+  ]},
+  TextArea: { import: vueImport('TextArea'), examples: [
+    { name: 'basic',   snippet: '<TextArea v-model="notes" :rows="6" :maxLength="500" />' },
+  ]},
+  Select: { import: vueImport('Select'), examples: [
+    { name: 'basic', snippet: '<Select v-model="theme" :options="themeOptions" aria-label="Theme" />' },
+  ]},
+  Checkbox: { import: vueImport('Checkbox'), examples: [
+    { name: 'basic', snippet: '<Checkbox v-model="enabled" label="ENABLE" />' },
+    { name: 'tri',   snippet: '<Checkbox v-model="allOn" :indeterminate="someOn && !allOn" label="ALL" />' },
+  ]},
+  RadioGroup: { import: vueImport('RadioGroup'), examples: [
+    { name: 'basic', snippet: '<RadioGroup v-model="mode" :options="modeOptions" />' },
+  ]},
+  Toggle: { import: vueImport('Toggle'), examples: [
+    { name: 'basic', snippet: '<Toggle v-model="notify" label="NOTIFICATIONS" />' },
+    { name: 'armed', snippet: '<Toggle v-model="armed" accent="danger" label="I UNDERSTAND" />' },
+  ]},
+  Counter: { import: vueImport('Counter'), examples: [
+    { name: 'basic', snippet: '<Counter v-model="wpm" :min="5" :max="40" label="WPM" />' },
+  ]},
+  SearchBar: { import: vueImport('SearchBar'), examples: [
+    { name: 'plain',    snippet: '<SearchBar :items="contacts" @select="onPick" placeholder="SEARCH…" />' },
+    { name: 'semantic', snippet: '<SearchBar :items="contacts" :ai="{ semantic: true }" @select="onPick" />' },
+  ]},
+  FormField: { import: vueImport('FormField'), examples: [
+    { name: 'basic', snippet: '<FormField label="CALLSIGN" hint="4 chars, alphanumeric." required>\n  <TextField v-model="callsign" />\n</FormField>' },
+    { name: 'error', snippet: '<FormField label="CALLSIGN" error="Must be 4 characters">\n  <TextField v-model="callsign" />\n</FormField>' },
+  ]},
+  Chips: { import: vueImport('Chips'), examples: [
+    { name: 'flat',    snippet: '<Chips :groups="phrases" @select="onPick" />' },
+    { name: 'grouped', snippet: '<Chips :groups="[emergency, everyday]" @select="onPick" />' },
+  ]},
+
+  // Data
+  Badge: { import: vueImport('Badge'), examples: [
+    { name: 'solid',   snippet: '<Badge kind="info">NEW</Badge>' },
+    { name: 'outline', snippet: '<Badge kind="success" variant="outline">LIVE</Badge>' },
+  ]},
+  Tag: { import: vueImport('Tag'), examples: [
+    { name: 'basic',     snippet: '<Tag accent="info">GEODESY</Tag>' },
+    { name: 'removable', snippet: '<Tag accent="info" removable @remove="drop(\'geodesy\')">GEODESY</Tag>' },
+  ]},
+  Avatar: { import: vueImport('Avatar'), examples: [
+    { name: 'initials', snippet: '<Avatar name="K. ALICE" status="online" />' },
+    { name: 'image',    snippet: '<Avatar src="/u/kmw.jpg" alt="KMW" size="lg" />' },
+  ]},
+  Kbd: { import: vueImport('Kbd'), examples: [
+    { name: 'string',  snippet: '<Kbd keys="Ctrl+K" />' },
+    { name: 'array',   snippet: '<Kbd :keys="[\'Shift\', \'Tab\']" />' },
+  ]},
+  CodeBlock: { import: vueImport('CodeBlock'), examples: [
+    { name: 'plain',  snippet: '<CodeBlock :code="snippet" language="ts" />' },
+    { name: 'shiki',  snippet: '<CodeBlock :html="highlighted" language="ts" />' },
+  ]},
+  Table: { import: vueImport('Table'), examples: [
+    { name: 'basic', snippet: '<Table :columns="cols" :rows="rows" />' },
+    { name: 'sorted', snippet: '<Table :columns="cols" :rows="rows" :sortBy="sortBy" :sortDir="sortDir" @sortChange="onSort" />' },
+  ]},
+  StatusTile: { import: vueImport('StatusTile'), examples: [
+    { name: 'clickable', snippet: '<StatusTile title="TALK" subtitle="HOLD TO TRANSMIT" accent="info" clickable @click="startTalking">\n  <template #icon><IconBroadcast /></template>\n</StatusTile>' },
+  ]},
+  DotLeader: { import: vueImport('DotLeader'), examples: [
+    { name: 'row',     snippet: '<DotLeader label="LATENCY" value="42 MS" />' },
+    { name: 'colored', snippet: '<DotLeader label="STATE" value="HEALTHY" valueColor="var(--cathode-color-success)" />' },
+  ]},
+  Pill: { import: vueImport('Pill'), examples: [
+    { name: 'nav',    snippet: '<Pill title="LOGS" accent="info" :active="tab === \'logs\'" @click="tab = \'logs\'" />' },
+    { name: 'action', snippet: '<Pill title="REFRESH" accent="info" @click="refetch" />' },
+  ]},
+
+  // Navigation
+  Tabs: { import: vueImport('Tabs'), examples: [
+    { name: 'basic', snippet: '<Tabs v-model="view" :items="[{ value: \'overview\', label: \'OVERVIEW\' }, { value: \'logs\', label: \'LOGS\' }]" />' },
+  ]},
+  Breadcrumbs: { import: vueImport('Breadcrumbs'), examples: [
+    { name: 'basic', snippet: '<Breadcrumbs :items="[{ label: \'HOME\', href: \'/\' }, { label: \'FLEET\', href: \'/fleet\' }, { label: \'KA4X\' }]" />' },
+  ]},
+  Menu: { import: vueImport('Menu'), examples: [
+    { name: 'overflow', snippet: '<Menu :items="[{ label: \'DUPLICATE\' }, { label: \'DELETE\', kind: \'danger\' }]" @select="onAction">\n  <template #trigger><Button>⋯</Button></template>\n</Menu>' },
+  ]},
+  Pagination: { import: vueImport('Pagination'), examples: [
+    { name: 'basic', snippet: '<Pagination v-model="page" :totalPages="12" />' },
+  ]},
+
+  // Feedback
+  ProgressBar: { import: vueImport('ProgressBar'), examples: [
+    { name: 'determinate',   snippet: '<ProgressBar :value="uploadPct" showValue />' },
+    { name: 'indeterminate', snippet: '<ProgressBar />' },
+  ]},
+  Loader: { import: vueImport('Loader'), examples: [
+    { name: 'md', snippet: '<Loader size="md" aria-label="Connecting" />' },
+  ]},
+  Skeleton: { import: vueImport('Skeleton'), examples: [
+    { name: 'text',  snippet: '<Skeleton variant="text" :width="180" />' },
+    { name: 'block', snippet: '<Skeleton variant="block" :height="60" />' },
+  ]},
+  PixelBar: { import: vueImport('PixelBar'), examples: [
+    { name: 'vu', snippet: '<PixelBar :level="0.6" :cells="24" />' },
+  ]},
+  ActivityBar: { import: vueImport('ActivityBar'), examples: [
+    { name: 'transmitting', snippet: '<ActivityBar :intensity="0.55" :seed="tick" :cells="28" />' },
+  ]},
+  SignalBars: { import: vueImport('SignalBars'), examples: [
+    { name: 'basic', snippet: '<SignalBars :level="4" :bars="5" accent="success" />' },
+  ]},
+  PulsingDot: { import: vueImport('PulsingDot'), examples: [
+    { name: 'basic', snippet: '<PulsingDot color="var(--cathode-color-success)" />' },
+  ]},
+  Toast: { import: vueImport('Toast'), examples: [
+    { name: 'basic', snippet: '<Toast :visible="show" kind="success">SAVED</Toast>' },
+  ]},
+
+  // Overlays
+  Dialog: { import: vueImport('Dialog'), examples: [
+    { name: 'confirm', snippet: '<Dialog :open="open" title="DELETE ACCOUNT?" accent="danger" @close="open = false">\n  <p>No undo. Armed actions only.</p>\n</Dialog>' },
+  ]},
+  Drawer: { import: vueImport('Drawer'), examples: [
+    { name: 'right', snippet: '<Drawer :open="open" title="FILTERS" side="right" @close="open = false">\n  <!-- controls -->\n</Drawer>' },
+  ]},
+  Popover: { import: vueImport('Popover'), examples: [
+    { name: 'basic', snippet: '<Popover v-model:open="open" align="end">\n  <template #trigger><Button>…</Button></template>\n  <div>panel content</div>\n</Popover>' },
+  ]},
+  Tooltip: { import: vueImport('Tooltip'), examples: [
+    { name: 'basic', snippet: '<Tooltip label="SAVED" side="top">\n  <Badge kind="success">OK</Badge>\n</Tooltip>' },
+  ]},
+
+  // AI
+  Chat: { import: vueImport('Chat'), examples: [
+    { name: 'basic', snippet: '<Chat title="ASSISTANT" :maxHeight="360" />' },
+  ]},
+
+  // Retro
+  ScanLine: { import: vueImport('ScanLine'), examples: [
+    { name: 'basic', snippet: '<ScanLine :speed="4">\n  <TerminalFrame title="LIVE">…</TerminalFrame>\n</ScanLine>' },
+  ]},
+  TypewriterText: { import: vueImport('TypewriterText'), examples: [
+    { name: 'basic', snippet: '<TypewriterText text="BOOT SEQUENCE INITIATED" :speed="40" />' },
+  ]},
+  Countdown: { import: vueImport('Countdown'), examples: [
+    { name: 'basic', snippet: '<Countdown :target="launchTime" prefix="T-" />' },
+  ]},
 };
 
 const missing = [];

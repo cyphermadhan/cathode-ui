@@ -20,9 +20,19 @@ Run `git log --oneline` in the repo for the exact commit history.
 - **npm published**: `@cathode-ui/react@0.4.0` + `@cathode-ui/mcp@0.4.0` live on the public registry.
 - **Next.js / App Router compatible** (Phase 2.5). Every JS entry ships a `"use client"` directive so Cathode primitives import cleanly into Server Components with no consumer-side wrapping. Verified end-to-end against `next@16` App Router.
 - **Multi-framework manifest schema** (Phase 4a). Each component has an `adapters.<framework>` block (currently `react` + partial `vue`); the flat `import` + `examples` fields mirror `adapters.react` for backwards compat. MCP tools take an optional `framework` arg (default `"react"`) and fall back with a warning when an adapter isn't shipped — lays the groundwork for Svelte / Solid / Compose.
-- **Vue 3 package started** (Phase 4b, session 1). `@cathode-ui/vue` scaffolded — `CathodeProvider` + `useCathode` composable + 3 primitives (`Button`, `Stack`, `TerminalFrame`). Top-level manifest `adapters: ['react', 'vue']`; MCP serves Vue-specific imports + examples for the 3 ported components and falls back to React with a per-component `note` for the other 42. Framework adapter plumbing validated end-to-end.
+- **Vue 3 package complete** (Phase 4b). `@cathode-ui/vue@0.1.0` ships all 45 primitives in full API parity with `@cathode-ui/react`:
+  - `CathodeProvider` (theme/motion/haptic/sound/ai) + `useCathode` composable
+  - Feedback controllers (`haptic`, `sound`) + AI composables (`useAiSuggest`, `useAiChat`, `useAiAction`) + AI provider types
+  - 5 layout (TerminalFrame, Card, Stack, Accordion, HazardStripes), 11 forms (Button, TextField, TextArea, Select, Checkbox, RadioGroup, Toggle, Counter, SearchBar, FormField, Chips), 9 data (Badge, Tag, Avatar, Kbd, CodeBlock, Table, StatusTile, DotLeader, Pill), 4 nav (Tabs, Breadcrumbs, Menu, Pagination), 8 feedback (ProgressBar, Loader, Skeleton, PixelBar, ActivityBar, SignalBars, PulsingDot, Toast), 4 overlays (Dialog, Drawer, Popover, Tooltip), 1 AI (Chat), 3 retro (ScanLine, TypewriterText, Countdown)
+  - Portals via Vue `<Teleport>` — Dialog, Drawer, Menu, Popover, Tooltip escape layout contexts the same way React's `createPortal` does
+  - Form inputs auto-wire `aria-labelledby` / `aria-describedby` through a `FORM_FIELD_KEY` provide/inject token (Vue's equivalent of React's `cloneElement` aria injection)
+  - Vue Transitions replace framer-motion (Accordion, Dialog, Drawer slide-in, Toast)
+  - 75 kB gzipped JS + 47 kB gzipped CSS for the full package
+  - Interactive test suite (Vitest + happy-dom + @vue/test-utils) — 26 tests across 6 files covering v-model roundtrip on every controlled input, Dialog close paths (Escape, backdrop, ×, `modal` suppression), Menu keyboard navigation (ArrowUp/Down/Enter/Escape + click-item), Popover (trigger/outside-click/Escape close), Tooltip hover+delay, Button AI-action flow with a mock provider. All green. Suite surfaced two real bugs before publish: Dialog Escape ignored `modal`, Popover couldn't detect controlled mode because Vue auto-coerces missing boolean props to `false`. Both fixed.
+  - `/vue` docs page on the Astro site with setup (Vite + Nuxt), API deltas vs React, and AI composable examples. 55/55 a11y pages pass.
+- **MCP framework routing proven end-to-end** — the manifest now carries `adapters.vue` for all 45 components; `cathode_get_component(name, { framework: "vue" })` returns Vue imports + Vue template snippets for every primitive.
 
-Not yet shipped: Swift package (Phase 3), rest of Vue primitives + feedback/AI plumbing (Phase 4b sessions 2+), Svelte / Solid (Phase 4c–d), Jetpack Compose (Phase 5).
+Not yet shipped: `@cathode-ui/vue` npm publish (package is local/git-only at 0.1.0), Swift package (Phase 3), Svelte / Solid (Phase 4c–d), Jetpack Compose (Phase 5).
 
 ---
 

@@ -1,0 +1,209 @@
+---
+import Main from '../layouts/Main.astro';
+import { withBase } from '../lib/href';
+---
+
+<Main title="Vue · Cathode UI" description="Using Cathode UI inside a Vue 3 app — install, CathodeProvider setup, Vue vs React API deltas, SSR + Nuxt notes.">
+  <h1>VUE</h1>
+  <div class="page-lead">
+    <code>@cathode-ui/vue</code> is a full framework-mirror of
+    <code>@cathode-ui/react</code> — the same 45 primitives, same
+    tokens, same motion/haptic/sound philosophy, implemented as
+    idiomatic Vue 3 <code>&lt;script setup&gt;</code> + <code>&lt;template&gt;</code>
+    SFCs. Works with Vite, Nuxt 3, and any other Vue 3.3+ runtime.
+  </div>
+
+  <h2>Install</h2>
+  <pre><code>npm install @cathode-ui/vue</code></pre>
+  <p>Peer dep: <code>vue &gt;= 3.3</code>.</p>
+
+  <h2>Setup</h2>
+  <p>Import the CSS once at the app entry, then use <code>CathodeProvider</code> at the root of your tree.</p>
+
+  <p><strong>1. Entry file</strong> (<code>main.ts</code>):</p>
+  <pre><code>{`import { createApp } from 'vue';
+import App from './App.vue';
+
+import '@cathode-ui/vue/tokens.css';   // CSS variables + dark/light
+import '@cathode-ui/vue/fonts.css';    // JetBrains Mono (optional)
+import '@cathode-ui/vue/styles.css';   // compiled component rules
+
+createApp(App).mount('#app');`}</code></pre>
+
+  <p><strong>2. Root component</strong> (<code>App.vue</code>):</p>
+  <pre><code>{`<script setup lang="ts">
+import { ref } from 'vue';
+import {
+  CathodeProvider, TerminalFrame, Stack,
+  Button, Toggle, Counter, DotLeader, PulsingDot,
+} from '@cathode-ui/vue';
+
+const armed = ref(false);
+const wpm   = ref(12);
+</script>
+
+<template>
+  <CathodeProvider theme="dark" motion="strong">
+    <TerminalFrame title="TELEMETRY" accent="info">
+      <Stack :gap="8">
+        <Stack direction="row" :gap="8" align="center">
+          <PulsingDot color="var(--cathode-color-success)" />
+          <span>LIVE</span>
+        </Stack>
+        <DotLeader label="LATENCY" value="42 MS" />
+        <Toggle  v-model="armed" label="ARMED" accent="danger" />
+        <Counter v-model="wpm"   :min="5" :max="40" label="WPM" />
+        <Button  variant="primary" @click="onSave">SAVE</Button>
+      </Stack>
+    </TerminalFrame>
+  </CathodeProvider>
+</template>`}</code></pre>
+
+  <p>
+    <code>CathodeProvider</code> accepts <code>theme</code>
+    (<code>auto</code> / <code>dark</code> / <code>light</code>),
+    <code>motion</code> (<code>none</code> / <code>subtle</code> /
+    <code>strong</code>), <code>haptic</code> (bool), <code>sound</code>
+    (bool, default off), and <code>ai</code> (a
+    <code>CathodeAIProvider</code> instance). Every prop is optional.
+  </p>
+
+  <h2>Nuxt 3</h2>
+  <p>
+    Cathode primitives use client-only browser APIs
+    (<code>navigator.vibrate</code>, Web Audio, portals via
+    <code>&lt;Teleport&gt;</code>), so wrap Cathode trees in
+    <code>&lt;ClientOnly&gt;</code> — or render in the
+    <code>app.vue</code> after mount via <code>onMounted</code>. Import
+    the three CSS files in <code>nuxt.config.ts</code>:
+  </p>
+  <pre><code>{`// nuxt.config.ts
+export default defineNuxtConfig({
+  css: [
+    '@cathode-ui/vue/tokens.css',
+    '@cathode-ui/vue/fonts.css',
+    '@cathode-ui/vue/styles.css',
+  ],
+});`}</code></pre>
+
+  <h2>Vue vs React API deltas</h2>
+  <p>
+    Same 45 components, same prop names wherever possible — but Vue
+    idioms pull a few surfaces apart from their React twins. If you're
+    porting a Cathode-React app to Vue, these are the differences.
+  </p>
+
+  <h3>v-model replaces value + onChange</h3>
+  <p>
+    Every controlled input uses <code>v-model</code> instead of the
+    React <code>value</code> + <code>onChange</code> pair. Applies to
+    <code>TextField</code>, <code>TextArea</code>, <code>Select</code>,
+    <code>Checkbox</code>, <code>RadioGroup</code>, <code>Toggle</code>,
+    <code>Counter</code>, <code>Tabs</code>, <code>Pagination</code>,
+    <code>Accordion</code> (<code>v-model:expandedIds</code>), and
+    <code>Popover</code> (<code>v-model:open</code>).
+  </p>
+  <pre><code>{`<!-- Vue -->                     <!-- React -->
+<Toggle v-model="armed" />       <Toggle value={armed} onChange={setArmed} />
+<Counter v-model="wpm" />        <Counter value={wpm} onChange={setWpm} />`}</code></pre>
+
+  <h3>Events replace on* handler props</h3>
+  <p>
+    <code>@click</code>, <code>@select</code>, <code>@remove</code>,
+    <code>@close</code>, <code>@complete</code>,
+    <code>@sortChange</code>, <code>@rowClick</code>,
+    <code>@actionResult</code>, <code>@done</code>.
+  </p>
+
+  <h3>Slots replace ReactNode props</h3>
+  <p>
+    Where React passed a <code>ReactNode</code> via props, Vue uses
+    named or default slots.
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>React (prop)</th>
+        <th>Vue (slot)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Button</code> / <code>Pill</code> / <code>StatusTile</code></td>
+        <td><code>icon</code></td>
+        <td><code>#icon</code></td>
+      </tr>
+      <tr>
+        <td><code>Menu</code> / <code>Popover</code></td>
+        <td><code>trigger</code></td>
+        <td><code>#trigger</code></td>
+      </tr>
+      <tr>
+        <td><code>SearchBar</code></td>
+        <td><code>icon</code></td>
+        <td><code>#icon</code> + <code>showIcon</code> prop</td>
+      </tr>
+      <tr>
+        <td><code>Accordion</code></td>
+        <td><code>items[].content: ReactNode</code></td>
+        <td>default scoped slot or string <code>content</code></td>
+      </tr>
+      <tr>
+        <td><code>Table</code></td>
+        <td><code>columns[].render(row, i)</code></td>
+        <td><code>#cell-&lt;key&gt;="{'{ row, value }'}"</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>clickable prop replaces "listener present"</h3>
+  <p>
+    <code>Card</code> and <code>StatusTile</code> in React switch to
+    <code>&lt;button&gt;</code> when you pass <code>onClick</code>. Vue
+    has no prop-introspection equivalent, so both accept an explicit
+    <code>clickable</code> prop:
+  </p>
+  <pre><code>{`<Card clickable @click="open">…</Card>
+<StatusTile clickable @click="talk" title="TALK" subtitle="HOLD">
+  <template #icon><IconBroadcast/></template>
+</StatusTile>`}</code></pre>
+
+  <h3>Removable Tag</h3>
+  <pre><code>{`<!-- Vue -->                                     <!-- React -->
+<Tag removable @remove="drop">GEODESY</Tag>      <Tag onRemove={drop}>GEODESY</Tag>`}</code></pre>
+
+  <h3>AI composables replace hooks</h3>
+  <p>
+    <code>useAiSuggest</code>, <code>useAiChat</code>,
+    <code>useAiAction</code> are Vue composables that return reactive
+    refs. Pass a ref (or getter) for any reactive source.
+  </p>
+  <pre><code>{`import { ref } from 'vue';
+import { useAiSuggest, useAiChat } from '@cathode-ui/vue';
+
+const prefix = ref('');
+const { suggestion, accept } = useAiSuggest(prefix, { enabled: ref(true) });
+
+const { messages, send, streaming, cancel, reset } = useAiChat();`}</code></pre>
+
+  <h2>AI provider</h2>
+  <p>
+    Cathode stays provider-agnostic — apps supply a
+    <code>CathodeAIProvider</code> (<code>suggest</code>,
+    <code>chat</code>, <code>act</code>) via <code>CathodeProvider</code>:
+  </p>
+  <pre><code>{`import { CathodeProvider } from '@cathode-ui/vue';
+import { myAiProvider } from './my-ai';
+
+<CathodeProvider :ai="myAiProvider">
+  <App />
+</CathodeProvider>`}</code></pre>
+  <p>
+    See <a href={withBase('/ai')}>AI providers</a> for the interface
+    shape — it's identical across the React and Vue packages.
+  </p>
+
+  <hr />
+  <p>Next: <a href={withBase('/components')}>browse components</a>, or jump back to <a href={withBase('/getting-started')}>Getting Started</a>.</p>
+</Main>

@@ -41,6 +41,7 @@ const PAGES = [
   { path: '/figma',            name: 'Figma library' },
   { path: '/patterns',         name: 'Patterns' },
   { path: '/nextjs',           name: 'Next.js' },
+  { path: '/vue',              name: 'Vue' },
   ...manifest.components.map((c) => ({
     path: `/components/${c.name.toLowerCase()}`,
     name: c.name,

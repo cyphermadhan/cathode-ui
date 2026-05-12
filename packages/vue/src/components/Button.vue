@@ -1,43 +1,76 @@
 <script setup lang="ts">
 import { useCathode } from '../useCathode';
+import { haptic } from '../feedback/haptic';
+import { sound } from '../feedback/sound';
+import type { CathodeAIProvider } from '../ai/provider';
 
 /**
- * General-purpose Cathode button.
+ * General-purpose Cathode button — full API parity with
+ * @cathode-ui/react's Button.
  *
  * Variants:
- *   - `default`  — panel fill, border text (the conservative option)
+ *   - `default`  — panel fill, border text (conservative option)
  *   - `primary`  — ok-green fill, inverted text (go, submit)
  *   - `danger`   — tx-red fill, inverted text (destructive)
  *
- * NOTE: Phase 4b session 1 ships Vue Button without the haptic /
- * sound / AI-action surface that @cathode-ui/react's Button carries.
- * The feedback controllers + provider interface port in session 2,
- * at which point `ai`, `onActionResult`, and the haptic/sound cues
- * fire on click. API additions will be non-breaking — all current
- * props keep their meaning.
+ * AI action: pass `:ai="{ action: 'explain-the-chart' }"` and a
+ * provider via `<CathodeProvider :ai="..."` and the button will
+ * route the click through `provider.act(action, context)` and emit
+ * `actionResult` with the resolved string.
  *
- * The motion intensity dial is honored already via a small press-scale
- * transform, using a CSS transition (no framer-motion dep in Vue).
+ * Haptic/sound defaults: `confirm` for primary, `destructive` for
+ * danger, `click`/`tap` for default.
  */
+export interface ButtonAIConfig {
+  action: string;
+  context?: unknown;
+  provider?: CathodeAIProvider;
+}
+
 interface Props {
   variant?: 'default' | 'primary' | 'danger';
   disabled?: boolean;
+  ai?: ButtonAIConfig | null;
+  ariaLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   variant: 'default',
   disabled: false,
+  ai: null,
 });
 
 const emit = defineEmits<{
   click: [event: MouseEvent];
+  actionResult: [result: string];
 }>();
 
-const { motion: motionIntensity } = useCathode();
+const cathode = useCathode();
 
-function handleClick(event: MouseEvent) {
+async function handleClick(event: MouseEvent) {
   if (props.disabled) return;
+  const soundPattern =
+    props.variant === 'primary' ? 'confirm'
+    : props.variant === 'danger' ? 'destructive'
+    : 'click';
+  const hapticPattern =
+    props.variant === 'primary' ? 'confirm'
+    : props.variant === 'danger' ? 'destructive'
+    : 'tap';
+  if (cathode.haptic) haptic(hapticPattern);
+  if (cathode.sound)  sound(soundPattern, { enabled: true });
   emit('click', event);
+
+  if (props.ai) {
+    const provider = props.ai.provider ?? cathode.ai;
+    if (!provider) return;
+    try {
+      const result = await provider.act(props.ai.action, props.ai.context);
+      emit('actionResult', result);
+    } catch {
+      // app surfaces errors via its own toast/log; stay quiet here.
+    }
+  }
 }
 </script>
 
@@ -46,18 +79,17 @@ function handleClick(event: MouseEvent) {
     type="button"
     class="cathode-button"
     :data-variant="props.variant"
-    :data-motion="motionIntensity"
+    :data-motion="cathode.motion"
     :disabled="props.disabled"
+    :aria-label="props.ariaLabel"
     @click="handleClick"
   >
+    <slot name="icon" />
     <slot />
   </button>
 </template>
 
 <style scoped>
-/* Press scale, gated on motion intensity. strong=0.97, subtle=0.99,
- * none=1 (no movement). Mirrors the framer-motion whileTap scaling in
- * the React package. Pure CSS so Vue doesn't need motion-one/framer. */
 button[data-motion='strong']:active:not(:disabled)   { transform: scale(0.97); }
 button[data-motion='subtle']:active:not(:disabled)   { transform: scale(0.99); }
 button[data-motion='none']:active:not(:disabled)     { transform: none; }

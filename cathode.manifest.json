@@ -186,6 +186,19 @@
               "snippet": "<Card onClick={open} aria-label=\"Show details\">…</Card>"
             }
           ]
+        },
+        "vue": {
+          "import": "import { Card } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "info",
+              "snippet": "<Card accent=\"info\" surface=\"elevated\">\n  <DotLeader label=\"LAT\" value=\"42 MS\" />\n</Card>"
+            },
+            {
+              "name": "clickable",
+              "snippet": "<Card clickable aria-label=\"Show details\" @click=\"open\">…</Card>"
+            }
+          ]
         }
       }
     },
@@ -256,6 +269,15 @@
               "snippet": "<PixelBar level={0.6} cells={24} />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { PixelBar } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "vu",
+              "snippet": "<PixelBar :level=\"0.6\" :cells=\"24\" />"
+            }
+          ]
         }
       }
     },
@@ -312,6 +334,15 @@
             {
               "name": "default",
               "snippet": "<PulsingDot color=\"var(--cathode-color-ok)\" />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { PulsingDot } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<PulsingDot color=\"var(--cathode-color-success)\" />"
             }
           ]
         }
@@ -376,6 +407,19 @@
             {
               "name": "error",
               "snippet": "<DotLeader label=\"STATUS\" value=\"DOWN\" valueColor=\"var(--cathode-color-tx)\" />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { DotLeader } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "row",
+              "snippet": "<DotLeader label=\"LATENCY\" value=\"42 MS\" />"
+            },
+            {
+              "name": "colored",
+              "snippet": "<DotLeader label=\"STATE\" value=\"HEALTHY\" valueColor=\"var(--cathode-color-success)\" />"
             }
           ]
         }
@@ -478,6 +522,19 @@
             {
               "name": "with-icon",
               "snippet": "<Pill title=\"SAVE\" icon={<IconCheck weight=\"bold\" />} onClick={save} accent=\"success\" />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Pill } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "nav",
+              "snippet": "<Pill title=\"LOGS\" accent=\"info\" :active=\"tab === 'logs'\" @click=\"tab = 'logs'\" />"
+            },
+            {
+              "name": "action",
+              "snippet": "<Pill title=\"REFRESH\" accent=\"info\" @click=\"refetch\" />"
             }
           ]
         }
@@ -678,6 +735,19 @@
               "snippet": "<TextField value={v} onChange={setV} ai={{ suggest: true }} />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { TextField } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<TextField v-model=\"name\" placeholder=\"CALLSIGN\" />"
+            },
+            {
+              "name": "ai",
+              "snippet": "<TextField v-model=\"draft\" :ai=\"{ suggest: true }\" />"
+            }
+          ]
         }
       }
     },
@@ -766,6 +836,15 @@
               "snippet": "<StatusTile title=\"ACTION\" subtitle=\"TAP TO RUN\" icon={<IconSparkle />} onClick={handler} />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { StatusTile } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "clickable",
+              "snippet": "<StatusTile title=\"TALK\" subtitle=\"HOLD TO TRANSMIT\" accent=\"info\" clickable @click=\"startTalking\">\n  <template #icon><IconBroadcast /></template>\n</StatusTile>"
+            }
+          ]
         }
       }
     },
@@ -839,6 +918,15 @@
               "snippet": "<ActivityBar intensity={0.6} seed={tick} cells={24} />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { ActivityBar } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "transmitting",
+              "snippet": "<ActivityBar :intensity=\"0.55\" :seed=\"tick\" :cells=\"28\" />"
+            }
+          ]
         }
       }
     },
@@ -906,6 +994,15 @@
             {
               "name": "caution",
               "snippet": "<HazardStripes><Button variant=\"danger\">ARM</Button></HazardStripes>"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { HazardStripes } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "subtle",
+              "snippet": "<HazardStripes :intensity=\"0.12\">\n  <Button variant=\"danger\">DELETE</Button>\n</HazardStripes>"
             }
           ]
         }
@@ -978,6 +1075,19 @@
             {
               "name": "basic",
               "snippet": "<Toggle value={on} onChange={setOn} label=\"ENABLED\" />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Toggle } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Toggle v-model=\"notify\" label=\"NOTIFICATIONS\" />"
+            },
+            {
+              "name": "armed",
+              "snippet": "<Toggle v-model=\"armed\" accent=\"danger\" label=\"I UNDERSTAND\" />"
             }
           ]
         }
@@ -1071,6 +1181,15 @@
               "snippet": "<Counter value={wpm} onChange={setWpm} min={5} max={40} label=\"WPM\" />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { Counter } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Counter v-model=\"wpm\" :min=\"5\" :max=\"40\" label=\"WPM\" />"
+            }
+          ]
         }
       }
     },
@@ -1138,6 +1257,19 @@
             {
               "name": "grouped",
               "snippet": "<Chips groups={[[{label:\"SOS\"}], [{label:\"OK\"}, {label:\"YES\"}]]} onSelect={insert} />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Chips } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "flat",
+              "snippet": "<Chips :groups=\"phrases\" @select=\"onPick\" />"
+            },
+            {
+              "name": "grouped",
+              "snippet": "<Chips :groups=\"[emergency, everyday]\" @select=\"onPick\" />"
             }
           ]
         }
@@ -1226,6 +1358,19 @@
             {
               "name": "semantic",
               "snippet": "<SearchBar items={items} onSelect={pick} ai={{ semantic: true }} />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { SearchBar } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "plain",
+              "snippet": "<SearchBar :items=\"contacts\" @select=\"onPick\" placeholder=\"SEARCH…\" />"
+            },
+            {
+              "name": "semantic",
+              "snippet": "<SearchBar :items=\"contacts\" :ai=\"{ semantic: true }\" @select=\"onPick\" />"
             }
           ]
         }
@@ -1317,6 +1462,15 @@
               "snippet": "<Dialog open={show} onClose={close} title=\"CONFIRM\" accent=\"danger\">…</Dialog>"
             }
           ]
+        },
+        "vue": {
+          "import": "import { Dialog } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "confirm",
+              "snippet": "<Dialog :open=\"open\" title=\"DELETE ACCOUNT?\" accent=\"danger\" @close=\"open = false\">\n  <p>No undo. Armed actions only.</p>\n</Dialog>"
+            }
+          ]
         }
       }
     },
@@ -1389,6 +1543,15 @@
             {
               "name": "basic",
               "snippet": "<Chat systemPrompt=\"You are terse.\" />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Chat } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Chat title=\"ASSISTANT\" :maxHeight=\"360\" />"
             }
           ]
         }
@@ -1480,6 +1643,19 @@
             {
               "name": "indeterminate",
               "snippet": "<Checkbox value={partial} onChange={selectAll} indeterminate label=\"ALL\" />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Checkbox } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Checkbox v-model=\"enabled\" label=\"ENABLE\" />"
+            },
+            {
+              "name": "tri",
+              "snippet": "<Checkbox v-model=\"allOn\" :indeterminate=\"someOn && !allOn\" label=\"ALL\" />"
             }
           ]
         }
@@ -1582,6 +1758,15 @@
               "snippet": "<RadioGroup value={v} onChange={setV} options={opts} orientation=\"vertical\" />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { RadioGroup } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<RadioGroup v-model=\"mode\" :options=\"modeOptions\" />"
+            }
+          ]
         }
       }
     },
@@ -1660,6 +1845,15 @@
             {
               "name": "placeholder",
               "snippet": "<Select value={v} onChange={setV} options={opts} placeholder=\"CHOOSE…\" />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Select } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Select v-model=\"theme\" :options=\"themeOptions\" aria-label=\"Theme\" />"
             }
           ]
         }
@@ -1758,6 +1952,15 @@
               "snippet": "<TextArea value={bio} onChange={setBio} maxLength={160} />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { TextArea } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<TextArea v-model=\"notes\" :rows=\"6\" :maxLength=\"500\" />"
+            }
+          ]
         }
       }
     },
@@ -1837,6 +2040,19 @@
               "snippet": "<FormField label=\"EMAIL\" error=\"Invalid address.\"><TextField value={e} onChange={setE} /></FormField>"
             }
           ]
+        },
+        "vue": {
+          "import": "import { FormField } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<FormField label=\"CALLSIGN\" hint=\"4 chars, alphanumeric.\" required>\n  <TextField v-model=\"callsign\" />\n</FormField>"
+            },
+            {
+              "name": "error",
+              "snippet": "<FormField label=\"CALLSIGN\" error=\"Must be 4 characters\">\n  <TextField v-model=\"callsign\" />\n</FormField>"
+            }
+          ]
         }
       }
     },
@@ -1910,6 +2126,19 @@
             {
               "name": "outline",
               "snippet": "<Badge kind=\"warning\" variant=\"outline\">BETA</Badge>"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Badge } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "solid",
+              "snippet": "<Badge kind=\"info\">NEW</Badge>"
+            },
+            {
+              "name": "outline",
+              "snippet": "<Badge kind=\"success\" variant=\"outline\">LIVE</Badge>"
             }
           ]
         }
@@ -1988,6 +2217,19 @@
             {
               "name": "removable",
               "snippet": "<Tag accent=\"amber\" onRemove={() => drop(\"p1\")}>P1</Tag>"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Tag } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Tag accent=\"info\">GEODESY</Tag>"
+            },
+            {
+              "name": "removable",
+              "snippet": "<Tag accent=\"info\" removable @remove=\"drop('geodesy')\">GEODESY</Tag>"
             }
           ]
         }
@@ -2079,6 +2321,19 @@
               "snippet": "<Avatar src=\"/u.jpg\" name=\"Madhan\" status=\"online\" size=\"lg\" />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { Avatar } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "initials",
+              "snippet": "<Avatar name=\"K. ALICE\" status=\"online\" />"
+            },
+            {
+              "name": "image",
+              "snippet": "<Avatar src=\"/u/kmw.jpg\" alt=\"KMW\" size=\"lg\" />"
+            }
+          ]
         }
       }
     },
@@ -2143,6 +2398,19 @@
             {
               "name": "array",
               "snippet": "<Kbd keys={[\"Shift\",\"+\",\"Tab\"]} />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Kbd } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "string",
+              "snippet": "<Kbd keys=\"Ctrl+K\" />"
+            },
+            {
+              "name": "array",
+              "snippet": "<Kbd :keys=\"['Shift', 'Tab']\" />"
             }
           ]
         }
@@ -2213,6 +2481,19 @@
             {
               "name": "ts",
               "snippet": "<CodeBlock language=\"ts\" code={\"const x = 1;\"} />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { CodeBlock } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "plain",
+              "snippet": "<CodeBlock :code=\"snippet\" language=\"ts\" />"
+            },
+            {
+              "name": "shiki",
+              "snippet": "<CodeBlock :html=\"highlighted\" language=\"ts\" />"
             }
           ]
         }
@@ -2316,6 +2597,19 @@
               "snippet": "<Table columns={cols} rows={sortedRows} sortBy=\"name\" sortDir=\"asc\" onSortChange={handleSort} />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { Table } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Table :columns=\"cols\" :rows=\"rows\" />"
+            },
+            {
+              "name": "sorted",
+              "snippet": "<Table :columns=\"cols\" :rows=\"rows\" :sortBy=\"sortBy\" :sortDir=\"sortDir\" @sortChange=\"onSort\" />"
+            }
+          ]
         }
       }
     },
@@ -2390,6 +2684,15 @@
               "snippet": "<Tabs value={v} onChange={setV} items={[{value:\"a\",label:\"Overview\"},{value:\"b\",label:\"Logs\"}]} aria-label=\"Views\" />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { Tabs } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Tabs v-model=\"view\" :items=\"[{ value: 'overview', label: 'OVERVIEW' }, { value: 'logs', label: 'LOGS' }]\" />"
+            }
+          ]
         }
       }
     },
@@ -2441,6 +2744,15 @@
             {
               "name": "path",
               "snippet": "<Breadcrumbs items={[{label:\"Home\",href:\"/\"},{label:\"Docs\",href:\"/docs\"},{label:\"Tabs\"}]} />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Breadcrumbs } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Breadcrumbs :items=\"[{ label: 'HOME', href: '/' }, { label: 'FLEET', href: '/fleet' }, { label: 'KA4X' }]\" />"
             }
           ]
         }
@@ -2506,6 +2818,15 @@
               "snippet": "<Menu trigger={<Button>MORE</Button>} items={[{label:\"Edit\",onSelect:doEdit,shortcut:\"E\"},{label:\"Delete\",kind:\"danger\",onSelect:doDelete}]} />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { Menu } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "overflow",
+              "snippet": "<Menu :items=\"[{ label: 'DUPLICATE' }, { label: 'DELETE', kind: 'danger' }]\" @select=\"onAction\">\n  <template #trigger><Button>⋯</Button></template>\n</Menu>"
+            }
+          ]
         }
       }
     },
@@ -2564,6 +2885,15 @@
             {
               "name": "basic",
               "snippet": "<Pagination page={p} totalPages={12} onChange={setP} />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Pagination } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Pagination v-model=\"page\" :totalPages=\"12\" />"
             }
           ]
         }
@@ -2650,6 +2980,15 @@
               "snippet": "<Popover trigger={<Button>DETAILS</Button>}><p>Some info</p></Popover>"
             }
           ]
+        },
+        "vue": {
+          "import": "import { Popover } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Popover v-model:open=\"open\" align=\"end\">\n  <template #trigger><Button>…</Button></template>\n  <div>panel content</div>\n</Popover>"
+            }
+          ]
         }
       }
     },
@@ -2714,6 +3053,15 @@
             {
               "name": "shortcut",
               "snippet": "<Tooltip label=\"Save — Cmd+S\"><Button>SAVE</Button></Tooltip>"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Tooltip } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Tooltip label=\"SAVED\" side=\"top\">\n  <Badge kind=\"success\">OK</Badge>\n</Tooltip>"
             }
           ]
         }
@@ -2805,6 +3153,15 @@
               "snippet": "<Drawer open={show} onClose={close} title=\"FILTERS\" side=\"right\">...</Drawer>"
             }
           ]
+        },
+        "vue": {
+          "import": "import { Drawer } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "right",
+              "snippet": "<Drawer :open=\"open\" title=\"FILTERS\" side=\"right\" @close=\"open = false\">\n  <!-- controls -->\n</Drawer>"
+            }
+          ]
         }
       }
     },
@@ -2886,6 +3243,19 @@
               "snippet": "<ProgressBar />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { ProgressBar } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "determinate",
+              "snippet": "<ProgressBar :value=\"uploadPct\" showValue />"
+            },
+            {
+              "name": "indeterminate",
+              "snippet": "<ProgressBar />"
+            }
+          ]
         }
       }
     },
@@ -2944,6 +3314,15 @@
             {
               "name": "loading",
               "snippet": "<Loader /> <span>CONNECTING…</span>"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Loader } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "md",
+              "snippet": "<Loader size=\"md\" aria-label=\"Connecting\" />"
             }
           ]
         }
@@ -3012,6 +3391,19 @@
             {
               "name": "block",
               "snippet": "<Skeleton width=\"100%\" height={120} />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Skeleton } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "text",
+              "snippet": "<Skeleton variant=\"text\" :width=\"180\" />"
+            },
+            {
+              "name": "block",
+              "snippet": "<Skeleton variant=\"block\" :height=\"60\" />"
             }
           ]
         }
@@ -3090,6 +3482,15 @@
               "snippet": "<SignalBars level={4} />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { SignalBars } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<SignalBars :level=\"4\" :bars=\"5\" accent=\"success\" />"
+            }
+          ]
         }
       }
     },
@@ -3156,6 +3557,15 @@
             {
               "name": "overlay",
               "snippet": "<ScanLine><TerminalFrame title=\"CAM\">…</TerminalFrame></ScanLine>"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { ScanLine } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<ScanLine :speed=\"4\">\n  <TerminalFrame title=\"LIVE\">…</TerminalFrame>\n</ScanLine>"
             }
           ]
         }
@@ -3244,6 +3654,15 @@
               "snippet": "<TypewriterText text=\"SYSTEM INITIALIZED.\" speed={30} />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { TypewriterText } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<TypewriterText text=\"BOOT SEQUENCE INITIATED\" :speed=\"40\" />"
+            }
+          ]
         }
       }
     },
@@ -3306,6 +3725,15 @@
             {
               "name": "launch",
               "snippet": "<Countdown target={launchAt} prefix=\"T-\" onComplete={fire} />"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Countdown } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Countdown :target=\"launchTime\" prefix=\"T-\" />"
             }
           ]
         }
@@ -3506,6 +3934,19 @@
               "snippet": "<Accordion items={items} allowMultiple={false} defaultExpandedIds={[\"a\"]} />"
             }
           ]
+        },
+        "vue": {
+          "import": "import { Accordion } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Accordion\n  :items=\"items\"\n  v-model:expandedIds=\"expanded\"\n/>"
+            },
+            {
+              "name": "exclusive",
+              "snippet": "<Accordion :items=\"items\" :allowMultiple=\"false\" />"
+            }
+          ]
         }
       }
     },
@@ -3569,6 +4010,15 @@
             {
               "name": "error",
               "snippet": "<Toast visible={hasError} kind=\"error\">CONNECTION LOST</Toast>"
+            }
+          ]
+        },
+        "vue": {
+          "import": "import { Toast } from '@cathode-ui/vue';",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "<Toast :visible=\"show\" kind=\"success\">SAVED</Toast>"
             }
           ]
         }

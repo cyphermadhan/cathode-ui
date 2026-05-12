@@ -5,6 +5,7 @@ import {
   DEFAULT_SETTINGS,
   type CathodeSettings,
 } from './settings';
+import type { CathodeAIProvider } from './ai/provider';
 
 /**
  * Root provider for Cathode UI. Wraps the app, exposes the Cathode
@@ -13,18 +14,20 @@ import {
  * [data-theme="…"] scoped variables in tokens.css kick in.
  *
  * Usage:
- *   <CathodeProvider theme="dark" motion="strong">
+ *   <CathodeProvider theme="dark" motion="strong" :ai="openaiProvider">
  *     <App />
  *   </CathodeProvider>
  *
  * Every prop is optional. Defaults: theme="auto", motion="strong",
- * haptic=true, sound=false. `auto` follows `prefers-color-scheme`.
+ * haptic=true, sound=false, ai=null. `auto` theme follows
+ * `prefers-color-scheme`.
  */
 interface Props {
   theme?: CathodeSettings['theme'];
   motion?: CathodeSettings['motion'];
   haptic?: boolean;
   sound?: boolean;
+  ai?: CathodeAIProvider | null;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -32,22 +35,17 @@ const props = withDefaults(defineProps<Props>(), {
   motion: DEFAULT_SETTINGS.motion,
   haptic: DEFAULT_SETTINGS.haptic,
   sound: DEFAULT_SETTINGS.sound,
+  ai: null,
 });
 
-// Compose the settings object from props. We provide a plain object
-// rather than reactive state because Cathode primitives read settings
-// synchronously — mirrors the React package's useMemo behavior.
-const settings = computed<CathodeSettings>(() => ({
-  theme: props.theme,
-  motion: props.motion,
-  haptic: props.haptic,
-  sound: props.sound,
-}));
+provide<CathodeSettings>(CATHODE_SETTINGS_KEY, {
+  get theme()  { return props.theme; },
+  get motion() { return props.motion; },
+  get haptic() { return props.haptic; },
+  get sound()  { return props.sound; },
+  get ai()     { return props.ai; },
+} as CathodeSettings);
 
-provide(CATHODE_SETTINGS_KEY, settings.value);
-
-// `auto` → undefined so the @media (prefers-color-scheme) default path
-// in tokens.css wins. Explicit values pin via data-theme.
 const dataTheme = computed(() =>
   props.theme === 'auto' ? undefined : props.theme,
 );
