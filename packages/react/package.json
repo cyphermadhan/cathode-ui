@@ -1,6 +1,6 @@
 {
   "name": "@cathode-ui/react",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Cathode UI — retro-future React design system with motion, haptics, sound, and AI-native surfaces. 45 primitives, machine-readable manifest, MCP server for AI agents.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -18,18 +18,23 @@
     "./icons": {
       "import": "./dist/icons.js",
       "types": "./dist/icons.d.ts"
-    }
+    },
+    "./cathode.manifest.json": "./cathode.manifest.json",
+    "./CATHODE.md": "./CATHODE.md",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "src/tokens.css",
     "src/fonts.css",
-    "README.md"
+    "README.md",
+    "CATHODE.md",
+    "cathode.manifest.json"
   ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build && node scripts/check-use-client.js",
-    "prepublishOnly": "npm run build",
+    "prepack": "npm run build && node scripts/bundle-agent-docs.js",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {

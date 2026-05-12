@@ -8,6 +8,30 @@ By [Madhan Raj](https://www.linkedin.com/in/cyphermadhan/).
 
 **[Docs →](https://cyphermadhan.github.io/cathode-ui/)**
 
+---
+
+> ## For AI coding agents
+>
+> This package ships two files designed for you — load them before
+> composing UI:
+>
+> - **`node_modules/@cathode-ui/react/CATHODE.md`** — long-form
+>   onboarding: install, setup, theming, motion/haptic/sound model,
+>   AI-hook surface, cluster overview.
+> - **`node_modules/@cathode-ui/react/cathode.manifest.json`** —
+>   structured registry of every component with `props`, `whenToUse`,
+>   `vs` disambiguation, `examples`, `a11y`, `feedback`, and
+>   framework-specific `adapters`.
+>
+> Read those and you have full Cathode context — no scraping source,
+> no doc-hunting. For interactive discovery
+> (`suggest_component(intent)`), also see
+> [`@cathode-ui/mcp`](https://www.npmjs.com/package/@cathode-ui/mcp)
+> — configure once, every MCP-aware tool (Claude Code, Cursor,
+> Windsurf, Codex, VS Code) gets tool access to the manifest.
+
+---
+
 ## Install
 
 ```bash

@@ -7,6 +7,13 @@ build/
 .env.local
 .vite/
 vite.config.ts.timestamp-*.mjs
+
+# Agent docs copied into packages/react/ at publish time by
+# scripts/bundle-agent-docs.js. Source of truth lives at the repo
+# root; the copies only exist in published tarballs. Gitignore
+# prevents accidental duplication / drift in the repo.
+packages/react/CATHODE.md
+packages/react/cathode.manifest.json
 storybook-static/
 coverage/
 .turbo/
