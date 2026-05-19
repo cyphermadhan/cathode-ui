@@ -10,7 +10,7 @@ By [Madhan Raj](https://www.linkedin.com/in/cyphermadhan/).
 
 > ## ⚠️ Work in progress — Phase 3
 >
-> Sessions 1 + 2 ship **17 of 45 primitives** + the full foundation:
+> Sessions 1–3 ship **27 of 45 primitives** + the full foundation:
 >
 > - **Layout / display:** `CathodeTerminalFrame`, `CathodeStack`,
 >   `CathodeDotLeader`, `CathodePulsingDot`, `CathodeBadge`
@@ -20,17 +20,24 @@ By [Madhan Raj](https://www.linkedin.com/in/cyphermadhan/).
 >   `CathodeTextField` (with optional AI ghost-text suggest),
 >   `CathodeTextArea`, `CathodeFormField`, `CathodeSearchBar` (with
 >   optional semantic AI ranking), `CathodeChips`
+> - **Data (7):** `CathodeCard`, `CathodeTag`, `CathodeAvatar`
+>   (image / initials / status dot), `CathodeKbd`,
+>   `CathodeCodeBlock` (platform-native copy via `UIPasteboard` /
+>   `NSPasteboard`), `CathodeTable<Row>` (generic, controlled
+>   sorting), `CathodeStatusTile` (icon ViewBuilder slot)
+> - **Navigation (3):** `CathodeTabs<Value>`, `CathodeBreadcrumbs`,
+>   `CathodePagination`
 > - **Foundation:** `CathodeProvider`, `CathodeSettings`,
 >   `CathodeAIProvider` protocol + environment, `CathodeSound`
 >   (AVAudioEngine on iOS/macOS), `CathodeFeedback`
 >   (`UIImpactFeedbackGenerator`)
 >
-> The remaining 28 (data cluster, navigation, feedback, overlays,
-> retro accents, `CathodeChat`) port session-by-session.
+> The remaining 18 (feedback cluster, retro accents, overlays,
+> `CathodeMenu`, `CathodeChat`) port session-by-session.
 >
 > AI agents querying [`@cathode-ui/mcp`](https://www.npmjs.com/package/@cathode-ui/mcp)
 > with `framework: "swiftui"` get SwiftUI imports + snippets for the
-> 17 shipped components and a clear "React fallback — SwiftUI port
+> 27 shipped components and a clear "React fallback — SwiftUI port
 > pending" note for the rest.
 
 ---

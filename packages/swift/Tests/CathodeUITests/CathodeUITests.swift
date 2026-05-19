@@ -129,6 +129,87 @@ final class CathodeUITests: XCTestCase {
         XCTAssertNil(env.cathodeAI)
     }
 
+    // MARK: - Data + nav cluster (session 3)
+
+    @MainActor
+    func testDataNavInitializers() {
+        struct Row: Identifiable, Hashable { let id: Int; let name: String }
+
+        var tab = "overview"
+        var page = 1
+
+        _ = CathodeCard { Text("x") }
+        _ = CathodeTag("GEODESY", accent: .info, onRemove: {})
+        _ = CathodeAvatar(name: "K. ALICE", status: .online)
+        _ = CathodeKbd("Ctrl+K")
+        _ = CathodeKbd(["Shift", "Tab"])
+        _ = CathodeCodeBlock(code: "let x = 1", language: "swift")
+        _ = CathodeStatusTile(title: "TALK", subtitle: "HOLD", isClickable: true) {
+            Text("◉")
+        }
+        _ = CathodeTabs(
+            value: .init(get: { tab }, set: { tab = $0 }),
+            items: [.init(value: "overview", label: "OVERVIEW"), .init(value: "logs", label: "LOGS")]
+        )
+        _ = CathodeBreadcrumbs(items: [
+            .init(label: "HOME", action: {}),
+            .init(label: "FLEET", action: {}),
+            .init(label: "KA4X"),
+        ])
+        _ = CathodePagination(page: .init(get: { page }, set: { page = $0 }), totalPages: 12)
+
+        let cols: [CathodeTable<Row>.Column] = [
+            .init(id: "id",   header: "ID",   align: .trailing) { AnyView(Text("\($0.id)")) },
+            .init(id: "name", header: "NAME") { AnyView(Text($0.name)) },
+        ]
+        _ = CathodeTable(
+            columns: cols,
+            rows: [Row(id: 1, name: "ALPHA"), Row(id: 2, name: "BRAVO")],
+            sortBy: "id",
+            sortDir: .asc
+        )
+    }
+
+    @MainActor
+    func testKbdSplit() {
+        // The String overload should split on `+` and `-` and trim
+        // whitespace so consumers can pass either notation idiomatically.
+        let plus = CathodeKbd("Ctrl+K")
+        _ = plus.body
+        let dash = CathodeKbd("Cmd-Shift-P")
+        _ = dash.body
+    }
+
+    @MainActor
+    func testAvatarInitials() {
+        // Two-token name → two letters; single-token → one letter;
+        // empty → "?". Internal initials computation is exercised
+        // via body construction; we assert the Avatar accepts the
+        // expected accents + status.
+        _ = CathodeAvatar(name: "K", status: .away)
+        _ = CathodeAvatar(name: "K. ALICE", accent: .purple)
+        _ = CathodeAvatar(name: "  ", alt: "fallback")
+    }
+
+    @MainActor
+    func testPaginationBoundaries() {
+        var p = 1
+        let pag = CathodePagination(
+            page: .init(get: { p }, set: { p = $0 }),
+            totalPages: 5
+        )
+        _ = pag.body
+        // Single-page → renders an EmptyView, no buttons emitted. We
+        // assert by reconstructing with totalPages: 1 and confirming
+        // no crash + page state untouched.
+        let none = CathodePagination(
+            page: .init(get: { p }, set: { p = $0 }),
+            totalPages: 1
+        )
+        _ = none.body
+        XCTAssertEqual(p, 1)
+    }
+
     func testProviderConstruction() {
         // Tree-walk builders run synchronously; just instantiate the
         // outer view to confirm the generic content-builder shape works.

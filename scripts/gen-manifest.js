@@ -913,6 +913,44 @@ const SWIFTUI_ADAPTERS = {
     { name: 'flat',    snippet: 'CathodeChips([.init(label: "GO"), .init(label: "STOP")]) { onPick($0) }' },
     { name: 'grouped', snippet: 'CathodeChips(groups: [\n    .init([.init(label: "DUPLICATE")]),\n    .init([.init(label: "DELETE")])\n]) { onPick($0) }' },
   ]},
+
+  // Data + nav cluster (Phase 3 session 3)
+  Card: { import: swiftImport, examples: [
+    { name: 'info', snippet: 'CathodeCard(accent: .info, surface: .elevated) {\n    CathodeDotLeader(label: "LAT", value: "42 MS")\n}' },
+    { name: 'clickable', snippet: 'CathodeCard(isClickable: true) { open() } content: {\n    Text("OPEN")\n}' },
+  ]},
+  Tag: { import: swiftImport, examples: [
+    { name: 'basic',     snippet: 'CathodeTag("GEODESY", accent: .info)' },
+    { name: 'removable', snippet: 'CathodeTag("GEODESY", accent: .info) { drop("geodesy") }' },
+  ]},
+  Avatar: { import: swiftImport, examples: [
+    { name: 'initials', snippet: 'CathodeAvatar(name: "K. ALICE", status: .online)' },
+    { name: 'image',    snippet: 'CathodeAvatar(name: "KMW", imageURL: URL(string: "https://example.com/kmw.jpg")!, size: .lg)' },
+  ]},
+  Kbd: { import: swiftImport, examples: [
+    { name: 'string', snippet: 'CathodeKbd("Ctrl+K")' },
+    { name: 'array',  snippet: 'CathodeKbd(["Shift", "Tab"])' },
+  ]},
+  CodeBlock: { import: swiftImport, examples: [
+    { name: 'plain',     snippet: 'CathodeCodeBlock(code: snippet, language: "swift")' },
+    { name: 'attributed', snippet: 'CathodeCodeBlock(attributed: highlighted, language: "swift")' },
+  ]},
+  Table: { import: swiftImport, examples: [
+    { name: 'basic', snippet: 'CathodeTable(\n    columns: cols,\n    rows: rows\n)' },
+    { name: 'sorted', snippet: 'CathodeTable(\n    columns: cols, rows: rows,\n    sortBy: sortBy, sortDir: sortDir,\n    onSortChange: { onSort($0, $1) }\n)' },
+  ]},
+  StatusTile: { import: swiftImport, examples: [
+    { name: 'clickable', snippet: 'CathodeStatusTile(title: "TALK", subtitle: "HOLD TO TRANSMIT", accent: .info, isClickable: true) {\n    startTalking()\n} icon: {\n    Image(systemName: "antenna.radiowaves.left.and.right")\n}' },
+  ]},
+  Tabs: { import: swiftImport, examples: [
+    { name: 'basic', snippet: 'CathodeTabs(value: $view, items: [\n    .init(value: "overview", label: "OVERVIEW"),\n    .init(value: "logs",     label: "LOGS"),\n])' },
+  ]},
+  Breadcrumbs: { import: swiftImport, examples: [
+    { name: 'basic', snippet: 'CathodeBreadcrumbs(items: [\n    .init(label: "HOME",  action: { go("/") }),\n    .init(label: "FLEET", action: { go("/fleet") }),\n    .init(label: "KA4X"),\n])' },
+  ]},
+  Pagination: { import: swiftImport, examples: [
+    { name: 'basic', snippet: 'CathodePagination(page: $page, totalPages: 12)' },
+  ]},
 };
 const VUE_ADAPTERS = {
   // Layout
