@@ -11,7 +11,8 @@
   "themeSelection": "CSS `prefers-color-scheme`, overridable via <html data-theme='dark|light'> or <CathodeProvider theme='dark|light'>.",
   "adapters": [
     "react",
-    "vue"
+    "vue",
+    "swiftui"
   ],
   "imports": {
     "tokens": "import '@cathode-ui/react/tokens.css';",
@@ -100,6 +101,19 @@
             {
               "name": "accented",
               "snippet": "<TerminalFrame title=\"ERROR\" accent=\"danger\">…</TerminalFrame>"
+            }
+          ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "titled",
+              "snippet": "CathodeTerminalFrame(title: \"PEERS\") {\n    // children\n}"
+            },
+            {
+              "name": "accented",
+              "snippet": "CathodeTerminalFrame(title: \"ERROR\", accent: .danger) {\n    // children\n}"
             }
           ]
         }
@@ -345,6 +359,15 @@
               "snippet": "<PulsingDot color=\"var(--cathode-color-success)\" />"
             }
           ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "CathodePulsingDot(color: CathodeTokens.Palette.Dark.success)"
+            }
+          ]
         }
       }
     },
@@ -420,6 +443,19 @@
             {
               "name": "colored",
               "snippet": "<DotLeader label=\"STATE\" value=\"HEALTHY\" valueColor=\"var(--cathode-color-success)\" />"
+            }
+          ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "row",
+              "snippet": "CathodeDotLeader(label: \"LATENCY\", value: \"42 MS\")"
+            },
+            {
+              "name": "colored",
+              "snippet": "CathodeDotLeader(label: \"STATE\", value: \"HEALTHY\",\n                 valueColor: CathodeTokens.Palette.Dark.success)"
             }
           ]
         }
@@ -537,6 +573,19 @@
               "snippet": "<Pill title=\"REFRESH\" accent=\"info\" @click=\"refetch\" />"
             }
           ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "nav",
+              "snippet": "CathodePill(\"LOGS\", accent: .info, isActive: tab == .logs) { tab = .logs }"
+            },
+            {
+              "name": "action",
+              "snippet": "CathodePill(\"REFRESH\", accent: .info) { refetch() }"
+            }
+          ]
         }
       }
     },
@@ -643,6 +692,19 @@
             {
               "name": "danger",
               "snippet": "<Button variant=\"danger\"  @click=\"remove\">DELETE</Button>"
+            }
+          ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "primary",
+              "snippet": "CathodeButton(\"SAVE\", variant: .primary) { save() }"
+            },
+            {
+              "name": "danger",
+              "snippet": "CathodeButton(\"DELETE\", variant: .danger) { remove() }"
             }
           ]
         }
@@ -2139,6 +2201,19 @@
             {
               "name": "outline",
               "snippet": "<Badge kind=\"success\" variant=\"outline\">LIVE</Badge>"
+            }
+          ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "solid",
+              "snippet": "CathodeBadge(\"NEW\", kind: .info)"
+            },
+            {
+              "name": "outline",
+              "snippet": "CathodeBadge(\"LIVE\", kind: .success, variant: .outline)"
             }
           ]
         }
@@ -3849,6 +3924,19 @@
             {
               "name": "column",
               "snippet": "<Stack :gap=\"16\" fullWidth>\n  <FormField />\n  <FormField />\n</Stack>"
+            }
+          ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "row",
+              "snippet": "CathodeStack(direction: .row, gap: 8, alignment: .center) {\n    CathodePill(\"ALPHA\")\n    CathodePill(\"BRAVO\")\n}"
+            },
+            {
+              "name": "column",
+              "snippet": "CathodeStack(gap: 16, fullWidth: true) {\n    CathodeBadge(\"LIVE\", kind: .success)\n}"
             }
           ]
         }

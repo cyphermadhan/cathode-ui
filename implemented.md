@@ -31,8 +31,17 @@ Run `git log --oneline` in the repo for the exact commit history.
   - Interactive test suite (Vitest + happy-dom + @vue/test-utils) — 26 tests across 6 files covering v-model roundtrip on every controlled input, Dialog close paths (Escape, backdrop, ×, `modal` suppression), Menu keyboard navigation (ArrowUp/Down/Enter/Escape + click-item), Popover (trigger/outside-click/Escape close), Tooltip hover+delay, Button AI-action flow with a mock provider. All green. Suite surfaced two real bugs before publish: Dialog Escape ignored `modal`, Popover couldn't detect controlled mode because Vue auto-coerces missing boolean props to `false`. Both fixed.
   - `/vue` docs page on the Astro site with setup (Vite + Nuxt), API deltas vs React, and AI composable examples. 55/55 a11y pages pass.
 - **MCP framework routing proven end-to-end** — the manifest now carries `adapters.vue` for all 45 components; `cathode_get_component(name, { framework: "vue" })` returns Vue imports + Vue template snippets for every primitive.
+- **Swift package started** (Phase 3, session 1). `packages/swift/` scaffolded as a Swift Package Manager target (iOS 16+ / macOS 13+ / visionOS 1+ / tvOS 16+):
+  - `scripts/gen-swift.js` generates `Tokens.swift` from `tokens.json` — Palette (dark + light SwiftUI Color literals), Spacing, Size, TypeScale, Tracking, MotionDuration (ms→seconds), MotionScale, Haptic, Breakpoint. Wired into `npm run gen`.
+  - `CathodeSettings` + `CathodeProvider` + `EnvironmentValues.cathodeSettings`. Theme/motion/haptic/sound surface mirrors React + Vue exactly.
+  - `ColorKey` enum + `ResolvedColor` helper resolve theme-aware Color values; `.auto` reads `@Environment(\.colorScheme)`.
+  - 7 bellwether primitives: `CathodeTerminalFrame`, `CathodeStack`, `CathodeDotLeader`, `CathodePulsingDot`, `CathodeBadge`, `CathodeButton`, `CathodePill`. All compile clean under Swift 6.2 strict concurrency.
+  - Real iOS haptics — `CathodeButton` + `CathodePill` fire `UIImpactFeedbackGenerator` at variant-appropriate styles (light/medium/heavy). The `navigator.vibrate` no-op on iOS Safari is solved natively.
+  - Press-scale animations honor `motion: .none / .subtle / .strong` + the system "Reduce Motion" accessibility flag.
+  - 7 XCTest cases cover settings defaults, custom values, ColorKey resolution, token shape, motion duration unit conversion, and component initializer construction. All pass via `swift test`.
+  - Manifest top-level `adapters: ['react', 'vue', 'swiftui']`; per-component `adapters.swiftui` for the 7 ported. MCP smoke-tested: `cathode_get_component({ name, framework: "swiftui" })` returns SwiftUI imports + snippets for ported components, React fallback with explicit `note` for the other 38.
 
-Not yet shipped: Swift package (Phase 3), Svelte / Solid (Phase 4c–d), Jetpack Compose (Phase 5).
+Not yet shipped: rest of the SwiftUI primitives (Phase 3 sessions 2+), Svelte / Solid (Phase 4c–d), Jetpack Compose (Phase 5).
 
 ---
 

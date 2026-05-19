@@ -10,9 +10,10 @@
   ],
   "scripts": {
     "gen:css": "node scripts/gen-css.js",
+    "gen:swift": "node scripts/gen-swift.js",
     "gen:manifest": "node scripts/gen-manifest.js",
     "gen:ai-docs": "node scripts/gen-ai-docs.js",
-    "gen": "npm run gen:css && npm run gen:manifest && npm run gen:ai-docs",
+    "gen": "npm run gen:css && npm run gen:swift && npm run gen:manifest && npm run gen:ai-docs",
     "build": "npm run build -w @cathode-ui/react",
     "dev": "npm run dev -w @cathode-ui/react",
     "storybook": "npm run storybook -w @cathode-ui/react",

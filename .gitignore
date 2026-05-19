@@ -19,6 +19,15 @@ coverage/
 .turbo/
 *.tsbuildinfo
 
+# Swift Package Manager — local build artifacts + Xcode metadata.
+# Distribution is via SPM source; consumers build their own .build/.
+.build/
+.swiftpm/
+xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+DerivedData/
+Package.resolved
+
 # Generated outputs — committed separately by intent
 # (kept in repo for downstream consumers + AI agents):
 # packages/react/src/tokens.css

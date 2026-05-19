@@ -836,6 +836,46 @@ const components = [
 // Any component whose Vue adapter isn't listed here falls back to the
 // React adapter in MCP responses with a `fallbackFrom: 'react'` note.
 const vueImport = (name) => `import { ${name} } from '@cathode-ui/vue';`;
+
+// SwiftUI adapter entries for components shipped in `packages/swift`
+// (Cathode-Swift package, distributed via SPM at repo root). The
+// import line is the same for every component (`import CathodeUI`),
+// and the class names use the `Cathode` prefix to avoid SwiftUI's
+// own `Button` / `Stack` types. Components NOT listed here omit
+// `adapters.swiftui` — MCP falls back to React with a per-component
+// `note` so agents know the SwiftUI port is pending. Phase 3 ships
+// 7 bellwether primitives in session 1; remaining ~38 land in
+// follow-up sessions.
+const swiftImport = "import CathodeUI";
+const SWIFTUI_ADAPTERS = {
+  TerminalFrame: { import: swiftImport, examples: [
+    { name: 'titled',   snippet: 'CathodeTerminalFrame(title: "PEERS") {\n    // children\n}' },
+    { name: 'accented', snippet: 'CathodeTerminalFrame(title: "ERROR", accent: .danger) {\n    // children\n}' },
+  ]},
+  Stack: { import: swiftImport, examples: [
+    { name: 'row',    snippet: 'CathodeStack(direction: .row, gap: 8, alignment: .center) {\n    CathodePill("ALPHA")\n    CathodePill("BRAVO")\n}' },
+    { name: 'column', snippet: 'CathodeStack(gap: 16, fullWidth: true) {\n    CathodeBadge("LIVE", kind: .success)\n}' },
+  ]},
+  DotLeader: { import: swiftImport, examples: [
+    { name: 'row',     snippet: 'CathodeDotLeader(label: "LATENCY", value: "42 MS")' },
+    { name: 'colored', snippet: 'CathodeDotLeader(label: "STATE", value: "HEALTHY",\n                 valueColor: CathodeTokens.Palette.Dark.success)' },
+  ]},
+  PulsingDot: { import: swiftImport, examples: [
+    { name: 'basic', snippet: 'CathodePulsingDot(color: CathodeTokens.Palette.Dark.success)' },
+  ]},
+  Badge: { import: swiftImport, examples: [
+    { name: 'solid',   snippet: 'CathodeBadge("NEW", kind: .info)' },
+    { name: 'outline', snippet: 'CathodeBadge("LIVE", kind: .success, variant: .outline)' },
+  ]},
+  Button: { import: swiftImport, examples: [
+    { name: 'primary', snippet: 'CathodeButton("SAVE", variant: .primary) { save() }' },
+    { name: 'danger',  snippet: 'CathodeButton("DELETE", variant: .danger) { remove() }' },
+  ]},
+  Pill: { import: swiftImport, examples: [
+    { name: 'nav',    snippet: 'CathodePill("LOGS", accent: .info, isActive: tab == .logs) { tab = .logs }' },
+    { name: 'action', snippet: 'CathodePill("REFRESH", accent: .info) { refetch() }' },
+  ]},
+};
 const VUE_ADAPTERS = {
   // Layout
   TerminalFrame: { import: vueImport('TerminalFrame'), examples: [
@@ -1027,6 +1067,9 @@ const enrichedComponents = components.map((c) => {
   if (VUE_ADAPTERS[c.name]) {
     adapters.vue = VUE_ADAPTERS[c.name];
   }
+  if (SWIFTUI_ADAPTERS[c.name]) {
+    adapters.swiftui = SWIFTUI_ADAPTERS[c.name];
+  }
   return {
     ...c,
     whenToUse: g.whenToUse,
@@ -1054,7 +1097,7 @@ const manifest = {
   // adds 'compose'. MCP clients should read `adapters[framework]` on
   // each component; if the key is missing, the flat `import` +
   // `examples` on the component are the React fallback.
-  adapters: ['react', 'vue'],
+  adapters: ['react', 'vue', 'swiftui'],
   imports: {
     tokens: "import '@cathode-ui/react/tokens.css';",
     fonts:  "import '@cathode-ui/react/fonts.css';",
