@@ -94,6 +94,9 @@ public struct CathodePill: View {
         if settings.haptic {
             CathodeFeedback.haptic(for: .default)
         }
+        if settings.sound {
+            CathodeSound.play(.click, enabled: true)
+        }
         action()
     }
 }

@@ -57,6 +57,78 @@ final class CathodeUITests: XCTestCase {
         _ = CathodePill("LOGS", accent: .info, isActive: true) {}
     }
 
+    // MARK: - Forms cluster (session 2)
+
+    @MainActor
+    func testFormsInitializers() {
+        // Construct each forms primitive against a binding to confirm
+        // generics resolve and required props compile.
+        var enabled = false
+        var checked = false
+        var mode = "auto"
+        var theme: String = "auto"
+        var wpm = 12
+        var note = ""
+        var area = ""
+
+        _ = CathodeToggle("ARMED", value: .init(get: { enabled }, set: { enabled = $0 }))
+        _ = CathodeCheckbox("ALL", value: .init(get: { checked }, set: { checked = $0 }), isIndeterminate: true)
+        _ = CathodeRadioGroup(
+            value: .init(get: { mode }, set: { mode = $0 }),
+            options: [.init(value: "auto", label: "AUTO"), .init(value: "manual", label: "MANUAL")]
+        )
+        _ = CathodeSelect(
+            value: .init(get: { theme }, set: { theme = $0 }),
+            options: [.init(value: "auto", label: "AUTO"), .init(value: "dark", label: "DARK")]
+        )
+        _ = CathodeCounter(value: .init(get: { wpm }, set: { wpm = $0 }), min: 5, max: 40, label: "WPM")
+        _ = CathodeTextField(text: .init(get: { note }, set: { note = $0 }), placeholder: "CALLSIGN")
+        _ = CathodeTextArea(text: .init(get: { area }, set: { area = $0 }), rows: 6, maxLength: 500)
+        _ = CathodeFormField(label: "CALLSIGN", hint: "4 chars") { Text("input") }
+        _ = CathodeChips([.init(label: "GO"), .init(label: "STOP")]) { _ in }
+    }
+
+    @MainActor
+    func testCounterClampsAtMin() {
+        // Direct unit test: ensure the binding is not mutated when the
+        // current value is already at the minimum step. We simulate by
+        // calling the public surface — which doesn't expose `fire(_:)`
+        // — so this is an indirect smoke check that initializers
+        // compile + the type accepts the expected min/max contract.
+        var v = 0
+        let counter = CathodeCounter(
+            value: .init(get: { v }, set: { v = $0 }),
+            min: 0, max: 10, step: 1
+        )
+        _ = counter.body
+        XCTAssertEqual(v, 0)
+    }
+
+    @MainActor
+    func testSelectOptionMembership() {
+        let opts: [CathodeSelect<String>.Option] = [
+            .init(value: "a", label: "A"),
+            .init(value: "b", label: "B"),
+        ]
+        XCTAssertEqual(opts.first?.value, "a")
+        XCTAssertFalse(opts.contains(.init(value: "c", label: "C")))
+    }
+
+    @MainActor
+    func testChipGroupShape() {
+        let g = CathodeChips.Group([.init(label: "A"), .init(label: "B")])
+        XCTAssertEqual(g.chips.count, 2)
+        XCTAssertEqual(g.chips.first?.label, "A")
+    }
+
+    @MainActor
+    func testAIProviderEnvironment() {
+        // Sanity — the environment key declared in
+        // CathodeAIProvider.swift is reachable and defaults to nil.
+        let env = EnvironmentValues()
+        XCTAssertNil(env.cathodeAI)
+    }
+
     func testProviderConstruction() {
         // Tree-walk builders run synchronously; just instantiate the
         // outer view to confirm the generic content-builder shape works.

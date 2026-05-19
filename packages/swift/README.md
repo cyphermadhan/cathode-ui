@@ -10,16 +10,27 @@ By [Madhan Raj](https://www.linkedin.com/in/cyphermadhan/).
 
 > ## ⚠️ Work in progress — Phase 3
 >
-> Session 1 ships **7 of 45 primitives**: `CathodeTerminalFrame`,
-> `CathodeStack`, `CathodeDotLeader`, `CathodePulsingDot`,
-> `CathodeBadge`, `CathodeButton`, `CathodePill` — plus
-> `CathodeProvider`, `CathodeSettings`, and the generated `CathodeTokens`
-> namespace. The remaining 38 (forms cluster, overlays, feedback,
-> retro accents, Chat) port session-by-session.
+> Sessions 1 + 2 ship **17 of 45 primitives** + the full foundation:
+>
+> - **Layout / display:** `CathodeTerminalFrame`, `CathodeStack`,
+>   `CathodeDotLeader`, `CathodePulsingDot`, `CathodeBadge`
+> - **Buttons:** `CathodeButton`, `CathodePill`
+> - **Forms (10):** `CathodeToggle`, `CathodeCheckbox`,
+>   `CathodeRadioGroup`, `CathodeSelect`, `CathodeCounter`,
+>   `CathodeTextField` (with optional AI ghost-text suggest),
+>   `CathodeTextArea`, `CathodeFormField`, `CathodeSearchBar` (with
+>   optional semantic AI ranking), `CathodeChips`
+> - **Foundation:** `CathodeProvider`, `CathodeSettings`,
+>   `CathodeAIProvider` protocol + environment, `CathodeSound`
+>   (AVAudioEngine on iOS/macOS), `CathodeFeedback`
+>   (`UIImpactFeedbackGenerator`)
+>
+> The remaining 28 (data cluster, navigation, feedback, overlays,
+> retro accents, `CathodeChat`) port session-by-session.
 >
 > AI agents querying [`@cathode-ui/mcp`](https://www.npmjs.com/package/@cathode-ui/mcp)
 > with `framework: "swiftui"` get SwiftUI imports + snippets for the
-> 7 shipped components and a clear "React fallback — SwiftUI port
+> 17 shipped components and a clear "React fallback — SwiftUI port
 > pending" note for the rest.
 
 ---
@@ -83,14 +94,26 @@ struct ContentView: View {
 
 | Component | Status |
 |---|---|
-| `CathodeProvider` + `CathodeSettings` | ✅ theme + motion + haptic + sound |
+| `CathodeProvider` + `CathodeSettings` | ✅ theme + motion + haptic + sound + ai |
+| `CathodeAIProvider` (protocol) | ✅ async streaming + act |
+| `CathodeSound` | ✅ AVAudioEngine click / tick / confirm / warn / error / destructive on iOS + macOS; no-op stub on tvOS / visionOS / watchOS |
 | `CathodeTerminalFrame` | ✅ accent border + inset title |
 | `CathodeStack` | ✅ row / column, gap, alignment, fullWidth |
 | `CathodeDotLeader` | ✅ label + dots + value, valueColor override |
 | `CathodePulsingDot` | ✅ animated, respects motion + reduce-motion |
 | `CathodeBadge` | ✅ kind + variant (solid/outline) + size |
-| `CathodeButton` | ✅ variants, press scale, iOS UIImpactFeedbackGenerator haptics |
+| `CathodeButton` | ✅ variants, press scale, iOS UIImpactFeedbackGenerator haptics, sound on tap |
 | `CathodePill` | ✅ accent + active state, press scale |
+| `CathodeToggle` | ✅ binding-driven, sliding knob, accent variants |
+| `CathodeCheckbox` | ✅ tri-state (on / off / indeterminate) |
+| `CathodeRadioGroup<Value>` | ✅ generic, horizontal/vertical, accent |
+| `CathodeSelect<Value>` | ✅ wraps SwiftUI Menu with Cathode chrome |
+| `CathodeCounter` | ✅ `[−]  LABEL VALUE  [+]` rocker with min/max/step |
+| `CathodeTextField` | ✅ ghost-text AI suggest (Tab to accept on macOS 14+/iOS 17+) |
+| `CathodeTextArea` | ✅ multi-line, optional max-length counter |
+| `CathodeFormField<Content>` | ✅ label + hint + error + required-marker |
+| `CathodeSearchBar<Item>` | ✅ substring + semantic-AI search modes |
+| `CathodeChips` | ✅ groups, scrolling row, dividers |
 | `CathodeTokens` | ✅ generated from `tokens.json` — Palette (dark + light), Spacing, Size, TypeScale, Tracking, MotionDuration, MotionScale, Haptic, Breakpoint |
 
 ## SwiftUI vs React/Vue API deltas

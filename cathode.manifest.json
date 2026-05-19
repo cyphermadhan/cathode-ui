@@ -810,6 +810,19 @@
               "snippet": "<TextField v-model=\"draft\" :ai=\"{ suggest: true }\" />"
             }
           ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "CathodeTextField(text: $name, placeholder: \"CALLSIGN\")"
+            },
+            {
+              "name": "aiSuggest",
+              "snippet": "CathodeTextField(text: $draft, aiSuggest: true)"
+            }
+          ]
         }
       }
     },
@@ -1152,6 +1165,19 @@
               "snippet": "<Toggle v-model=\"armed\" accent=\"danger\" label=\"I UNDERSTAND\" />"
             }
           ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "CathodeToggle(\"ARMED\", value: $armed)"
+            },
+            {
+              "name": "danger",
+              "snippet": "CathodeToggle(\"DANGER MODE\", value: $armed, accent: .danger)"
+            }
+          ]
         }
       }
     },
@@ -1252,6 +1278,15 @@
               "snippet": "<Counter v-model=\"wpm\" :min=\"5\" :max=\"40\" label=\"WPM\" />"
             }
           ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "CathodeCounter(value: $wpm, min: 5, max: 40, label: \"WPM\")"
+            }
+          ]
         }
       }
     },
@@ -1332,6 +1367,19 @@
             {
               "name": "grouped",
               "snippet": "<Chips :groups=\"[emergency, everyday]\" @select=\"onPick\" />"
+            }
+          ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "flat",
+              "snippet": "CathodeChips([.init(label: \"GO\"), .init(label: \"STOP\")]) { onPick($0) }"
+            },
+            {
+              "name": "grouped",
+              "snippet": "CathodeChips(groups: [\n    .init([.init(label: \"DUPLICATE\")]),\n    .init([.init(label: \"DELETE\")])\n]) { onPick($0) }"
             }
           ]
         }
@@ -1433,6 +1481,19 @@
             {
               "name": "semantic",
               "snippet": "<SearchBar :items=\"contacts\" :ai=\"{ semantic: true }\" @select=\"onPick\" />"
+            }
+          ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "plain",
+              "snippet": "CathodeSearchBar(\n    items: contacts,\n    label: { .init(primary: $0.name, secondary: $0.callsign) }\n) { onPick($0) }"
+            },
+            {
+              "name": "semantic",
+              "snippet": "CathodeSearchBar(\n    items: contacts,\n    label: { .init(primary: $0.name) },\n    aiSemantic: true\n) { onPick($0) }"
             }
           ]
         }
@@ -1720,6 +1781,19 @@
               "snippet": "<Checkbox v-model=\"allOn\" :indeterminate=\"someOn && !allOn\" label=\"ALL\" />"
             }
           ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "CathodeCheckbox(\"ENABLE\", value: $enabled)"
+            },
+            {
+              "name": "tri",
+              "snippet": "CathodeCheckbox(\"ALL\", value: $allOn, isIndeterminate: someOn && !allOn)"
+            }
+          ]
         }
       }
     },
@@ -1829,6 +1903,15 @@
               "snippet": "<RadioGroup v-model=\"mode\" :options=\"modeOptions\" />"
             }
           ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "CathodeRadioGroup(value: $mode, options: [\n    .init(value: \"auto\",   label: \"AUTO\"),\n    .init(value: \"manual\", label: \"MANUAL\"),\n])"
+            }
+          ]
         }
       }
     },
@@ -1916,6 +1999,15 @@
             {
               "name": "basic",
               "snippet": "<Select v-model=\"theme\" :options=\"themeOptions\" aria-label=\"Theme\" />"
+            }
+          ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "CathodeSelect(value: $theme, options: [\n    .init(value: \"auto\",  label: \"AUTO\"),\n    .init(value: \"dark\",  label: \"DARK\"),\n    .init(value: \"light\", label: \"LIGHT\"),\n])"
             }
           ]
         }
@@ -2023,6 +2115,15 @@
               "snippet": "<TextArea v-model=\"notes\" :rows=\"6\" :maxLength=\"500\" />"
             }
           ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "CathodeTextArea(text: $notes, rows: 6, maxLength: 500)"
+            }
+          ]
         }
       }
     },
@@ -2113,6 +2214,19 @@
             {
               "name": "error",
               "snippet": "<FormField label=\"CALLSIGN\" error=\"Must be 4 characters\">\n  <TextField v-model=\"callsign\" />\n</FormField>"
+            }
+          ]
+        },
+        "swiftui": {
+          "import": "import CathodeUI",
+          "examples": [
+            {
+              "name": "basic",
+              "snippet": "CathodeFormField(label: \"CALLSIGN\", hint: \"4 chars\", isRequired: true) {\n    CathodeTextField(text: $callsign)\n}"
+            },
+            {
+              "name": "error",
+              "snippet": "CathodeFormField(label: \"CALLSIGN\", error: \"Must be 4 characters\") {\n    CathodeTextField(text: $callsign)\n}"
             }
           ]
         }

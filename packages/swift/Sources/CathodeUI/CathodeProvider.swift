@@ -22,6 +22,7 @@ import SwiftUI
 ///     }
 public struct CathodeProvider<Content: View>: View {
     private let settings: CathodeSettings
+    private let ai: (any CathodeAIProvider)?
     @ViewBuilder private let content: () -> Content
 
     public init(
@@ -29,6 +30,7 @@ public struct CathodeProvider<Content: View>: View {
         motion: CathodeMotion = .strong,
         haptic: Bool = true,
         sound: Bool = false,
+        ai: (any CathodeAIProvider)? = nil,
         @ViewBuilder content: @escaping () -> Content
     ) {
         self.settings = CathodeSettings(
@@ -37,12 +39,14 @@ public struct CathodeProvider<Content: View>: View {
             haptic: haptic,
             sound: sound
         )
+        self.ai = ai
         self.content = content
     }
 
     public var body: some View {
         content()
             .environment(\.cathodeSettings, settings)
+            .environment(\.cathodeAI, ai)
             .preferredColorScheme(preferredScheme)
     }
 

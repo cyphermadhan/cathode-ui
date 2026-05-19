@@ -105,6 +105,19 @@ public struct CathodeButton: View {
         if settings.haptic {
             CathodeFeedback.haptic(for: variant)
         }
+        if settings.sound {
+            // Variant → sound pattern, matching the React/Vue mapping:
+            // primary → confirm (rising two-tone), danger →
+            // destructive (single low harsh note), default → click.
+            let pattern: CathodeSoundPattern = {
+                switch variant {
+                case .primary: return .confirm
+                case .danger:  return .destructive
+                case .default: return .click
+                }
+            }()
+            CathodeSound.play(pattern, enabled: true)
+        }
         action()
     }
 }

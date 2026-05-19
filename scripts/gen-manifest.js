@@ -875,6 +875,44 @@ const SWIFTUI_ADAPTERS = {
     { name: 'nav',    snippet: 'CathodePill("LOGS", accent: .info, isActive: tab == .logs) { tab = .logs }' },
     { name: 'action', snippet: 'CathodePill("REFRESH", accent: .info) { refetch() }' },
   ]},
+
+  // Forms cluster (Phase 3 session 2)
+  Toggle: { import: swiftImport, examples: [
+    { name: 'basic', snippet: 'CathodeToggle("ARMED", value: $armed)' },
+    { name: 'danger', snippet: 'CathodeToggle("DANGER MODE", value: $armed, accent: .danger)' },
+  ]},
+  Checkbox: { import: swiftImport, examples: [
+    { name: 'basic', snippet: 'CathodeCheckbox("ENABLE", value: $enabled)' },
+    { name: 'tri',   snippet: 'CathodeCheckbox("ALL", value: $allOn, isIndeterminate: someOn && !allOn)' },
+  ]},
+  RadioGroup: { import: swiftImport, examples: [
+    { name: 'basic', snippet: 'CathodeRadioGroup(value: $mode, options: [\n    .init(value: "auto",   label: "AUTO"),\n    .init(value: "manual", label: "MANUAL"),\n])' },
+  ]},
+  Select: { import: swiftImport, examples: [
+    { name: 'basic', snippet: 'CathodeSelect(value: $theme, options: [\n    .init(value: "auto",  label: "AUTO"),\n    .init(value: "dark",  label: "DARK"),\n    .init(value: "light", label: "LIGHT"),\n])' },
+  ]},
+  Counter: { import: swiftImport, examples: [
+    { name: 'basic', snippet: 'CathodeCounter(value: $wpm, min: 5, max: 40, label: "WPM")' },
+  ]},
+  TextField: { import: swiftImport, examples: [
+    { name: 'basic',   snippet: 'CathodeTextField(text: $name, placeholder: "CALLSIGN")' },
+    { name: 'aiSuggest', snippet: 'CathodeTextField(text: $draft, aiSuggest: true)' },
+  ]},
+  TextArea: { import: swiftImport, examples: [
+    { name: 'basic', snippet: 'CathodeTextArea(text: $notes, rows: 6, maxLength: 500)' },
+  ]},
+  FormField: { import: swiftImport, examples: [
+    { name: 'basic', snippet: 'CathodeFormField(label: "CALLSIGN", hint: "4 chars", isRequired: true) {\n    CathodeTextField(text: $callsign)\n}' },
+    { name: 'error', snippet: 'CathodeFormField(label: "CALLSIGN", error: "Must be 4 characters") {\n    CathodeTextField(text: $callsign)\n}' },
+  ]},
+  SearchBar: { import: swiftImport, examples: [
+    { name: 'plain', snippet: 'CathodeSearchBar(\n    items: contacts,\n    label: { .init(primary: $0.name, secondary: $0.callsign) }\n) { onPick($0) }' },
+    { name: 'semantic', snippet: 'CathodeSearchBar(\n    items: contacts,\n    label: { .init(primary: $0.name) },\n    aiSemantic: true\n) { onPick($0) }' },
+  ]},
+  Chips: { import: swiftImport, examples: [
+    { name: 'flat',    snippet: 'CathodeChips([.init(label: "GO"), .init(label: "STOP")]) { onPick($0) }' },
+    { name: 'grouped', snippet: 'CathodeChips(groups: [\n    .init([.init(label: "DUPLICATE")]),\n    .init([.init(label: "DELETE")])\n]) { onPick($0) }' },
+  ]},
 };
 const VUE_ADAPTERS = {
   // Layout
